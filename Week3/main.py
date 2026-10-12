@@ -1,4 +1,4 @@
-from custom_classes import Book, DVD, LibraryCollection, MediaItem
+from custom_classes import DVD, Book, LibraryCollection, MediaItem
 
 collection = LibraryCollection()
 
