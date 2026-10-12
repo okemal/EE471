@@ -1,17 +1,16 @@
-from custom_classes import DVD, MediaItem
+from custom_classes import Book, DVD, LibraryCollection, MediaItem
 
-guide = MediaItem("The Hitchhiker's Guide to the Galaxy", "Douglas Adams")
-express= MediaItem("Chungking Express", "Wong Kar-wai")
+collection = LibraryCollection()
 
-print(guide)
-print(express)
-
+guide = Book("The Hitchhiker's Guide to the Galaxy", "Douglas Adams", 224)
 inception = DVD("Inception", "Christopher Nolan", 148)
-print(inception)
-print(inception.checkout())
-print(inception)
+express = MediaItem("Chungking Express", "Wong Kar-wai")
 
-print(express.checkout())
+collection.add_item(guide)
+collection.add_item(inception)
+collection.add_item(express)
 
-print(guide)
-print(express)
+_ = guide.checkout()
+_ = inception.checkout()
+
+print(collection.list_available())
