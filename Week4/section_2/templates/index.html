@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f4ee">
+  <title>Library collection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=3) }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Library collection">
+      <span class="brand-mark" aria-hidden="true">▤</span>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation"><a class="active" href="#collection">Collection</a></nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <p class="eyebrow">THE COLLECTION DESK</p>
+        <h1 id="hero-title">A place for every story.</h1>
+        <p class="hero-copy">Care for your collection. Keep good things in circulation.</p>
+      </div>
+      <div class="hero-tools">
+        <div class="stat"><strong id="total-count">—</strong><span>TOTAL ITEMS</span></div>
+        <div class="stat"><strong id="available-count">—</strong><span>AVAILABLE</span></div>
+        <div class="stat"><strong id="loan-count">—</strong><span>ON LOAN</span></div>
+        <button class="button button-primary" id="add-item"><span>＋</span> Add item</button>
+      </div>
+    </section>
+
+    <section id="collection" class="collection-layout">
+      <div class="collection-main">
+        <div class="collection-heading">
+          <div class="heading-title"><h2>Your collection</h2><span id="visible-count">Loading…</span></div>
+          <div class="filters" role="group" aria-label="Filter collection type">
+            <button class="filter active" data-type="all">All</button>
+            <button class="filter" data-type="book">Book</button>
+            <button class="filter" data-type="dvd">DVD</button>
+          </div>
+          <label class="available-filter"><input id="available-only" type="checkbox"><span class="switch"></span>Available only</label>
+        </div>
+        <div id="notice" class="notice" role="status" hidden><span class="notice-symbol">ⓘ</span><span id="notice-text"></span><button id="dismiss-notice" aria-label="Dismiss message">×</button></div>
+        <div class="table-head"><span>TITLE / AUTHOR</span><span>FORMAT / EXTENT</span><span>STATUS</span><span>ACTIONS</span></div>
+        <div id="item-list" class="item-list" aria-live="polite"></div>
+        <div class="list-foot"><span id="list-summary"></span><span id="editing-summary"></span></div>
+      </div>
+
+      <aside id="form-panel" class="form-panel" aria-labelledby="form-title">
+        <div class="panel-heading">
+          <div><p class="eyebrow">COLLECTION RECORD</p><h2 id="form-title">Add an item</h2></div>
+          <button id="close-form" class="icon-button close-button" aria-label="Close form">×</button>
+        </div>
+        <form id="item-form">
+          <label class="field-label" for="title">Title</label>
+          <input id="title" name="title" required placeholder="A story worth sharing">
+          <label class="field-label" for="author">Author</label>
+          <input id="author" name="author" required placeholder="Author or director">
+          <span class="field-label">Type</span>
+          <div class="type-picker" role="group" aria-label="Item type">
+            <button type="button" class="type-option selected" data-item-type="book"><span>▤</span> Book</button>
+            <button type="button" class="type-option" data-item-type="dvd"><span>◉</span> DVD</button>
+          </div>
+          <label class="field-label" id="detail-label" for="detail">Page count</label>
+          <div class="input-with-unit"><input id="detail" name="detail" type="number" min="1" required placeholder="320"><span id="detail-unit">pages</span></div>
+          <p id="detail-help" class="field-help">Total number of pages in this edition.</p>
+          <div class="form-actions"><button class="button button-primary save-button" type="submit">Save item</button><button id="cancel-form" class="button button-secondary" type="button">Cancel</button></div>
+          <p class="form-hint">All fields are required.</p>
+        </form>
+      </aside>
+    </section>
+
+  </main>
+  <script src="{{ url_for('static', filename='script.js', v=3) }}" defer></script>
+</body>
+</html>

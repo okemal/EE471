@@ -1,4 +1,10 @@
-"""Exercise the library model's item and collection operations."""
+"""Run a small terminal walkthrough of the library domain model.
+
+The script creates mixed item types and exercises serialization, lookup,
+filtering, checkout/return, partial updates, safe deletion, and ID allocation
+after deletion. It deliberately triggers and catches expected domain errors;
+run it with ``python3 main.py`` from the repository root.
+"""
 
 from custom_classes import (
     Book,
