@@ -1,0 +1,109 @@
+:root {
+  color-scheme: light;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #eef4fb;
+  color: #152a45;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(ellipse at 50% 35%, #fff 0, #f4f8fd 52%, #e7eff8 100%);
+}
+
+.calculator {
+  width: min(100%, 340px);
+  padding: 15px;
+  border-radius: 22px;
+  background: #1976d2;
+  box-shadow: 0 22px 50px #183c642b, 0 3px 8px #183c641c;
+}
+
+.display {
+  min-height: 92px;
+  margin-bottom: 12px;
+  padding: 10px 16px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #fff;
+  color: #1c3554;
+}
+
+.expression {
+  width: 100%;
+  min-height: 20px;
+  overflow: hidden;
+  color: #7c8da3;
+  font-size: 13px;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: clamp(32px, 11vw, 40px);
+  font-weight: 500;
+  letter-spacing: -1.5px;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.key {
+  min-width: 0;
+  height: 56px;
+  border: 0;
+  border-radius: 8px;
+  background: #687485;
+  color: white;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.key:hover { background: #78869a; }
+.key:active { transform: translateY(1px) scale(.98); }
+.key:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.key-function { background: #5791d0; }
+.key-function:hover { background: #6ca3df; }
+.key-operator { background: #536d91; }
+.key-operator:hover { background: #6382aa; }
+.key-operator.is-selected { background: #fff; color: #1976d2; }
+
+.keyboard-hint {
+  margin: 12px 0 0;
+  color: #dcecff;
+  font-size: 11px;
+  text-align: center;
+}
+
+@media (max-width: 380px) {
+  body { padding: 14px; }
+  .calculator { padding: 12px; border-radius: 18px; }
+  .keypad { gap: 7px; }
+  .key { height: 54px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; }
+}

@@ -1,3 +1,5 @@
+# This script is no longer used.
+
 from custom_classes import Calculator
 
 calculator = Calculator()
