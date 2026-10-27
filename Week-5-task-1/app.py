@@ -1,0 +1,93 @@
+"""Run with `uv run flask --app app run --host 127.0.0.1 --port 5000`."""
+
+import os
+from pathlib import Path
+import re
+
+from dotenv import dotenv_values
+from flask import Flask, jsonify, render_template, request
+from werkzeug.exceptions import HTTPException
+
+from speech import LANGUAGES, MAX_AUDIO_SECONDS, SpeechError, transcribe, validate_audio
+
+PROJECT_DIR = Path(__file__).resolve().parent
+
+
+def create_app(test_config=None):
+    app = Flask(__name__)
+    # Environment > project .env > repository .env. Do not log these values.
+    settings = {
+        **dotenv_values(PROJECT_DIR.parent / ".env"),
+        **dotenv_values(PROJECT_DIR / ".env"),
+        **os.environ,
+    }
+    app.config.update(
+        AZURE_SPEECH_KEY=settings.get("AZURE_SPEECH_KEY") or settings.get("AZURE_API_KEY_1", ""),
+        AZURE_SPEECH_REGION=settings.get("AZURE_SPEECH_REGION") or "",
+        MAX_CONTENT_LENGTH=2 * 1024 * 1024,
+    )
+    if test_config:
+        app.config.update(test_config)
+
+    def configured():
+        return bool(app.config["AZURE_SPEECH_KEY"] and re.fullmatch(r"[a-z][a-z0-9-]{1,49}", app.config["AZURE_SPEECH_REGION"]))
+
+    @app.before_request
+    def same_origin():
+        # Reject cross-origin form uploads as well as API calls on this local app.
+        if request.method == "POST" and request.headers.get("Origin") not in (None, request.host_url.rstrip("/")):
+            return jsonify(error="Cross-origin requests are not allowed."), 403
+
+    @app.after_request
+    def secure_response(response):
+        response.headers["Cache-Control"] = "no-store"
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["Referrer-Policy"] = "no-referrer"
+        response.headers["Permissions-Policy"] = "microphone=(self)"
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; script-src 'self'; style-src 'self'; "
+            "img-src 'self' data:; media-src 'self' blob:; connect-src 'self'; "
+            "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+        )
+        return response
+
+    @app.errorhandler(SpeechError)
+    def speech_error(error):
+        return jsonify(error=str(error)), error.status
+
+    @app.errorhandler(HTTPException)
+    def http_error(error):
+        if error.code == 413:
+            return jsonify(error="The upload is too large. Please choose a smaller file."), 413
+        return jsonify(error=error.description), error.code
+
+    @app.get("/")
+    def index():
+        return render_template("index.html", languages=LANGUAGES, configured=configured(), max_audio_seconds=MAX_AUDIO_SECONDS)
+
+    @app.get("/api/health")
+    def health():
+        return jsonify(configured=configured())
+
+    @app.post("/api/speech-to-text")
+    def speech_to_text():
+        language = request.form.get("language", "en-US")
+        if language not in [item["id"] for item in LANGUAGES]:
+            return jsonify(error="Choose one of the available transcription languages."), 400
+        upload = request.files.get("audio")
+        if upload is None:
+            return jsonify(error="Choose an audio file or record your voice first."), 400
+        audio = upload.read()
+        validate_audio(audio)
+        if not configured():
+            return jsonify(error="Add an Azure Speech key and region to the server's .env file, then restart the app."), 503
+        text = transcribe(audio, language, key=app.config["AZURE_SPEECH_KEY"], region=app.config["AZURE_SPEECH_REGION"])
+        return jsonify(text=text, language=language)
+
+    return app
+
+
+app = create_app()
+
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=5000, debug=False)
