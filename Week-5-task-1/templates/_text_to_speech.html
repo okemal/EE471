@@ -1,0 +1,24 @@
+      <section class="studio-grid" aria-label="Text to speech workspace">
+        <form id="tts-form" class="panel composer-panel" data-configured="{{ 'true' if configured else 'false' }}">
+          <div class="panel-heading"><div><span class="section-number">01</span><h2>Your words</h2></div><button class="text-button" type="button" id="example-button">Try an example <span aria-hidden="true">↗</span></button></div>
+          <label class="sr-only" for="speech-text">Text to turn into speech</label>
+          <textarea id="speech-text" name="text" maxlength="{{ max_text_length }}" required placeholder="Every great idea starts with a few words.&#10;&#10;Type or paste yours here…" aria-describedby="text-hint character-count"></textarea>
+          <div class="editor-footer"><span id="text-hint">Let your words do the talking.</span><span><button class="text-button muted" type="button" id="clear-button">Clear</button><span id="character-count">0 / {{ max_text_length }}</span></span></div>
+          <div class="settings-row">
+            <div class="voice-setting"><label for="voice">Voice &amp; language</label><select id="voice" name="voice">{% for voice in voices %}<option value="{{ voice.id }}">{{ voice.label }}</option>{% endfor %}</select></div>
+            <div class="speed-setting"><div class="range-heading"><label for="rate">Speaking speed</label><output for="rate" id="rate-value">1.00×</output></div><input id="rate" name="rate" type="range" min="0.75" max="1.5" step="0.05" value="1"><div class="range-labels"><span>Slower</span><span>Faster</span></div></div>
+          </div>
+          <div class="form-actions"><span class="form-footnote">Natural voices. Your words.</span><button type="submit" class="button button-primary" id="generate-button" {% if not configured %}disabled{% endif %}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 11 7-11 7V5Z"/></svg><span id="generate-label">Generate speech</span></button></div>
+          <p class="status-message" id="tts-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <aside class="panel output-panel" aria-labelledby="output-title">
+          <div class="panel-heading"><div><span class="section-number">02</span><h2 id="output-title">Your audio</h2></div><span class="format-tag">WAV</span></div>
+          <div class="audio-art" aria-hidden="true"><div class="audio-art-circle"><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span></div><span class="audio-art-label">A SOUND OF YOUR OWN</span></div>
+          <div id="audio-empty" class="empty-state"><h3>Words in. Wonder out.</h3><p>Your audio will appear here.<br>Write something and let’s hear it.</p></div>
+          <div id="audio-result" class="audio-result" hidden><h3>Ready when you are.</h3><p id="audio-description">Listen to your new audio.</p><audio id="audio-player" controls preload="metadata" aria-label="Generated speech"></audio><a id="download-audio" class="button button-secondary" download="vocal-speech.wav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M5 16v4h14v-4"/></svg>Download audio</a></div>
+          <div class="output-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6l-8-3Z"/><path d="m8 12 3 3 5-6"/></svg><p>Text is sent to Azure to create your audio. This app doesn’t save your text or recordings.</p></div>
+        </aside>
+      </section>
+
+      <section class="workflow" aria-label="How it works"><div><span>01</span><p><strong>Make it yours</strong>Paste a passage or start from a blank page.</p></div><div><span>02</span><p><strong>Find your voice</strong>Choose a language and set the pace.</p></div><div><span>03</span><p><strong>Take it with you</strong>Listen here or download your audio.</p></div></section>

@@ -1,113 +1,45 @@
 "use strict";
 
 (() => {
-  const form = document.querySelector("#tts-form");
-  if (!form) return;
-  const text = document.querySelector("#speech-text");
-  const voice = document.querySelector("#voice");
-  const rate = document.querySelector("#rate");
-  const generate = document.querySelector("#generate-button");
-  const label = document.querySelector("#generate-label");
-  const status = document.querySelector("#tts-status");
-  const audio = document.querySelector("#audio-player");
-  const result = document.querySelector("#audio-result");
-  const empty = document.querySelector("#audio-empty");
-  const download = document.querySelector("#download-audio");
-  const outputPanel = document.querySelector(".output-panel");
-  let audioUrl = null;
-  let pending = false;
+  const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
 
-  function setStatus(message, error = false) {
-    status.textContent = message;
-    status.classList.toggle("is-error", error);
+  function activate(tab, moveFocus = false) {
+    const wasSpeech = document.querySelector("#speech-to-text-tab").getAttribute("aria-selected") === "true";
+    const willBeSpeech = tab.id === "speech-to-text-tab";
+    if (wasSpeech && !willBeSpeech) {
+      document.dispatchEvent(new Event("speech-studio:leave-speech"));
+    }
+    document.querySelectorAll("audio").forEach((audio) => audio.pause());
+    for (const candidate of tabs) {
+      const selected = candidate === tab;
+      candidate.setAttribute("aria-selected", String(selected));
+      candidate.tabIndex = selected ? 0 : -1;
+      candidate.classList.toggle("mode-active", selected);
+      document.getElementById(candidate.getAttribute("aria-controls")).hidden = !selected;
+    }
+    if (moveFocus) tab.focus();
+    history.replaceState(null, "", willBeSpeech ? "#speech-to-text" : "#text-to-speech");
   }
 
-  function updateCount() {
-    document.querySelector("#character-count").textContent = `${Array.from(text.value).length} / ${text.maxLength}`;
+  for (const [index, tab] of tabs.entries()) {
+    tab.addEventListener("click", () => activate(tab));
+    tab.addEventListener("keydown", (event) => {
+      let next;
+      if (event.key === "ArrowRight") next = tabs[(index + 1) % tabs.length];
+      if (event.key === "ArrowLeft") next = tabs[(index + tabs.length - 1) % tabs.length];
+      if (event.key === "Home") next = tabs[0];
+      if (event.key === "End") next = tabs[tabs.length - 1];
+      if (next) {
+        event.preventDefault();
+        activate(next, true);
+      }
+    });
   }
 
-  text.addEventListener("input", updateCount);
-  rate.addEventListener("input", () => {
-    document.querySelector("#rate-value").value = `${Number(rate.value).toFixed(2)}×`;
-  });
-  document.querySelector("#example-button").addEventListener("click", () => {
-    text.value = "Some ideas begin as a whisper. Give them a voice, and see how far they travel. Welcome to Vocal, a little space for your words to come alive.";
-    updateCount();
-    text.focus();
-  });
-  document.querySelector("#clear-button").addEventListener("click", () => {
-    text.value = "";
-    updateCount();
-    text.focus();
-  });
+  function activateFromHash() {
+    activate(location.hash === "#speech-to-text" ? tabs[1] : tabs[0]);
+  }
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    if (pending) return;
-    if (form.dataset.configured !== "true") {
-      setStatus("Add the Azure Speech key and region on the server, then restart the app.", true);
-      return;
-    }
-    const value = text.value.trim();
-    if (!value) {
-      setStatus("Write a few words first, then generate your audio.", true);
-      text.focus();
-      return;
-    }
-
-    pending = true;
-    generate.disabled = true;
-    label.textContent = "Creating audio…";
-    form.setAttribute("aria-busy", "true");
-    outputPanel.classList.add("is-loading");
-    setStatus("Giving your words a voice. This may take a moment…");
-    const selectedVoice = voice.options[voice.selectedIndex].text;
-    const selectedRate = Number(rate.value);
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 90000);
-
-    try {
-      const response = await fetch("/api/text-to-speech", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({text: value, voice: voice.value, rate: selectedRate}),
-        signal: controller.signal,
-      });
-      if (!response.ok) {
-        let message = "We couldn’t create the audio. Please try again.";
-        try {
-          const body = await response.json();
-          if (typeof body.error === "string") message = body.error;
-        } catch (_) { /* Keep a readable fallback for non-JSON errors. */ }
-        throw new Error(message);
-      }
-      const blob = await response.blob();
-      if (!blob.size || !response.headers.get("Content-Type")?.startsWith("audio/")) {
-        throw new Error("The speech service returned no playable audio. Please try again.");
-      }
-      audio.pause();
-      if (audioUrl) URL.revokeObjectURL(audioUrl);
-      audioUrl = URL.createObjectURL(blob);
-      audio.src = audioUrl;
-      download.href = audioUrl;
-      document.querySelector("#audio-description").textContent = `${selectedVoice} · ${selectedRate.toFixed(2)}× speed`;
-      empty.hidden = true;
-      result.hidden = false;
-      setStatus("Your audio is ready. Play it here or download the WAV file.");
-    } catch (error) {
-      setStatus(error.name === "AbortError" ? "The request took too long. Please try again." : error.message || "Couldn’t reach the server. Please try again.", true);
-    } finally {
-      clearTimeout(timeout);
-      pending = false;
-      generate.disabled = false;
-      label.textContent = "Generate speech";
-      form.removeAttribute("aria-busy");
-      outputPanel.classList.remove("is-loading");
-    }
-  });
-
-  window.addEventListener("pagehide", () => {
-    if (audioUrl) URL.revokeObjectURL(audioUrl);
-  });
-  updateCount();
+  window.addEventListener("hashchange", activateFromHash);
+  if (location.hash === "#speech-to-text") activateFromHash();
 })();

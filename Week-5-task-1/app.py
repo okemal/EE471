@@ -8,7 +8,7 @@ from dotenv import dotenv_values
 from flask import Flask, jsonify, render_template, request, Response
 from werkzeug.exceptions import HTTPException
 
-from speech import VOICES, SpeechError, synthesize
+from speech import LANGUAGES, MAX_AUDIO_SECONDS, VOICES, SpeechError, synthesize, transcribe, validate_audio
 
 PROJECT_DIR = Path(__file__).resolve().parent
 MAX_TEXT_LENGTH = 3000
@@ -64,7 +64,10 @@ def create_app(test_config=None):
 
     @app.get("/")
     def index():
-        return render_template("index.html", voices=VOICES, configured=configured(), max_text_length=MAX_TEXT_LENGTH)
+        return render_template(
+            "index.html", voices=VOICES, languages=LANGUAGES, configured=configured(),
+            max_text_length=MAX_TEXT_LENGTH, max_audio_seconds=MAX_AUDIO_SECONDS,
+        )
 
     @app.get("/api/health")
     def health():
@@ -93,6 +96,21 @@ def create_app(test_config=None):
             return jsonify(error="Add an Azure Speech key and region to the server's .env file, then restart the app."), 503
         audio = synthesize(text, voice, rate, key=app.config["AZURE_SPEECH_KEY"], region=app.config["AZURE_SPEECH_REGION"])
         return Response(audio, mimetype="audio/wav", headers={"Content-Disposition": 'attachment; filename="speech.wav"'})
+
+    @app.post("/api/speech-to-text")
+    def speech_to_text():
+        language = request.form.get("language", "en-US")
+        if language not in [item["id"] for item in LANGUAGES]:
+            return jsonify(error="Choose one of the available transcription languages."), 400
+        upload = request.files.get("audio")
+        if upload is None:
+            return jsonify(error="Choose an audio file or record your voice first."), 400
+        audio = upload.read()
+        validate_audio(audio)
+        if not configured():
+            return jsonify(error="Add an Azure Speech key and region to the server's .env file, then restart the app."), 503
+        text = transcribe(audio, language, key=app.config["AZURE_SPEECH_KEY"], region=app.config["AZURE_SPEECH_REGION"])
+        return jsonify(text=text, language=language)
 
     return app
 
