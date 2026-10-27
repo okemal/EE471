@@ -1207,3 +1207,269 @@ input[type=range] {
     font-size: 12px;
   }
 }
+
+.tool-picker,
+.tool-settings {
+  margin-bottom: 22px;
+}
+
+.tool-picker label,
+.tool-settings label,
+.live-controls > label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tool-picker p,
+.tool-settings p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 8px 0 0;
+}
+
+.tool-settings textarea {
+  min-height: 95px;
+  padding: 12px;
+  margin-bottom: 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--paper);
+}
+
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.score-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.score-card strong {
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.score-card span,
+.assessment-caption {
+  font-size: 11px;
+  color: #536447;
+}
+
+.word-feedback {
+  margin: 18px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+}
+
+summary {
+  cursor: pointer;
+}
+
+.word-row {
+  margin-top: 10px;
+  padding: 10px;
+  background: #f5f7f0;
+  border-radius: 5px;
+  overflow-wrap: anywhere;
+}
+
+.word-row.needs-practice {
+  background: #fff1df;
+  color: #815523;
+}
+
+.word-row p {
+  font-size: 11px;
+}
+
+.source-transcript {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+  margin-bottom: 18px;
+  overflow-wrap: anywhere;
+}
+
+.source-transcript h3 {
+  font-size: 12px;
+  margin: 0 0 8px;
+}
+
+.source-transcript p {
+  font-size: 13px;
+  white-space: pre-wrap;
+  color: var(--muted);
+}
+
+.live-grid {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  margin-bottom: 42px;
+}
+
+.live-controls,
+.live-output {
+  padding: 24px;
+  min-width: 0;
+}
+
+.live-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  height: 135px;
+  background: var(--soft);
+  border-radius: 8px;
+}
+
+.live-illustration span {
+  display: grid;
+  place-items: center;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--lime);
+  font-family: Georgia, serif;
+  font-size: 24px;
+}
+
+.live-illustration span:last-child {
+  background: var(--lime);
+  color: var(--green);
+}
+
+.live-illustration i {
+  width: 48px;
+  border-top: 1px dashed #8f9b7e;
+}
+
+.live-description {
+  text-align: center;
+  font-family: Georgia, serif;
+  font-size: 20px;
+  margin: 22px 0;
+}
+
+.live-controls > .button {
+  width: 100%;
+  margin: 20px 0 10px;
+}
+
+.live-controls > .record-timer {
+  display: block;
+  text-align: center;
+}
+
+.live-hint {
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+
+.live-output {
+  display: flex;
+  flex-direction: column;
+}
+
+.live-empty {
+  text-align: center;
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin: 90px 0;
+}
+
+.live-lines {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 470px;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+}
+
+.live-lines li {
+  padding: 15px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.live-lines li > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.live-lines li > div > span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.speaker-label {
+  padding: 4px 9px;
+  border-radius: 4px;
+  font-size: 11px;
+  background: var(--soft);
+}
+
+.live-lines p {
+  margin: 10px 0 0;
+}
+
+.live-partial {
+  min-height: 28px;
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  overflow-wrap: anywhere;
+}
+
+.live-output .output-note {
+  margin-top: auto;
+}
+
+.live-output .output-note p {
+  max-width: none;
+}
+
+@media (max-width: 850px) {
+  .mode-caption {
+    display: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .mode-tabs {
+    gap: 4px;
+  }
+  .mode-tab {
+    padding-inline: 0;
+    gap: 5px;
+    font-size: 11px;
+  }
+  .mode-tab svg {
+    width: 16px;
+    height: 16px;
+  }
+  .live-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .live-controls,
+  .live-output {
+    padding: 20px;
+  }
+}

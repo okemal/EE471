@@ -1,14 +1,52 @@
-      <section class="studio-grid" aria-label="Speech to text workspace">
-        <form id="stt-form" class="panel composer-panel speech-input-panel" data-configured="{{ 'true' if configured else 'false' }}" data-max-seconds="{{ max_audio_seconds }}">
-          <div class="panel-heading"><div><span class="section-number">01</span><h2>Your audio</h2></div><span class="format-tag">UP TO {{ max_audio_seconds }} SEC</span></div>
-          <div id="drop-zone" class="drop-zone"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5M4 14v6h16v-6"/></svg><label for="audio-file">Drop a recording here<span>or <u>browse your files</u></span></label><span class="upload-hint" id="file-hint">WAV, MP3, M4A, OGG, WebM or FLAC · Up to 20 MB<br>Supported formats depend on your browser.</span><input type="file" id="audio-file" accept="audio/*,.wav,.mp3,.m4a,.ogg,.webm,.flac" aria-describedby="file-hint"></div>
-          <div class="or-divider"><span></span>or record something new<span></span></div>
-          <div class="record-row"><button class="button button-secondary record-button" id="record-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11v1a7 7 0 0 0 14 0v-1M12 19v3m-3 0h6"/></svg><span id="record-label">Record your voice</span></button><span id="record-timer" class="record-timer" role="status" aria-live="polite">Microphone · 55 sec max</span></div>
-          <div class="source-preview" id="source-preview" hidden><div><span id="source-name"></span><button class="text-button muted" type="button" id="remove-audio">Remove</button></div><audio id="source-player" controls preload="metadata" aria-label="Audio to transcribe"></audio><p id="source-details"></p></div>
-          <div class="stt-language-row"><label for="recognition-language">Spoken language</label><select id="recognition-language" name="language">{% for language in languages %}<option value="{{ language.id }}">{{ language.label }}</option>{% endfor %}</select><p>Choose the language spoken in your recording.</p></div>
-          <div class="form-actions"><span class="form-footnote">Capture a thought. Keep the words.</span><button type="submit" class="button button-primary" id="transcribe-button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 11 7-11 7V5Z"/></svg><span id="transcribe-label">Transcribe audio</span></button></div>
-          <p class="status-message" id="stt-status" role="status" aria-live="polite"></p>
-        </form>
-        <aside class="panel output-panel transcript-panel" aria-labelledby="transcript-title"><div class="panel-heading"><div><span class="section-number">02</span><h2 id="transcript-title">Your transcript</h2></div><span class="format-tag">TEXT</span></div><label class="sr-only" for="transcript">Editable transcript</label><textarea id="transcript" placeholder="The words will find their way here.&#10;&#10;Upload or record some audio, then choose Transcribe audio." aria-describedby="transcript-hint" disabled></textarea><div class="transcript-meta"><span id="transcript-hint">Review and edit before sharing.</span><span id="word-count">0 words</span></div><div class="transcript-actions"><button id="copy-transcript" type="button" class="button button-secondary" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V3H3v13h5"/></svg>Copy text</button><a id="download-transcript" class="button button-secondary" download="vocal-transcript.txt" aria-disabled="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M5 16v4h14v-4"/></svg>Download .txt</a></div><p class="status-message" id="transcript-status" role="status" aria-live="polite"></p><div class="output-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6l-8-3Z"/><path d="m8 12 3 3 5-6"/></svg><p>Audio is sent to Azure only when you transcribe. This app doesn’t save your recordings or transcripts.</p></div></aside>
-      </section>
-      <section class="workflow" aria-label="How it works"><div><span>01</span><p><strong>Bring your voice</strong>Upload a short clip or use your microphone.</p></div><div><span>02</span><p><strong>Put it into words</strong>Choose the spoken language and transcribe.</p></div><div><span>03</span><p><strong>Make it useful</strong>Edit, copy, or download your transcript.</p></div></section>
+<section class="studio-grid" aria-label="Speech tools workspace">
+  <form id="stt-form" class="panel composer-panel speech-input-panel" data-configured="{{ 'true' if configured else 'false' }}" data-max-seconds="{{ max_audio_seconds }}">
+    <div class="panel-heading"><div><span class="section-number">01</span><h2>Your audio</h2></div><span class="format-tag" id="audio-limit">UP TO {{ max_audio_seconds }} SEC</span></div>
+    <div class="tool-picker">
+      <label for="speech-task">What would you like to do?</label>
+      <select id="speech-task"><option value="transcribe">Transcribe audio</option><option value="translate">Translate speech</option><option value="pronunciation">Assess pronunciation</option></select>
+      <p id="task-hint">Turn spoken words into an editable transcript.</p>
+    </div>
+    <div id="drop-zone" class="drop-zone">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5M4 14v6h16v-6"/></svg>
+      <label for="audio-file">Drop a recording here<span>or <u>browse your files</u></span></label>
+      <span class="upload-hint" id="file-hint">WAV, MP3, M4A, OGG, WebM or FLAC · Up to 20 MB<br>Supported formats depend on your browser.</span>
+      <input type="file" id="audio-file" accept="audio/*,.wav,.mp3,.m4a,.ogg,.webm,.flac" aria-describedby="file-hint task-hint">
+    </div>
+    <div class="or-divider"><span></span>or record something new<span></span></div>
+    <div class="record-row"><button class="button button-secondary record-button" id="record-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11v1a7 7 0 0 0 14 0v-1M12 19v3m-3 0h6"/></svg><span id="record-label">Record your voice</span></button><span id="record-timer" class="record-timer" role="status" aria-live="polite">Microphone · 55 sec max</span></div>
+    <div class="source-preview" id="source-preview" hidden><div><span id="source-name"></span><button class="text-button muted" type="button" id="remove-audio">Remove</button></div><audio id="source-player" controls preload="metadata" aria-label="Audio to process"></audio><p id="source-details"></p></div>
+    <div class="stt-language-row">
+      <label for="recognition-language">Spoken language</label>
+      <select id="recognition-language" name="language">{% for language in languages %}<option value="{{ language.id }}" data-assessment="{{ 'true' if language in assessment_languages else 'false' }}">{{ language.label }}</option>{% endfor %}</select>
+      <p id="language-hint">Choose the language spoken in your recording.</p>
+    </div>
+    <div id="translation-settings" class="tool-settings" hidden>
+      <label for="target-language">Translate into</label>
+      <select id="target-language">{% for language in translation_languages %}<option value="{{ language.id }}">{{ language.label }}</option>{% endfor %}</select>
+    </div>
+    <div id="assessment-settings" class="tool-settings" hidden>
+      <label for="reference-text">Read this text aloud</label>
+      <textarea id="reference-text" maxlength="{{ max_reference_length }}" placeholder="The quick brown fox jumps over the lazy dog." aria-describedby="assessment-hint"></textarea>
+      <button type="button" id="reference-example" class="text-button">Use an example</button>
+      <p id="assessment-hint">Enter up to {{ max_reference_length }} characters, then record yourself reading them. One short passage, up to {{ max_assessment_seconds }} seconds. Turkish assessment is not available.</p>
+    </div>
+    <div class="form-actions"><span class="form-footnote">Capture a thought. Keep the words.</span><button type="submit" class="button button-primary" id="transcribe-button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 11 7-11 7V5Z"/></svg><span id="transcribe-label">Transcribe audio</span></button></div>
+    <p class="status-message" id="stt-status" role="status" aria-live="polite"></p>
+  </form>
+  <aside class="panel output-panel transcript-panel" aria-labelledby="transcript-title">
+    <div class="panel-heading"><div><span class="section-number">02</span><h2 id="transcript-title">Your transcript</h2></div><span class="format-tag" id="result-format">TEXT</span></div>
+    <div id="assessment-result" hidden>
+      <div class="score-grid" id="assessment-scores" aria-label="Pronunciation scores out of 100"></div>
+      <p class="assessment-caption">Scores out of 100 · Feedback for this recording</p>
+      <details class="word-feedback"><summary>Word &amp; phoneme feedback</summary><div id="assessment-words"></div></details>
+    </div>
+    <label class="sr-only" for="transcript" id="transcript-label">Editable transcript</label>
+    <textarea id="transcript" placeholder="The words will find their way here.&#10;&#10;Upload or record some audio, then choose a speech tool." aria-describedby="transcript-hint" disabled></textarea>
+    <div class="transcript-meta"><span id="transcript-hint">Review and edit before sharing.</span><span id="word-count">0 words</span></div>
+    <div id="source-transcript" class="source-transcript" hidden><h3>Original speech</h3><p id="original-speech"></p></div>
+    <div class="transcript-actions"><button id="copy-transcript" type="button" class="button button-secondary" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V3H3v13h5"/></svg>Copy text</button><a id="download-transcript" class="button button-secondary" download="vocal-transcript.txt" aria-disabled="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M5 16v4h14v-4"/></svg>Download .txt</a></div>
+    <p class="status-message" id="transcript-status" role="status" aria-live="polite"></p>
+    <div class="output-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6l-8-3Z"/><path d="m8 12 3 3 5-6"/></svg><p>Audio is sent to Azure when you run a speech tool. This app doesn’t retain recordings or results on the server.</p></div>
+  </aside>
+</section>
+<section class="workflow" aria-label="How speech tools work"><div><span>01</span><p><strong>Bring your voice</strong>Upload a short clip or use your microphone.</p></div><div><span>02</span><p><strong>Choose your tool</strong>Transcribe, translate, or practice pronunciation.</p></div><div><span>03</span><p><strong>Make it useful</strong>Review the feedback, copy, or download your words.</p></div></section>

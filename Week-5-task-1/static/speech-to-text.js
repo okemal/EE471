@@ -18,7 +18,17 @@
   const copyButton = document.querySelector("#copy-transcript");
   const download = document.querySelector("#download-transcript");
   const transcriptStatus = document.querySelector("#transcript-status");
-  const maxSeconds = Number(form.dataset.maxSeconds) || 60;
+  const task = document.querySelector("#speech-task");
+  const target = document.querySelector("#target-language");
+  const reference = document.querySelector("#reference-text");
+  const modes = {
+    transcribe: {endpoint: "/api/speech-to-text", action: "Transcribe audio", busy: "Transcribing…", title: "Your transcript"},
+    translate: {endpoint: "/api/speech-translation", action: "Translate speech", busy: "Translating…", title: "Your translation"},
+    pronunciation: {endpoint: "/api/pronunciation-assessment", action: "Assess pronunciation", busy: "Assessing…", title: "Pronunciation feedback"},
+  };
+  let maxSeconds = Number(form.dataset.maxSeconds) || 60;
+  let audioDuration = 0;
+  const recordLimit = () => task.value === "pronunciation" ? 25 : 55;
   let audioBlob = null;
   let audioUrl = null;
   let textUrl = null;
@@ -42,6 +52,10 @@
     fileInput.disabled = locked;
     removeButton.disabled = locked;
     language.disabled = locked;
+    task.disabled = locked;
+    target.disabled = locked;
+    reference.disabled = locked;
+    document.querySelector("#reference-example").disabled = locked;
     recordButton.disabled = busy || requestingMic;
     transcribe.disabled = locked || !audioBlob || form.dataset.configured !== "true";
     dropZone.classList.toggle("is-disabled", locked);
@@ -69,11 +83,17 @@
     transcript.value = "";
     transcript.disabled = true;
     transcriptStatus.textContent = "";
+    document.querySelector("#assessment-result").hidden = true;
+    document.querySelector("#source-transcript").hidden = true;
+    document.querySelector("#original-speech").textContent = "";
+    document.querySelector("#assessment-scores").replaceChildren();
+    document.querySelector("#assessment-words").replaceChildren();
     updateTranscript();
   }
 
   function clearAudio() {
     audioBlob = null;
+    audioDuration = 0;
     player.pause();
     player.removeAttribute("src");
     player.load();
@@ -139,13 +159,14 @@
       source.start();
       const normalized = await offline.startRendering();
       if (leaving) return;
+      audioDuration = decoded.duration;
       audioBlob = encodeWav(normalized.getChannelData(0));
       audioUrl = URL.createObjectURL(audioBlob);
       player.src = audioUrl;
       document.querySelector("#source-name").textContent = name;
-      document.querySelector("#source-details").textContent = `${decoded.duration.toFixed(1)} seconds · Ready to transcribe`;
+      document.querySelector("#source-details").textContent = `${decoded.duration.toFixed(1)} seconds · Ready to use`;
       document.querySelector("#source-preview").hidden = false;
-      setStatus("Audio ready. Listen first, then choose Transcribe audio.");
+      setStatus("Audio ready. Listen first, then run your chosen speech tool.");
     } catch (error) {
       setStatus(error.message || "Couldn’t prepare this recording. Please try another file.", true);
     } finally {
@@ -181,7 +202,80 @@
     setStatus("Recording removed. Choose a file or record something new.");
     fileInput.focus();
   });
-  language.addEventListener("change", clearTranscript);
+  function syncTarget() {
+    if (target.value === language.value.split("-")[0]) {
+      target.value = language.value.startsWith("tr-") ? "en" : "tr";
+    }
+  }
+
+  function configureTask() {
+    const assessment = task.value === "pronunciation";
+    maxSeconds = assessment ? 30 : 60;
+    document.querySelector("#audio-limit").textContent = `UP TO ${maxSeconds} SEC`;
+    document.querySelector("#translation-settings").hidden = task.value !== "translate";
+    document.querySelector("#assessment-settings").hidden = !assessment;
+    reference.required = assessment;
+    for (const option of language.options) option.disabled = assessment && option.dataset.assessment !== "true";
+    if (language.selectedOptions[0].disabled) language.value = "en-US";
+    syncTarget();
+    document.querySelector("#transcript-title").textContent = modes[task.value].title;
+    document.querySelector("#transcript-label").textContent = task.value === "translate" ? "Editable translation" : "Editable recognized speech";
+    document.querySelector("#task-hint").textContent = assessment ? "Compare a short reading with reference text. Get scores and word-level feedback." : task.value === "translate" ? "See the original speech and its translation in another language." : "Turn spoken words into an editable transcript.";
+    document.querySelector("#language-hint").textContent = assessment ? "Choose the pronunciation model for the language you are practicing." : "Choose the language spoken in your recording.";
+    transcribeLabel.textContent = modes[task.value].action;
+    recordTimer.textContent = `Microphone · ${recordLimit()} sec max`;
+    if (audioDuration > maxSeconds) {
+      clearAudio();
+      setStatus(`Choose a recording of ${maxSeconds} seconds or less for this tool.`, true);
+    } else {
+      clearTranscript();
+      setStatus("");
+    }
+    updateControls();
+  }
+
+  task.addEventListener("change", configureTask);
+  target.addEventListener("change", clearTranscript);
+  reference.addEventListener("input", clearTranscript);
+  language.addEventListener("change", () => { syncTarget(); clearTranscript(); });
+  document.querySelector("#reference-example").addEventListener("click", () => {
+    const examples = {
+      "en-US": "Hello. Welcome to our speech studio.", "en-GB": "Hello. Welcome to our speech studio.",
+      "de-DE": "Guten Morgen. Heute ist ein schöner Tag.", "fr-FR": "Bonjour. Bienvenue dans notre studio.",
+      "es-ES": "Hola. Bienvenidos a nuestro estudio.",
+    };
+    reference.value = examples[language.value];
+    clearTranscript();
+    reference.focus();
+  });
+
+  function renderAssessment(data) {
+    const scores = document.querySelector("#assessment-scores");
+    for (const [key, label] of [["overall", "Overall"], ["accuracy", "Accuracy"], ["fluency", "Fluency"], ["completeness", "Completeness"]]) {
+      const card = document.createElement("div");
+      card.className = "score-card";
+      const value = document.createElement("strong");
+      value.textContent = typeof data.scores?.[key] === "number" ? data.scores[key].toFixed(1) : "—";
+      const title = document.createElement("span");
+      title.textContent = label;
+      card.append(value, title);
+      scores.append(card);
+    }
+    const words = document.querySelector("#assessment-words");
+    for (const word of data.words || []) {
+      const row = document.createElement("details");
+      row.className = "word-row";
+      if (word.error !== "None") row.classList.add("needs-practice");
+      const summary = document.createElement("summary");
+      const accuracy = typeof word.accuracy === "number" ? `${word.accuracy.toFixed(1)}/100` : "Not scored";
+      summary.textContent = `${word.word} · ${accuracy} · ${word.error === "None" ? "Correct" : word.error}`;
+      const detail = document.createElement("p");
+      detail.textContent = (word.phonemes || []).map(item => `${item.phoneme}: ${typeof item.accuracy === "number" ? item.accuracy.toFixed(1) : "—"}`).join(" · ") || "No phoneme breakdown for this word.";
+      row.append(summary, detail);
+      words.append(row);
+    }
+    document.querySelector("#assessment-result").hidden = false;
+  }
 
   function releaseMic() {
     window.clearInterval(timerInterval);
@@ -238,7 +332,7 @@
         recording = false;
         recorder = null;
         recordLabel.textContent = "Record your voice";
-        recordTimer.textContent = "Microphone · 55 sec max";
+        recordTimer.textContent = `Microphone · ${recordLimit()} sec max`;
         recordButton.classList.remove("is-recording");
         updateControls();
         if (!failed && !leaving) void loadAudio(new Blob(chunks, {type}), "Microphone recording");
@@ -247,14 +341,15 @@
       recording = true;
       recordLabel.textContent = "Stop recording";
       recordButton.classList.add("is-recording");
-      recordTimer.textContent = "Recording · 0:00 / 0:55";
+      const limit = recordLimit();
+      recordTimer.textContent = `Recording · 0:00 / 0:${limit}`;
       const started = Date.now();
       timerInterval = window.setInterval(() => {
-        const seconds = Math.min(55, Math.floor((Date.now() - started) / 1000));
-        recordTimer.textContent = `Recording · 0:${String(seconds).padStart(2, "0")} / 0:55`;
+        const seconds = Math.min(limit, Math.floor((Date.now() - started) / 1000));
+        recordTimer.textContent = `Recording · 0:${String(seconds).padStart(2, "0")} / 0:${limit}`;
       }, 1000);
-      stopTimeout = window.setTimeout(finishRecording, 55000);
-      setStatus("Recording your voice. Stop when you’re ready; recording ends automatically after 55 seconds.");
+      stopTimeout = window.setTimeout(finishRecording, limit * 1000);
+      setStatus(`Recording your voice. Stop when you’re ready; recording ends automatically after ${limit} seconds.`);
     } catch (error) {
       releaseMic();
       recording = false;
@@ -276,28 +371,37 @@
     clearTranscript();
     busy = true;
     updateControls();
-    transcribeLabel.textContent = "Transcribing…";
+    const mode = modes[task.value];
+    transcribeLabel.textContent = mode.busy;
     setStatus("Listening for your words. This may take a moment…");
     const body = new FormData();
     body.append("audio", audioBlob, "recording.wav");
     body.append("language", language.value);
+    if (task.value === "translate") body.append("target_language", target.value);
+    if (task.value === "pronunciation") body.append("reference_text", reference.value.trim());
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 100000);
     try {
-      const response = await fetch("/api/speech-to-text", {method: "POST", body, signal: controller.signal});
+      const response = await fetch(mode.endpoint, {method: "POST", body, signal: controller.signal});
       let data;
       try { data = await response.json(); } catch (_) { throw new Error("The server returned an unexpected response. Please try again."); }
       if (!response.ok) throw new Error(typeof data.error === "string" ? data.error : "Couldn’t transcribe your audio. Please try again.");
       if (typeof data.text !== "string" || !data.text.trim()) throw new Error("No speech was recognized. Try a clearer recording and check the spoken language.");
-      transcript.value = data.text;
+      transcript.value = task.value === "translate" ? data.translation : data.text;
+      if (typeof transcript.value !== "string" || !transcript.value.trim()) throw new Error("No result was returned. Please try again.");
+      if (task.value === "translate") {
+        document.querySelector("#original-speech").textContent = data.text;
+        document.querySelector("#source-transcript").hidden = false;
+      }
+      if (task.value === "pronunciation") renderAssessment(data);
       transcript.disabled = false;
-      setStatus("Your transcript is ready. Review it, make any edits, and take it with you.");
+      setStatus(task.value === "pronunciation" ? "Your feedback is ready. Expand a word to explore its phonemes." : task.value === "translate" ? "Your translation is ready. Review it alongside the original speech." : "Your transcript is ready. Review it, make any edits, and take it with you.");
     } catch (error) {
       setStatus(error.name === "AbortError" ? "Transcription took too long. Please try again with a shorter clip." : error.message || "Couldn’t reach the server. Please try again.", true);
     } finally {
       window.clearTimeout(timeout);
       busy = false;
-      transcribeLabel.textContent = "Transcribe audio";
+      transcribeLabel.textContent = modes[task.value].action;
       updateControls();
       updateTranscript();
     }
@@ -345,5 +449,5 @@
       updateControls();
     }
   });
-  updateControls();
+  configureTask();
 })();

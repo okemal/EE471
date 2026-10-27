@@ -4,10 +4,14 @@
   const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
 
   function activate(tab, moveFocus = false) {
+    const previous = tabs.find(candidate => candidate.getAttribute("aria-selected") === "true");
     const wasSpeech = document.querySelector("#speech-to-text-tab").getAttribute("aria-selected") === "true";
     const willBeSpeech = tab.id === "speech-to-text-tab";
     if (wasSpeech && !willBeSpeech) {
       document.dispatchEvent(new Event("speech-studio:leave-speech"));
+    }
+    if (previous?.id === "live-diarization-tab" && previous !== tab) {
+      document.dispatchEvent(new Event("speech-studio:leave-live"));
     }
     document.querySelectorAll("audio").forEach((audio) => audio.pause());
     for (const candidate of tabs) {
@@ -18,7 +22,7 @@
       document.getElementById(candidate.getAttribute("aria-controls")).hidden = !selected;
     }
     if (moveFocus) tab.focus();
-    history.replaceState(null, "", willBeSpeech ? "#speech-to-text" : "#text-to-speech");
+    history.replaceState(null, "", `#${tab.id.replace(/-tab$/, "")}`);
   }
 
   for (const [index, tab] of tabs.entries()) {
@@ -37,9 +41,9 @@
   }
 
   function activateFromHash() {
-    activate(location.hash === "#speech-to-text" ? tabs[1] : tabs[0]);
+    activate(tabs.find(tab => `#${tab.id.replace(/-tab$/, "")}` === location.hash) || tabs[0]);
   }
 
   window.addEventListener("hashchange", activateFromHash);
-  if (location.hash === "#speech-to-text") activateFromHash();
+  if (location.hash) activateFromHash();
 })();

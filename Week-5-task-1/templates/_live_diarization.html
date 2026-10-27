@@ -1,0 +1,22 @@
+<section class="studio-grid live-grid" aria-label="Real-time speaker diarization">
+  <div class="panel live-controls" data-configured="{{ 'true' if configured else 'false' }}" data-max-seconds="{{ max_live_seconds }}">
+    <div class="panel-heading"><div><span class="section-number">01</span><h2>Follow the conversation</h2></div><span class="format-tag">LIVE</span></div>
+    <div class="live-illustration" aria-hidden="true"><span>01</span><i></i><span>02</span></div>
+    <p class="live-description">One microphone. Different voices.<br>See who said what as the conversation unfolds.</p>
+    <label for="live-language">Conversation language</label>
+    <select id="live-language">{% for language in languages %}<option value="{{ language.id }}">{{ language.label }}</option>{% endfor %}</select>
+    <button type="button" id="live-start" class="button button-primary" {% if not configured %}disabled{% endif %}>Start live session</button>
+    <span id="live-timer" class="record-timer">Up to 5 minutes per session</span>
+    <p id="live-status" class="status-message" role="status" aria-live="polite">Microphone audio is sent to Azure while the session is live.</p>
+    <p class="live-hint">Azure assigns labels such as Guest-1 and Guest-2. Early labels can be Unknown and may change as it hears more speech. Labels distinguish voices within this session; they aren’t people’s names.</p>
+  </div>
+  <div class="panel live-output" aria-labelledby="live-output-title">
+    <div class="panel-heading"><div><span class="section-number">02</span><h2 id="live-output-title">Who said what</h2></div><span class="format-tag" id="speaker-count">0 SPEAKERS</span></div>
+    <p class="live-empty" id="live-empty">The next conversation starts here.<br>Start a session and speak naturally.</p>
+    <ol id="live-lines" class="live-lines" aria-label="Completed speaker turns"></ol>
+    <p id="live-partial" class="live-partial" role="status" aria-live="polite"></p>
+    <div class="transcript-actions"><button id="live-copy" type="button" class="button button-secondary" disabled>Copy transcript</button><a id="live-download" class="button button-secondary" download="vocal-speakers.txt" aria-disabled="true">Download .txt</a></div>
+    <p class="status-message" id="live-copy-status" role="status" aria-live="polite"></p>
+    <div class="output-note"><p>Audio streams through this local server. Completed lines stay in this page until you start a new session or reload; they aren’t saved on the server.</p></div>
+  </div>
+</section>

@@ -10,6 +10,7 @@
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
   <script src="{{ url_for('static', filename='text-to-speech.js') }}" defer></script>
   <script src="{{ url_for('static', filename='speech-to-text.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='live-diarization.js') }}" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#studio">Skip to speech studio</a>
@@ -24,7 +25,7 @@
         <div>
           <p class="eyebrow"><span></span> WORDS TO VOICE. VOICE TO WORDS.</p>
           <h1 id="page-title">Good words go <em>both ways.</em></h1>
-          <p class="intro-description">Turn text into natural speech, or bring a recording back to words.<br class="desktop-break"> A little space to create, listen, and keep your ideas.</p>
+          <p class="intro-description">Turn words into speech, translate a recording, or practice pronunciation.<br class="desktop-break"> Follow a conversation live, one voice at a time.</p>
         </div>
       </section>
       {% if not configured %}
@@ -36,7 +37,10 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M9 7v12M6 19h6M16 10c2 1 2 5 0 6M19 7c4 3 4 9 0 12"/></svg>Text to speech
           </button>
           <button type="button" id="speech-to-text-tab" class="mode-tab" role="tab" aria-selected="false" aria-controls="speech-to-text-panel" tabindex="-1">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11v1a7 7 0 0 0 14 0v-1M12 19v3m-3 0h6"/></svg>Speech to text
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11v1a7 7 0 0 0 14 0v-1M12 19v3m-3 0h6"/></svg>Speech tools
+          </button>
+          <button type="button" id="live-diarization-tab" class="mode-tab" role="tab" aria-selected="false" aria-controls="live-diarization-panel" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="7" r="3"/><circle cx="17" cy="9" r="2"/><path d="M2 20v-3a6 6 0 0 1 12 0v3m2-6a4 4 0 0 1 6 3v3"/></svg>Live speakers
           </button>
         </div>
         <span class="mode-caption">Write it. Say it. Keep it.</span>
@@ -46,6 +50,9 @@
       </section>
       <section id="speech-to-text-panel" role="tabpanel" aria-labelledby="speech-to-text-tab" tabindex="0" hidden>
         {% include '_speech_to_text.html' %}
+      </section>
+      <section id="live-diarization-panel" role="tabpanel" aria-labelledby="live-diarization-tab" tabindex="0" hidden>
+        {% include '_live_diarization.html' %}
       </section>
     </main>
     <footer class="site-footer"><span>Made for words that deserve to be heard.</span><span>VOCAL / SPEECH STUDIO</span></footer>

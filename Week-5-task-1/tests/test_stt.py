@@ -11,11 +11,21 @@ import requests
 
 from app import create_app
 
-
 FAKE_KEY = "stt-test-secret-never-display-this"
 
 
 def wav_bytes(*, frames=1600, sample_rate=16000, channels=1, sample_width=2):
+    """Builds silent WAV bytes with selectable encoding for boundary tests.
+
+    Args:
+        frames: An int number of audio frames, including zero for empty audio.
+        sample_rate: An int sample rate in hertz.
+        channels: An int channel count.
+        sample_width: An int number of bytes per sample.
+
+    Returns:
+        WAV bytes with the selected format and frame count.
+    """
     buffer = io.BytesIO()
     with wave.open(buffer, "wb") as audio:
         audio.setnchannels(channels)
@@ -26,17 +36,29 @@ def wav_bytes(*, frames=1600, sample_rate=16000, channels=1, sample_width=2):
 
 
 def azure_response(payload, status=200):
+    """Builds an upstream response from raw bytes or a JSON-serializable value.
+
+    Args:
+        payload: Bytes to return verbatim, or an object to JSON-encode.
+        status: An int upstream HTTP status code.
+
+    Returns:
+        A requests.Response usable by the real response-parsing code.
+    """
     response = requests.Response()
     response.status_code = status
-    response._content = payload if isinstance(payload, bytes) else json.dumps(payload).encode()
+    response._content = payload if isinstance(
+        payload, bytes) else json.dumps(payload).encode()
     response.headers["Content-Type"] = "application/json"
     return response
 
 
 @pytest.fixture
 def azure_post(monkeypatch):
+    """Returns a network-blocking POST mock with a successful transcript reply."""
     post = Mock(return_value=azure_response({
-        "RecognitionStatus": "Success", "DisplayText": "Hello from the test.",
+        "RecognitionStatus": "Success",
+        "DisplayText": "Hello from the test.",
     }))
     monkeypatch.setattr("speech.requests.post", post)
     return post
@@ -44,6 +66,7 @@ def azure_post(monkeypatch):
 
 @pytest.fixture
 def app(azure_post):
+    """Returns an isolated Flask app whose Azure credentials are test-only."""
     return create_app({
         "TESTING": True,
         "AZURE_SPEECH_KEY": FAKE_KEY,
@@ -53,20 +76,42 @@ def app(azure_post):
 
 @pytest.fixture
 def client(app):
+    """Returns an in-process HTTP client for the isolated Flask app."""
     return app.test_client()
 
 
-def upload(client, audio=None, *, language="en-US", headers=None, filename="recording.wav"):
-    data = {"audio": (io.BytesIO(wav_bytes() if audio is None else audio), filename)}
+def upload(client,
+           audio=None,
+           *,
+           language="en-US",
+           headers=None,
+           filename="recording.wav"):
+    """Submits a multipart recording through the public transcription route.
+
+    Args:
+        client: A Flask test client.
+        audio: Optional WAV bytes; None selects the default valid recording.
+        language: An optional str locale. None omits the field to test defaults.
+        headers: An optional dict of HTTP headers, including Origin when needed.
+        filename: A str untrusted filename sent with the recording.
+
+    Returns:
+        The Flask test response for the upload request.
+    """
+    data = {
+        "audio": (io.BytesIO(wav_bytes() if audio is None else audio), filename)
+    }
     if language is not None:
         data["language"] = language
     return client.post("/api/speech-to-text", data=data, headers=headers or {})
 
 
-def test_transcription_sends_audio_and_returns_text_without_credentials(client, azure_post):
+def test_transcription_sends_audio_and_returns_text_without_credentials(
+        client, azure_post):
     audio = wav_bytes()
     azure_post.return_value = azure_response({
-        "RecognitionStatus": "Success", "DisplayText": "Merhaba dünya.",
+        "RecognitionStatus": "Success",
+        "DisplayText": "Merhaba dünya.",
     })
     response = upload(client, audio, language="tr-TR")
 
@@ -91,14 +136,16 @@ def test_transcription_sends_audio_and_returns_text_without_credentials(client, 
     assert all(value > 0 for value in kwargs["timeout"])
 
 
-@pytest.mark.parametrize("language", [None, "en-US", "en-GB", "tr-TR", "de-DE", "fr-FR", "es-ES"])
+@pytest.mark.parametrize(
+    "language", [None, "en-US", "en-GB", "tr-TR", "de-DE", "fr-FR", "es-ES"])
 def test_supported_languages_and_default(client, language):
     response = upload(client, language=language)
     assert response.status_code == 200
     assert response.json["language"] == (language or "en-US")
 
 
-@pytest.mark.parametrize("language", ["", "en", "unknown", "en-US&format=detailed", "../en-US"])
+@pytest.mark.parametrize(
+    "language", ["", "en", "unknown", "en-US&format=detailed", "../en-US"])
 def test_invalid_language_never_reaches_azure(client, azure_post, language):
     response = upload(client, language=language)
     assert response.status_code == 400
@@ -107,12 +154,20 @@ def test_invalid_language_never_reaches_azure(client, azure_post, language):
 
 
 @pytest.mark.parametrize("audio", [
-    b"", b"not an audio file", b"RIFF" + b"\0" * 40,
-    b"RIFF" + (12).to_bytes(4, "little") + b"WAVEJUNK" + (100).to_bytes(4, "little"),
-    wav_bytes()[:20], wav_bytes()[:-2], wav_bytes()[:-1],
-    wav_bytes(frames=0), wav_bytes(channels=2),
-    wav_bytes(sample_rate=44100), wav_bytes(sample_width=1),
-    wav_bytes(sample_width=3), wav_bytes(frames=60 * 16000 + 1),
+    b"",
+    b"not an audio file",
+    b"RIFF" + b"\0" * 40,
+    b"RIFF" + (12).to_bytes(4, "little") + b"WAVEJUNK" +
+    (100).to_bytes(4, "little"),
+    wav_bytes()[:20],
+    wav_bytes()[:-2],
+    wav_bytes()[:-1],
+    wav_bytes(frames=0),
+    wav_bytes(channels=2),
+    wav_bytes(sample_rate=44100),
+    wav_bytes(sample_width=1),
+    wav_bytes(sample_width=3),
+    wav_bytes(frames=60 * 16000 + 1),
 ])
 def test_invalid_audio_is_rejected_before_azure(client, azure_post, audio):
     response = upload(client, audio)
@@ -128,9 +183,19 @@ def test_sixty_second_audio_is_accepted(client, azure_post):
 
 
 @pytest.mark.parametrize("request_kwargs", [
-    {"data": {}},
-    {"json": {"audio": "pretend.wav"}},
-    {"data": {"audio": "pretend.wav"}},
+    {
+        "data": {}
+    },
+    {
+        "json": {
+            "audio": "pretend.wav"
+        }
+    },
+    {
+        "data": {
+            "audio": "pretend.wav"
+        }
+    },
 ])
 def test_missing_file_is_rejected(client, azure_post, request_kwargs):
     response = client.post("/api/speech-to-text", **request_kwargs)
@@ -145,10 +210,13 @@ def test_oversized_upload_is_rejected(client, azure_post):
     azure_post.assert_not_called()
 
 
-@pytest.mark.parametrize("status", ["NoMatch", "InitialSilenceTimeout", "BabbleTimeout"])
-def test_no_recognizable_speech_has_actionable_error(client, azure_post, status):
+@pytest.mark.parametrize("status",
+                         ["NoMatch", "InitialSilenceTimeout", "BabbleTimeout"])
+def test_no_recognizable_speech_has_actionable_error(client, azure_post,
+                                                     status):
     azure_post.return_value = azure_response({
-        "RecognitionStatus": status, "ErrorDetails": FAKE_KEY,
+        "RecognitionStatus": status,
+        "ErrorDetails": FAKE_KEY,
     })
     response = upload(client)
     assert response.status_code == 422
@@ -157,23 +225,46 @@ def test_no_recognizable_speech_has_actionable_error(client, azure_post, status)
 
 
 @pytest.mark.parametrize("text", ["", " \n\t "])
-def test_empty_success_is_reported_as_unrecognized_speech(client, azure_post, text):
-    azure_post.return_value = azure_response({"RecognitionStatus": "Success", "DisplayText": text})
+def test_empty_success_is_reported_as_unrecognized_speech(
+        client, azure_post, text):
+    azure_post.return_value = azure_response({
+        "RecognitionStatus": "Success",
+        "DisplayText": text
+    })
     response = upload(client)
     assert response.status_code == 422
     assert response.json["error"]
 
 
 @pytest.mark.parametrize("payload", [
-    {"RecognitionStatus": "Error", "ErrorDetails": FAKE_KEY},
-    {"RecognitionStatus": "UnknownStatus", "ErrorDetails": FAKE_KEY},
-    {}, [], None, "not an object", 42,
-    {"RecognitionStatus": "Success"},
-    {"RecognitionStatus": "Success", "DisplayText": None},
-    {"RecognitionStatus": "Success", "DisplayText": [FAKE_KEY]},
+    {
+        "RecognitionStatus": "Error",
+        "ErrorDetails": FAKE_KEY
+    },
+    {
+        "RecognitionStatus": "UnknownStatus",
+        "ErrorDetails": FAKE_KEY
+    },
+    {},
+    [],
+    None,
+    "not an object",
+    42,
+    {
+        "RecognitionStatus": "Success"
+    },
+    {
+        "RecognitionStatus": "Success",
+        "DisplayText": None
+    },
+    {
+        "RecognitionStatus": "Success",
+        "DisplayText": [FAKE_KEY]
+    },
     b"not valid JSON: " + FAKE_KEY.encode(),
 ])
-def test_malformed_or_failed_upstream_result_is_safe(client, azure_post, payload):
+def test_malformed_or_failed_upstream_result_is_safe(client, azure_post,
+                                                     payload):
     azure_post.return_value = azure_response(payload)
     response = upload(client)
     assert response.status_code == 502
@@ -182,10 +273,17 @@ def test_malformed_or_failed_upstream_result_is_safe(client, azure_post, payload
 
 
 @pytest.mark.parametrize("upstream_status,expected_status", [
-    (401, 503), (403, 503), (429, 429), (400, 502), (500, 502), (503, 502),
+    (401, 503),
+    (403, 503),
+    (429, 429),
+    (400, 502),
+    (500, 502),
+    (503, 502),
 ])
-def test_http_errors_hide_upstream_details(client, azure_post, upstream_status, expected_status):
-    azure_post.return_value = azure_response({"error": FAKE_KEY}, status=upstream_status)
+def test_http_errors_hide_upstream_details(client, azure_post, upstream_status,
+                                           expected_status):
+    azure_post.return_value = azure_response({"error": FAKE_KEY},
+                                             status=upstream_status)
     response = upload(client)
     assert response.status_code == expected_status
     assert response.json["error"]
@@ -196,7 +294,8 @@ def test_http_errors_hide_upstream_details(client, azure_post, upstream_status, 
     (requests.Timeout(FAKE_KEY), 504),
     (requests.ConnectionError(FAKE_KEY), 502),
 ])
-def test_network_errors_are_safe(client, azure_post, exception, expected_status):
+def test_network_errors_are_safe(client, azure_post, exception,
+                                 expected_status):
     azure_post.side_effect = exception
     response = upload(client)
     assert response.status_code == expected_status
@@ -205,9 +304,15 @@ def test_network_errors_are_safe(client, azure_post, exception, expected_status)
 
 
 @pytest.mark.parametrize("overrides", [
-    {"AZURE_SPEECH_KEY": ""}, {"AZURE_SPEECH_REGION": ""},
+    {
+        "AZURE_SPEECH_KEY": ""
+    },
+    {
+        "AZURE_SPEECH_REGION": ""
+    },
 ])
-def test_unconfigured_server_does_not_call_azure(app, client, azure_post, overrides):
+def test_unconfigured_server_does_not_call_azure(app, client, azure_post,
+                                                 overrides):
     app.config.update(overrides)
     response = upload(client)
     assert response.status_code == 503
@@ -224,7 +329,9 @@ def test_cross_origin_form_upload_cannot_spend_quota(client, azure_post):
 
 
 def test_same_origin_upload_is_accepted(client):
-    assert upload(client, headers={"Origin": "http://localhost"}).status_code == 200
+    assert upload(client, headers={
+        "Origin": "http://localhost"
+    }).status_code == 200
 
 
 @pytest.mark.parametrize("path", ["/", "/api/health"])
