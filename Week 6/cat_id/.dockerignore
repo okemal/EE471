@@ -1,0 +1,11 @@
+*
+!Dockerfile
+!pyproject.toml
+!uv.lock
+!requirements-cpu.lock
+!backend/
+!backend/**
+!frontend/
+!frontend/**
+**/__pycache__/
+**/*.pyc

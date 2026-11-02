@@ -1,0 +1,10 @@
+# Requires NVIDIA Container Toolkit in Docker, separately from a working host GPU.
+services:
+  web:
+    build:
+      args:
+        INFERENCE_DEVICE: cuda
+    image: felis-cat-id:cuda
+    environment:
+      CAT_ID_DEVICE: cuda
+    gpus: all

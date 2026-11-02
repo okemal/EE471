@@ -1,0 +1,820 @@
+[
+  {
+    "id": "domestic-cat",
+    "common_name": "Domestic cat",
+    "scientific_name": "Felis catus",
+    "genus": "Felis",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Cat",
+    "summary": "Our familiar companion is a member of Felidae. Domestic cats vary enormously in coat colour, pattern and length; tabbies, Siamese and other breeds belong to the same species.",
+    "range": "Worldwide, associated with people",
+    "habitat": "Homes, settlements, farms and feral populations in many environments",
+    "identification": [
+      "Highly variable coat colours and patterns",
+      "Size and hair length vary among breeds",
+      "Tabby markings can closely resemble wildcats"
+    ],
+    "source_url": "https://felidaefund.org/learn/cats/domestic-cat",
+    "taxonomy_note": "A species match does not identify a breed. Appearance alone cannot reliably separate domestic–wildcat hybrids.",
+    "aliases": [
+      "House cat"
+    ]
+  },
+  {
+    "id": "lion",
+    "common_name": "Lion",
+    "scientific_name": "Panthera leo",
+    "genus": "Panthera",
+    "subfamily": "Pantherinae",
+    "wikipedia_title": "Lion",
+    "summary": "A powerful, social big cat. Lions live in groups called prides, and adult males commonly develop a mane whose appearance varies with age and environment.",
+    "range": "Parts of sub-Saharan Africa and western India",
+    "habitat": "Savannas, open woodlands and scrub",
+    "identification": [
+      "Mostly plain tawny coat",
+      "Tail ending in a dark tuft",
+      "Adult males usually have a mane"
+    ],
+    "source_url": "https://www.catsg.org/living-species-lions",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "tiger",
+    "common_name": "Tiger",
+    "scientific_name": "Panthera tigris",
+    "genus": "Panthera",
+    "subfamily": "Pantherinae",
+    "wikipedia_title": "Tiger",
+    "summary": "A large, striped Asian cat that usually hunts alone. Each animal has its own stripe pattern, which helps break up its outline among vegetation.",
+    "range": "Fragmented populations across South, Southeast and eastern Asia",
+    "habitat": "Forests, grasslands and wetlands with cover and prey",
+    "identification": [
+      "Dark vertical stripes",
+      "Orange coat with pale underparts in typical individuals",
+      "Broad head and powerful build"
+    ],
+    "source_url": "https://www.catsg.org/living-species-tiger",
+    "taxonomy_note": "White tigers are a colour variant, not a separate species.",
+    "aliases": []
+  },
+  {
+    "id": "leopard",
+    "common_name": "Leopard",
+    "scientific_name": "Panthera pardus",
+    "genus": "Panthera",
+    "subfamily": "Pantherinae",
+    "wikipedia_title": "Leopard",
+    "summary": "An adaptable big cat found in a wide variety of landscapes. Its spotted coat varies across its range; black individuals are the same species, with markings often still visible.",
+    "range": "Parts of Africa and Asia",
+    "habitat": "Forests, savannas, scrub and rocky mountains",
+    "identification": [
+      "Small dark rosettes, usually without central spots",
+      "Long tail",
+      "Relatively slender build compared with a jaguar"
+    ],
+    "source_url": "https://www.catsg.org/living-species-leopard",
+    "taxonomy_note": "A black panther may be a melanistic leopard or jaguar; the term is not a species name.",
+    "aliases": []
+  },
+  {
+    "id": "jaguar",
+    "common_name": "Jaguar",
+    "scientific_name": "Panthera onca",
+    "genus": "Panthera",
+    "subfamily": "Pantherinae",
+    "wikipedia_title": "Jaguar",
+    "summary": "The largest cat native to the Americas. Jaguars have a robust head and body, and inhabit forests as well as wetlands and other covered landscapes.",
+    "range": "Mexico through Central America into South America",
+    "habitat": "Tropical forests, wetlands, wooded savannas and scrub",
+    "identification": [
+      "Large rosettes often containing small spots",
+      "Broad head and stocky body",
+      "Relatively short tail for a big cat"
+    ],
+    "source_url": "https://www.catsg.org/living-species-jaguar",
+    "taxonomy_note": "Black individuals are melanistic jaguars, not a separate species.",
+    "aliases": []
+  },
+  {
+    "id": "snow-leopard",
+    "common_name": "Snow leopard",
+    "scientific_name": "Panthera uncia",
+    "genus": "Panthera",
+    "subfamily": "Pantherinae",
+    "wikipedia_title": "Snow leopard",
+    "summary": "A mountain specialist adapted to cold, rugged terrain. A thick coat, broad paws and a long, bushy tail help it move and rest in harsh conditions.",
+    "range": "High mountains of Central and South Asia",
+    "habitat": "Rocky alpine and subalpine mountains",
+    "identification": [
+      "Pale grey coat with dark rosettes",
+      "Exceptionally long, thick tail",
+      "Small rounded ears and broad paws"
+    ],
+    "source_url": "https://www.catsg.org/living-species-snowleopard",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "clouded-leopard",
+    "common_name": "Clouded leopard",
+    "scientific_name": "Neofelis nebulosa",
+    "genus": "Neofelis",
+    "subfamily": "Pantherinae",
+    "wikipedia_title": "Clouded leopard",
+    "summary": "A forest cat with large, irregular coat markings and strong climbing abilities. Its long tail helps it balance in trees.",
+    "range": "Himalayan foothills and mainland Southeast Asia",
+    "habitat": "Primarily dense tropical and subtropical forests",
+    "identification": [
+      "Large cloud-shaped dark markings",
+      "Long tail approaching body length",
+      "Short, sturdy legs and broad paws"
+    ],
+    "source_url": "https://www.catsg.org/living-species-cloudedleopard",
+    "taxonomy_note": "Separated from the Sunda clouded leopard; a photograph alone may not resolve the two.",
+    "aliases": [
+      "Mainland clouded leopard"
+    ]
+  },
+  {
+    "id": "sunda-clouded-leopard",
+    "common_name": "Sunda clouded leopard",
+    "scientific_name": "Neofelis diardi",
+    "genus": "Neofelis",
+    "subfamily": "Pantherinae",
+    "wikipedia_title": "Sunda clouded leopard",
+    "summary": "A forest-dwelling cat of Borneo and Sumatra. It is closely related to the mainland clouded leopard but recognised as a distinct species.",
+    "range": "Borneo and Sumatra",
+    "habitat": "Lowland, hill and montane forests, including some logged forest",
+    "identification": [
+      "Cloud-shaped markings, often smaller than in the mainland species",
+      "Grey-toned coat in typical individuals",
+      "Long tail and short legs"
+    ],
+    "source_url": "https://www.catsg.org/living-species-sundacloudedleopard",
+    "taxonomy_note": "Visual separation from the mainland clouded leopard can be uncertain without origin information.",
+    "aliases": []
+  },
+  {
+    "id": "cheetah",
+    "common_name": "Cheetah",
+    "scientific_name": "Acinonyx jubatus",
+    "genus": "Acinonyx",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Cheetah",
+    "summary": "A lightly built cat specialised for rapid pursuit. Its long limbs and slender body distinguish it from the more powerfully built spotted big cats.",
+    "range": "Parts of Africa and a remnant population in Iran",
+    "habitat": "Open grasslands, savannas, shrublands and arid landscapes",
+    "identification": [
+      "Dark tear lines from eyes toward mouth",
+      "Small solid spots in the typical coat",
+      "Slender body with long legs"
+    ],
+    "source_url": "https://www.catsg.org/living-species-cheetah",
+    "taxonomy_note": "The king cheetah pattern is a coat variation, not a separate species.",
+    "aliases": []
+  },
+  {
+    "id": "puma",
+    "common_name": "Puma",
+    "scientific_name": "Puma concolor",
+    "genus": "Puma",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Cougar",
+    "summary": "Also called the cougar or mountain lion, this adaptable American cat occupies an exceptionally broad range of habitats. Adults generally have a plain coat; cubs are spotted.",
+    "range": "Western North America, parts of eastern North America, Central and South America",
+    "habitat": "Forests, mountains, grasslands, scrub and deserts",
+    "identification": [
+      "Plain tawny or grey-brown adult coat",
+      "Long tail with a dark tip",
+      "Small rounded ears and powerful hindquarters"
+    ],
+    "source_url": "https://www.catsg.org/living-species-puma",
+    "taxonomy_note": "",
+    "aliases": [
+      "Cougar",
+      "Mountain lion"
+    ]
+  },
+  {
+    "id": "jaguarundi",
+    "common_name": "Jaguarundi",
+    "scientific_name": "Herpailurus yagouaroundi",
+    "genus": "Herpailurus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Jaguarundi",
+    "summary": "An elongated, low-slung cat closely related to the puma. Different individuals may be reddish, grey or dark brown, without the strong spotting of many other American cats.",
+    "range": "Mexico, Central America and much of South America",
+    "habitat": "Scrub, woodland, forests, grasslands and wetland edges",
+    "identification": [
+      "Long body and short legs",
+      "Small head with rounded ears",
+      "Mostly plain coat and long tail"
+    ],
+    "source_url": "https://www.catsg.org/living-species-jaguarundi",
+    "taxonomy_note": "Older sources may use Puma yagouaroundi.",
+    "aliases": [
+      "Puma yagouaroundi"
+    ]
+  },
+  {
+    "id": "caracal",
+    "common_name": "Caracal",
+    "scientific_name": "Caracal caracal",
+    "genus": "Caracal",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Caracal",
+    "summary": "An agile cat of often dry, open landscapes. Its tall ears carry conspicuous black tufts, although it is not a member of the lynx genus.",
+    "range": "Parts of Africa, the Middle East and South Asia",
+    "habitat": "Savannas, scrub, semi-deserts and open woodland",
+    "identification": [
+      "Long black ear tufts",
+      "Plain reddish or sandy coat",
+      "Long legs and a relatively short tail"
+    ],
+    "source_url": "https://www.catsg.org/living-species-caracal",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "african-golden-cat",
+    "common_name": "African golden cat",
+    "scientific_name": "Caracal aurata",
+    "genus": "Caracal",
+    "subfamily": "Felinae",
+    "wikipedia_title": "African golden cat",
+    "summary": "A compact forest cat closely related to the caracal and serval. Despite its name, the coat may be grey or reddish, with variable spotting.",
+    "range": "Forested parts of West and Central Africa",
+    "habitat": "Moist tropical forests, including some secondary and montane forest",
+    "identification": [
+      "Rounded ears without long tufts",
+      "Compact body and relatively short tail",
+      "Grey or reddish coat, sometimes spotted"
+    ],
+    "source_url": "https://www.catsg.org/living-species-africangoldencat",
+    "taxonomy_note": "The name Caracal aurata follows the 2017 reference; some newer checklists use Caracal auratus.",
+    "aliases": [
+      "Caracal auratus"
+    ]
+  },
+  {
+    "id": "serval",
+    "common_name": "Serval",
+    "scientific_name": "Leptailurus serval",
+    "genus": "Leptailurus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Serval",
+    "summary": "A long-legged African cat adapted to finding small prey in grass. Its exceptionally large ears help detect movement in dense vegetation.",
+    "range": "Mainly sub-Saharan Africa, with a limited northern African presence",
+    "habitat": "Grasslands, reed beds, marshes and other habitats near water",
+    "identification": [
+      "Very large upright ears",
+      "Long legs and a small head",
+      "Spotted coat with a short tail"
+    ],
+    "source_url": "https://www.catsg.org/living-species-serval",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "asian-golden-cat",
+    "common_name": "Asian golden cat",
+    "scientific_name": "Catopuma temminckii",
+    "genus": "Catopuma",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Asian golden cat",
+    "summary": "A forest cat with striking variation in colour: golden, grey, dark and patterned individuals occur. Facial stripes are more consistent than its coat colour.",
+    "range": "Himalayan foothills through Southeast Asia, including Sumatra",
+    "habitat": "Tropical, subtropical and montane forests",
+    "identification": [
+      "Pale facial lines bordered with dark markings",
+      "Rounded ears",
+      "Often plain golden-brown coat, but many colour forms occur"
+    ],
+    "source_url": "https://www.catsg.org/living-species-asiangoldencat",
+    "taxonomy_note": "",
+    "aliases": [
+      "Asiatic golden cat"
+    ]
+  },
+  {
+    "id": "bay-cat",
+    "common_name": "Bay cat",
+    "scientific_name": "Catopuma badia",
+    "genus": "Catopuma",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Bay cat",
+    "summary": "A little-studied cat found only on Borneo. It is associated with forest and has a notably long tail; reddish and grey individuals are known.",
+    "range": "Borneo",
+    "habitat": "Lowland and hill forests, including some logged forest",
+    "identification": [
+      "Long tail with a pale underside",
+      "Small rounded ears",
+      "Usually chestnut or grey coat"
+    ],
+    "source_url": "https://www.catsg.org/living-species-baycat",
+    "taxonomy_note": "",
+    "aliases": [
+      "Bornean bay cat",
+      "Borneo bay cat"
+    ]
+  },
+  {
+    "id": "marbled-cat",
+    "common_name": "Marbled cat",
+    "scientific_name": "Pardofelis marmorata",
+    "genus": "Pardofelis",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Marbled cat",
+    "summary": "A small Asian forest cat with an intricate blotched coat. Its very long tail and climbing adaptations suit life among trees.",
+    "range": "Himalayan foothills through Southeast Asia, Sumatra and Borneo",
+    "habitat": "Moist tropical and subtropical forests",
+    "identification": [
+      "Irregular marbled blotches outlined in dark fur",
+      "Very long, bushy tail",
+      "Rounded head and relatively small body"
+    ],
+    "source_url": "https://www.catsg.org/living-species-marbledcat",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "andean-cat",
+    "common_name": "Andean cat",
+    "scientific_name": "Leopardus jacobita",
+    "genus": "Leopardus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Andean mountain cat",
+    "summary": "A thick-coated cat of rocky Andean and Patagonian landscapes. It can resemble the pampas cat, making careful comparison necessary.",
+    "range": "Andean regions of Peru, Bolivia, Chile and Argentina, extending into northern Patagonia",
+    "habitat": "Rocky, sparsely vegetated mountain and steppe landscapes",
+    "identification": [
+      "Long, thick tail with broad dark rings",
+      "Silvery-grey coat with darker blotches",
+      "Dark nose in typical individuals"
+    ],
+    "source_url": "https://www.catsg.org/living-species-andeanmountaincat",
+    "taxonomy_note": "",
+    "aliases": [
+      "Andean mountain cat"
+    ]
+  },
+  {
+    "id": "ocelot",
+    "common_name": "Ocelot",
+    "scientific_name": "Leopardus pardalis",
+    "genus": "Leopardus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Ocelot",
+    "summary": "A medium-sized American cat most often associated with dense cover. Its coat carries elongated markings that can join into bands along the sides.",
+    "range": "Southern North America, Central America and South America",
+    "habitat": "Forests, thorn scrub, mangroves and other dense vegetation",
+    "identification": [
+      "Elongated rosettes and dark flank bands",
+      "Sturdy legs with large paws",
+      "Shorter tail than the similar margay"
+    ],
+    "source_url": "https://www.catsg.org/living-species-ocelot",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "margay",
+    "common_name": "Margay",
+    "scientific_name": "Leopardus wiedii",
+    "genus": "Leopardus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Margay",
+    "summary": "A small, highly skilled climbing cat of American forests. Its large eyes and long tail help distinguish it from the larger ocelot.",
+    "range": "Mexico through Central America into South America",
+    "habitat": "Tropical and subtropical forests",
+    "identification": [
+      "Very large eyes",
+      "Long, thick tail marked with rings",
+      "Rosetted coat and large paws"
+    ],
+    "source_url": "https://www.catsg.org/living-species-margay",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "pampas-cat",
+    "common_name": "Pampas cat",
+    "scientific_name": "Leopardus colocola",
+    "genus": "Leopardus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Pampas cat",
+    "summary": "A variable South American cat represented here by the broad 2017 species concept. Coat colour and markings differ substantially between populations.",
+    "range": "Western and southern South America under the 2017 broad species concept",
+    "habitat": "Grasslands, scrub, highland steppe and other open habitats",
+    "identification": [
+      "Broad face and often long fur",
+      "Relatively short tail",
+      "Leg bars and a pinkish nose in typical individuals"
+    ],
+    "source_url": "https://www.catsg.org/living-species-pampascat",
+    "taxonomy_note": "This is the broad CCTF 2017 concept. Later treatments split it into several species; this app does not distinguish those splits.",
+    "aliases": [
+      "Leopardus colocolo"
+    ]
+  },
+  {
+    "id": "northern-tiger-cat",
+    "common_name": "Northern tiger cat",
+    "scientific_name": "Leopardus tigrinus",
+    "genus": "Leopardus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Oncilla",
+    "summary": "A small spotted cat represented here by the broad northern tiger-cat concept used in 2017. Several populations have since been proposed or recognised as distinct species.",
+    "range": "Parts of Central and South America under the 2017 broad species concept",
+    "habitat": "Forests, wooded savannas and scrub, varying by population",
+    "identification": [
+      "Small, slender body",
+      "Dark rosettes on a pale to ochre coat",
+      "Strong visual overlap with other tiger cats"
+    ],
+    "source_url": "https://www.catsg.org/living-species-northerntigercat",
+    "taxonomy_note": "The 2017 concept predates later tiger-cat splits, including clouded tiger cat and the 2026 description of Leopardus tilcayo. This app cannot resolve those taxa.",
+    "aliases": [
+      "Oncilla",
+      "Northern tigrina"
+    ]
+  },
+  {
+    "id": "southern-tiger-cat",
+    "common_name": "Southern tiger cat",
+    "scientific_name": "Leopardus guttulus",
+    "genus": "Leopardus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Southern tiger cat",
+    "summary": "A small South American cat closely resembling other tiger cats. It occupies forest and some more open habitats, and can be difficult to identify from a single photograph.",
+    "range": "Southern and southeastern Brazil, Paraguay and northeastern Argentina",
+    "habitat": "Atlantic Forest, other woodlands and some savannas",
+    "identification": [
+      "Small body with a spotted or rosetted coat",
+      "Rosettes often have thick, continuous outlines",
+      "Yellow-brown to ochre background colour"
+    ],
+    "source_url": "https://www.catsg.org/living-species-southerntigercat",
+    "taxonomy_note": "Similar tiger-cat species may require geographic and genetic evidence for reliable identification.",
+    "aliases": [
+      "Southern tigrina"
+    ]
+  },
+  {
+    "id": "geoffroys-cat",
+    "common_name": "Geoffroy's cat",
+    "scientific_name": "Leopardus geoffroyi",
+    "genus": "Leopardus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Geoffroy's cat",
+    "summary": "A small cat of southern South America that uses diverse habitats. Its coat is usually covered in small solid spots; dark individuals also occur.",
+    "range": "Southern South America, including Bolivia, Brazil, Paraguay, Uruguay, Argentina and Chile",
+    "habitat": "Grasslands, scrub, woodland and wetlands",
+    "identification": [
+      "Small solid spots rather than large rosettes",
+      "Dark cheek stripes",
+      "Relatively short, ringed tail"
+    ],
+    "source_url": "https://www.catsg.org/living-species-geoffroyscat",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "kodkod",
+    "common_name": "Kodkod",
+    "scientific_name": "Leopardus guigna",
+    "genus": "Leopardus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Kodkod",
+    "summary": "Also known as the guiña, this very small South American cat depends strongly on vegetation cover. It inhabits forests and some surrounding modified landscapes.",
+    "range": "Central and southern Chile and adjoining Argentina",
+    "habitat": "Temperate forests, wooded scrub and forest mosaics",
+    "identification": [
+      "Small face and rounded ears",
+      "Dense small dark spots",
+      "Thick, ringed tail"
+    ],
+    "source_url": "https://www.catsg.org/living-species-kodkod",
+    "taxonomy_note": "",
+    "aliases": [
+      "Guina",
+      "Guiña"
+    ]
+  },
+  {
+    "id": "bobcat",
+    "common_name": "Bobcat",
+    "scientific_name": "Lynx rufus",
+    "genus": "Lynx",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Bobcat",
+    "summary": "An adaptable North American cat with a short tail. It resembles the Canada lynx but generally has smaller paws and shorter ear tufts.",
+    "range": "Southern Canada, the United States and Mexico",
+    "habitat": "Woodlands, scrub, deserts, wetlands and mixed landscapes",
+    "identification": [
+      "Short tail with a pale underside near the tip",
+      "Short ear tufts",
+      "Spotted or streaked coat and relatively compact build"
+    ],
+    "source_url": "https://www.catsg.org/living-species-bobcat",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "canada-lynx",
+    "common_name": "Canada lynx",
+    "scientific_name": "Lynx canadensis",
+    "genus": "Lynx",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Canada lynx",
+    "summary": "A northern forest cat strongly associated with snowshoe hares. Large, densely furred feet help it travel over soft snow.",
+    "range": "Canada, Alaska and parts of the northern contiguous United States",
+    "habitat": "Boreal and mixed forests",
+    "identification": [
+      "Very large, furred paws",
+      "Long ear tufts and cheek ruff",
+      "Short tail with an all-dark tip"
+    ],
+    "source_url": "https://www.catsg.org/living-species-canadalynx",
+    "taxonomy_note": "",
+    "aliases": [
+      "Canadian lynx"
+    ]
+  },
+  {
+    "id": "eurasian-lynx",
+    "common_name": "Eurasian lynx",
+    "scientific_name": "Lynx lynx",
+    "genus": "Lynx",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Eurasian lynx",
+    "summary": "The largest lynx species, with long legs and a coat that varies from almost plain to distinctly spotted. It occupies forests and some more open Asian landscapes.",
+    "range": "Parts of Europe and northern, central and eastern Asia",
+    "habitat": "Temperate and boreal forests, mountains and some wooded steppe",
+    "identification": [
+      "Long black ear tufts",
+      "Short black-tipped tail",
+      "Long legs and often a spotted coat"
+    ],
+    "source_url": "https://www.catsg.org/living-species-eurasianlynx",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "iberian-lynx",
+    "common_name": "Iberian lynx",
+    "scientific_name": "Lynx pardinus",
+    "genus": "Lynx",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Iberian lynx",
+    "summary": "A lynx native to the Iberian Peninsula and strongly dependent on rabbits. Its prominent facial ruff and spotted coat are useful features to compare.",
+    "range": "Spain and Portugal",
+    "habitat": "Mediterranean scrub and woodland mosaics",
+    "identification": [
+      "Prominent cheek ruff in adults",
+      "Distinct dark spots",
+      "Tufted ears and short black-tipped tail"
+    ],
+    "source_url": "https://www.catsg.org/living-species-iberianlynx",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "pallass-cat",
+    "common_name": "Pallas's cat",
+    "scientific_name": "Otocolobus manul",
+    "genus": "Otocolobus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Pallas's cat",
+    "summary": "Also called the manul, this thick-coated cat is adapted to cold, dry country. Its flattened face and low-set ears give it a distinctive outline.",
+    "range": "Central Asia and adjoining mountain and steppe regions",
+    "habitat": "Rocky steppe, montane grassland and semi-desert",
+    "identification": [
+      "Broad, flattened face",
+      "Small rounded ears set low on the head",
+      "Dense fur and a thick, ringed tail"
+    ],
+    "source_url": "https://www.catsg.org/living-species-pallasscat",
+    "taxonomy_note": "",
+    "aliases": [
+      "Manul"
+    ]
+  },
+  {
+    "id": "rusty-spotted-cat",
+    "common_name": "Rusty-spotted cat",
+    "scientific_name": "Prionailurus rubiginosus",
+    "genus": "Prionailurus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Rusty-spotted cat",
+    "summary": "One of the smallest cats, this species has a pale coat marked with rusty spots. Dense cover and rocky features are common in its habitats.",
+    "range": "India, Sri Lanka and parts of Nepal",
+    "habitat": "Forests, scrub, grassland and rocky areas",
+    "identification": [
+      "Very small body",
+      "Rusty-brown spots on a greyish coat",
+      "Dark facial stripes and large eyes"
+    ],
+    "source_url": "https://www.catsg.org/living-species-rustyspottedcat",
+    "taxonomy_note": "The correct epithet is rubiginosus; some online indexes contain spelling errors.",
+    "aliases": []
+  },
+  {
+    "id": "flat-headed-cat",
+    "common_name": "Flat-headed cat",
+    "scientific_name": "Prionailurus planiceps",
+    "genus": "Prionailurus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Flat-headed cat",
+    "summary": "A small wetland specialist with an unusually low forehead. Its anatomy is adapted to taking aquatic prey, and it is closely associated with water.",
+    "range": "Malay Peninsula, Sumatra and Borneo",
+    "habitat": "Lowland riverine forest, swamp forest and wetlands",
+    "identification": [
+      "Long, narrow head with a flattened forehead",
+      "Small low-set ears",
+      "Short tail and reddish-brown coat"
+    ],
+    "source_url": "https://www.catsg.org/living-species-flatheadedcat",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "fishing-cat",
+    "common_name": "Fishing cat",
+    "scientific_name": "Prionailurus viverrinus",
+    "genus": "Prionailurus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Fishing cat",
+    "summary": "A sturdy cat often associated with wetlands and fish prey. It is larger and more heavily built than the similar-looking leopard cats.",
+    "range": "Patchy populations in South and Southeast Asia",
+    "habitat": "Marshes, mangroves, river margins and wetland mosaics",
+    "identification": [
+      "Broad head and stocky legs",
+      "Greyish coat with dark spots and head stripes",
+      "Short, muscular tail"
+    ],
+    "source_url": "https://www.catsg.org/living-species-fishingcat",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "leopard-cat",
+    "common_name": "Leopard cat",
+    "scientific_name": "Prionailurus bengalensis",
+    "genus": "Prionailurus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Leopard cat",
+    "summary": "A small Asian cat with highly variable spotting and colour. Northern individuals tend to have thicker coats; this catalogue separates it from the Sunda leopard cat.",
+    "range": "Mainland Asia and nearby islands including Taiwan and parts of Japan",
+    "habitat": "Forests, scrub, grassland and some agricultural landscapes",
+    "identification": [
+      "Small spotted body with pale underparts",
+      "Dark forehead and cheek stripes",
+      "Rounded ears with pale marks on the backs"
+    ],
+    "source_url": "https://www.catsg.org/living-species-leopardcat",
+    "taxonomy_note": "Separated from Prionailurus javanensis in this taxonomy. Photographs alone may not reliably distinguish them.",
+    "aliases": [
+      "Mainland leopard cat"
+    ]
+  },
+  {
+    "id": "sunda-leopard-cat",
+    "common_name": "Sunda leopard cat",
+    "scientific_name": "Prionailurus javanensis",
+    "genus": "Prionailurus",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Sunda leopard cat",
+    "summary": "A small spotted cat of island Southeast Asia. It was formerly grouped with the mainland leopard cat and can be very similar in appearance.",
+    "range": "Java, Bali, Sumatra, Borneo and parts of the Philippines",
+    "habitat": "Tropical forest, scrub, forest mosaics and some plantations",
+    "identification": [
+      "Yellow-brown coat with dark spots",
+      "Pale underparts and striped face",
+      "Spotted tail with darker rings near the tip"
+    ],
+    "source_url": "https://www.catsg.org/living-species-sundaleopardcat",
+    "taxonomy_note": "Origin and other evidence can be needed to separate this species from the mainland leopard cat.",
+    "aliases": []
+  },
+  {
+    "id": "jungle-cat",
+    "common_name": "Jungle cat",
+    "scientific_name": "Felis chaus",
+    "genus": "Felis",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Jungle cat",
+    "summary": "Despite its name, this long-legged cat is often associated with reeds, wetlands and scrub rather than dense rainforest.",
+    "range": "Egypt, parts of the Middle East and Central, South and Southeast Asia",
+    "habitat": "Wetlands, reed beds, grasslands, scrub and cultivated areas",
+    "identification": [
+      "Mostly plain sandy, grey or reddish coat",
+      "Tall ears with small dark tufts",
+      "Long legs and a relatively short, ringed tail"
+    ],
+    "source_url": "https://www.catsg.org/living-species-junglecat",
+    "taxonomy_note": "",
+    "aliases": [
+      "Swamp cat"
+    ]
+  },
+  {
+    "id": "black-footed-cat",
+    "common_name": "Black-footed cat",
+    "scientific_name": "Felis nigripes",
+    "genus": "Felis",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Black-footed cat",
+    "summary": "A very small southern African cat of open, dry country. Its name refers to the dark soles and undersides of its feet, rather than entirely black legs.",
+    "range": "Southern Africa, principally South Africa, Namibia and Botswana",
+    "habitat": "Dry grassland, open savanna and semi-desert",
+    "identification": [
+      "Small body with strong dark spots",
+      "Spots merging into bands on legs and tail",
+      "Dark soles and a short black-tipped tail"
+    ],
+    "source_url": "https://www.catsg.org/living-species-blackfootedcat",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "sand-cat",
+    "common_name": "Sand cat",
+    "scientific_name": "Felis margarita",
+    "genus": "Felis",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Sand cat",
+    "summary": "A desert specialist with a pale coat and broad head. Fur beneath its paws helps protect it from the extremes of hot and cold ground.",
+    "range": "North Africa, the Arabian Peninsula and parts of Southwest and Central Asia",
+    "habitat": "Sandy and rocky deserts with sparse vegetation",
+    "identification": [
+      "Broad, flattened head and large low-set ears",
+      "Pale sandy coat",
+      "Dark cheek lines and bars on legs or tail"
+    ],
+    "source_url": "https://www.catsg.org/living-species-sandcat",
+    "taxonomy_note": "",
+    "aliases": []
+  },
+  {
+    "id": "chinese-mountain-cat",
+    "common_name": "Chinese mountain cat",
+    "scientific_name": "Felis bieti",
+    "genus": "Felis",
+    "subfamily": "Felinae",
+    "wikipedia_title": "Chinese mountain cat",
+    "summary": "A little-studied cat of high-elevation China. Although once called the Chinese desert cat, it is associated with grasslands and shrublands rather than true desert.",
+    "range": "Eastern Qinghai–Tibet Plateau, China",
+    "habitat": "Alpine meadows, highland steppe and shrubland",
+    "identification": [
+      "Stocky body with dense greyish or brown fur",
+      "Small ear tufts",
+      "Bushy tail with dark rings and tip"
+    ],
+    "source_url": "https://www.catsg.org/living-species-chinesemountaincat",
+    "taxonomy_note": "Recognised as a species in the 2017 reference; its relationship to other wildcats has been debated.",
+    "aliases": []
+  },
+  {
+    "id": "afro-asiatic-wildcat",
+    "common_name": "Afro-Asiatic wildcat",
+    "scientific_name": "Felis lybica",
+    "genus": "Felis",
+    "subfamily": "Felinae",
+    "wikipedia_title": "African wildcat",
+    "summary": "A wildcat of Africa and parts of Asia, closely related to the domestic cat. Its appearance varies across a wide range and overlaps strongly with domestic cats.",
+    "range": "Africa, the Middle East and parts of Central and South Asia",
+    "habitat": "Savannas, scrub, semi-deserts and open woodland",
+    "identification": [
+      "Relatively long legs and light build",
+      "Variable sandy or grey coat with stripes or spots",
+      "Slim, tapering tail with a dark tip"
+    ],
+    "source_url": "https://www.catsg.org/living-species-africanwildcat",
+    "taxonomy_note": "Includes Afro-Asiatic forms under CCTF 2017. Domestic cats and hybrids cannot reliably be excluded using a photograph alone.",
+    "aliases": [
+      "African wildcat",
+      "Asiatic wildcat"
+    ]
+  },
+  {
+    "id": "european-wildcat",
+    "common_name": "European wildcat",
+    "scientific_name": "Felis silvestris",
+    "genus": "Felis",
+    "subfamily": "Felinae",
+    "wikipedia_title": "European wildcat",
+    "summary": "A thick-coated forest cat of Europe and adjoining regions. It can closely resemble a domestic tabby, and hybridisation makes visual identification particularly uncertain.",
+    "range": "Parts of Europe, Anatolia and the Caucasus",
+    "habitat": "Forests and nearby scrub or grassland",
+    "identification": [
+      "Thick grey-brown coat with dark stripes",
+      "Broad, bushy tail with a blunt dark tip",
+      "Distinct dark rings around the tail"
+    ],
+    "source_url": "https://www.catsg.org/living-species-europeanwildcat",
+    "taxonomy_note": "Appearance cannot establish genetic purity or reliably distinguish all domestic–wildcat hybrids.",
+    "aliases": []
+  }
+]

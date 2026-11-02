@@ -1,0 +1,402 @@
+{
+  "health": {
+    "status": "ready",
+    "device": "cuda",
+    "model": "BioCLIP 2.5 Huge",
+    "species_count": 41,
+    "error": null,
+    "offline": true,
+    "max_upload_bytes": 10485760,
+    "taxonomy": "IUCN CCTF 2017 \u00b7 41 species concepts"
+  },
+  "cases": [
+    {
+      "case": "snow-leopard",
+      "expected": "Panthera uncia",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Irbis4.JPG",
+      "status": "matched",
+      "candidates": [
+        {
+          "name": "Panthera uncia",
+          "similarity": 0.6569
+        },
+        {
+          "name": "Felis bieti",
+          "similarity": 0.6249
+        },
+        {
+          "name": "Prionailurus bengalensis",
+          "similarity": 0.6046
+        }
+      ],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.3413,
+        "gate_margin": 0.1196,
+        "species_margin": 0.032
+      },
+      "elapsed_ms": 683
+    },
+    {
+      "case": "tiger",
+      "expected": "Panthera tigris",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Bengal_tiger_(Panthera_tigris_tigris)_female_3_crop.jpg",
+      "status": "matched",
+      "candidates": [
+        {
+          "name": "Panthera tigris",
+          "similarity": 0.5989
+        },
+        {
+          "name": "Neofelis diardi",
+          "similarity": 0.5672
+        },
+        {
+          "name": "Neofelis nebulosa",
+          "similarity": 0.5527
+        }
+      ],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.3133,
+        "gate_margin": 0.0733,
+        "species_margin": 0.0317
+      },
+      "elapsed_ms": 168
+    },
+    {
+      "case": "lion",
+      "expected": "Panthera leo",
+      "source_url": "https://commons.wikimedia.org/wiki/File:020_The_lion_king_Snyggve_in_the_Serengeti_National_Park_Photo_by_Giles_Laurent.jpg",
+      "status": "matched",
+      "candidates": [
+        {
+          "name": "Panthera leo",
+          "similarity": 0.6077
+        },
+        {
+          "name": "Acinonyx jubatus",
+          "similarity": 0.4619
+        },
+        {
+          "name": "Panthera pardus",
+          "similarity": 0.4551
+        }
+      ],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.3154,
+        "gate_margin": 0.1068,
+        "species_margin": 0.1458
+      },
+      "elapsed_ms": 174
+    },
+    {
+      "case": "domestic-cat",
+      "expected": "Felis catus",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Cat_August_2010-4.jpg",
+      "status": "matched",
+      "candidates": [
+        {
+          "name": "Felis catus",
+          "similarity": 0.5691
+        },
+        {
+          "name": "Felis silvestris",
+          "similarity": 0.5039
+        },
+        {
+          "name": "Felis lybica",
+          "similarity": 0.4946
+        }
+      ],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.3273,
+        "gate_margin": 0.0538,
+        "species_margin": 0.0652
+      },
+      "elapsed_ms": 159
+    },
+    {
+      "case": "leopard",
+      "expected": "Panthera pardus",
+      "source_url": "https://commons.wikimedia.org/wiki/File:African_leopard_male_(cropped).jpg",
+      "status": "matched",
+      "candidates": [
+        {
+          "name": "Panthera pardus",
+          "similarity": 0.6479
+        },
+        {
+          "name": "Acinonyx jubatus",
+          "similarity": 0.5338
+        },
+        {
+          "name": "Panthera leo",
+          "similarity": 0.4924
+        }
+      ],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.3056,
+        "gate_margin": 0.0904,
+        "species_margin": 0.1141
+      },
+      "elapsed_ms": 205
+    },
+    {
+      "case": "dog",
+      "expected": null,
+      "source_url": "https://commons.wikimedia.org/wiki/File:Golden_Retriever_Dukedestiny01_drvd.jpg",
+      "status": "no_match",
+      "candidates": [],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.2359,
+        "gate_margin": -0.0362
+      },
+      "elapsed_ms": 17
+    },
+    {
+      "case": "cheetah",
+      "expected": "Acinonyx jubatus",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Male_cheetah_facing_left_in_South_Africa.jpg",
+      "status": "matched",
+      "candidates": [
+        {
+          "name": "Acinonyx jubatus",
+          "similarity": 0.6549
+        },
+        {
+          "name": "Panthera pardus",
+          "similarity": 0.4935
+        },
+        {
+          "name": "Panthera leo",
+          "similarity": 0.4807
+        }
+      ],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.3301,
+        "gate_margin": 0.0877,
+        "species_margin": 0.1614
+      },
+      "elapsed_ms": 88
+    },
+    {
+      "case": "jaguar",
+      "expected": "Panthera onca",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Standing_jaguar.jpg",
+      "status": "matched",
+      "candidates": [
+        {
+          "name": "Panthera onca",
+          "similarity": 0.6888
+        },
+        {
+          "name": "Leopardus pardalis",
+          "similarity": 0.6034
+        },
+        {
+          "name": "Neofelis nebulosa",
+          "similarity": 0.5845
+        }
+      ],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.3453,
+        "gate_margin": 0.1067,
+        "species_margin": 0.0854
+      },
+      "elapsed_ms": 73
+    },
+    {
+      "case": "caracal",
+      "expected": "Caracal caracal",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Caracal_on_the_road,_early_morning_in_Kgalagadi_(36173878220)_(cropped).jpg",
+      "status": "uncertain",
+      "candidates": [
+        {
+          "name": "Caracal aurata",
+          "similarity": 0.6761
+        },
+        {
+          "name": "Caracal caracal",
+          "similarity": 0.6656
+        },
+        {
+          "name": "Felis margarita",
+          "similarity": 0.5575
+        }
+      ],
+      "expected_outcome": false,
+      "diagnostics": {
+        "cat_similarity": 0.3469,
+        "gate_margin": 0.0679,
+        "species_margin": 0.0105
+      },
+      "elapsed_ms": 97
+    },
+    {
+      "case": "eurasian-lynx",
+      "expected": "Lynx lynx",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Lynx_Nationalpark_Bayerischer_Wald_01.jpg",
+      "status": "matched",
+      "candidates": [
+        {
+          "name": "Lynx lynx",
+          "similarity": 0.6755
+        },
+        {
+          "name": "Lynx canadensis",
+          "similarity": 0.6079
+        },
+        {
+          "name": "Lynx pardinus",
+          "similarity": 0.5543
+        }
+      ],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.3631,
+        "gate_margin": 0.097,
+        "species_margin": 0.0676
+      },
+      "elapsed_ms": 83
+    },
+    {
+      "case": "pallas-cat",
+      "expected": "Otocolobus manul",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Manoel.jpg",
+      "status": "uncertain",
+      "candidates": [
+        {
+          "name": "Otocolobus manul",
+          "similarity": 0.6177
+        },
+        {
+          "name": "Felis bieti",
+          "similarity": 0.6036
+        },
+        {
+          "name": "Catopuma badia",
+          "similarity": 0.5612
+        }
+      ],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.386,
+        "gate_margin": 0.1042,
+        "species_margin": 0.0141
+      },
+      "elapsed_ms": 87
+    },
+    {
+      "case": "raccoon",
+      "expected": null,
+      "source_url": "https://commons.wikimedia.org/wiki/File:Raccoon_in_Central_Park_(35264).jpg",
+      "status": "no_match",
+      "candidates": [],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.2456,
+        "gate_margin": -0.0928
+      },
+      "elapsed_ms": 28
+    },
+    {
+      "case": "red-panda",
+      "expected": null,
+      "source_url": "https://commons.wikimedia.org/wiki/File:Red_Panda,_Gentle_Tree-Dweller_of_the_Himalayas.jpg",
+      "status": "no_match",
+      "candidates": [],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.2543,
+        "gate_margin": -0.0823
+      },
+      "elapsed_ms": 27
+    },
+    {
+      "case": "horse",
+      "expected": null,
+      "source_url": "https://commons.wikimedia.org/wiki/File:Nokota_Horses_cropped.jpg",
+      "status": "no_match",
+      "candidates": [],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.2099,
+        "gate_margin": -0.0712
+      },
+      "elapsed_ms": 14
+    },
+    {
+      "case": "sunflower",
+      "expected": null,
+      "source_url": "https://commons.wikimedia.org/wiki/File:Sunflower_sky_backdrop.jpg",
+      "status": "no_match",
+      "candidates": [],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.1366,
+        "gate_margin": -0.1142
+      },
+      "elapsed_ms": 36
+    },
+    {
+      "case": "blank-white",
+      "expected": null,
+      "source_url": "synthetic test fixture",
+      "status": "no_match",
+      "candidates": [],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.1945,
+        "gate_margin": -0.044
+      },
+      "elapsed_ms": 9
+    },
+    {
+      "case": "blank-black",
+      "expected": null,
+      "source_url": "synthetic test fixture",
+      "status": "no_match",
+      "candidates": [],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.2094,
+        "gate_margin": -0.0148
+      },
+      "elapsed_ms": 8
+    },
+    {
+      "case": "random-noise",
+      "expected": null,
+      "source_url": "synthetic test fixture",
+      "status": "no_match",
+      "candidates": [],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.1635,
+        "gate_margin": -0.1529
+      },
+      "elapsed_ms": 9
+    },
+    {
+      "case": "text-document",
+      "expected": null,
+      "source_url": "synthetic test fixture",
+      "status": "no_match",
+      "candidates": [],
+      "expected_outcome": true,
+      "diagnostics": {
+        "cat_similarity": 0.2243,
+        "gate_margin": -0.0622
+      },
+      "elapsed_ms": 11
+    }
+  ],
+  "notice": "Illustrative smoke cases, not a representative or held-out accuracy benchmark."
+}

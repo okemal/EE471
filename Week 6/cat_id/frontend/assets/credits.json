@@ -1,0 +1,62 @@
+[
+  {
+    "id": "snow-leopard",
+    "file": "/assets/snow-leopard.jpg",
+    "title": "Irbis4.JPG",
+    "artist": "Irbis1983",
+    "license": "Public domain",
+    "license_url": "",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Irbis4.JPG",
+    "changes": "Resized by Wikimedia; displayed with cropping."
+  },
+  {
+    "id": "tiger",
+    "file": "/assets/tiger.jpg",
+    "title": "Bengal_tiger_(Panthera_tigris_tigris)_female_3_crop.jpg",
+    "artist": "Charles J. Sharp",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Bengal_tiger_(Panthera_tigris_tigris)_female_3_crop.jpg",
+    "changes": "Resized by Wikimedia; displayed with cropping."
+  },
+  {
+    "id": "lion",
+    "file": "/assets/lion.jpg",
+    "title": "020_The_lion_king_Snyggve_in_the_Serengeti_National_Park_Photo_by_Giles_Laurent.jpg",
+    "artist": "Giles Laurent",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:020_The_lion_king_Snyggve_in_the_Serengeti_National_Park_Photo_by_Giles_Laurent.jpg",
+    "changes": "Resized by Wikimedia; displayed with cropping."
+  },
+  {
+    "id": "domestic-cat",
+    "file": "/assets/domestic-cat.jpg",
+    "title": "Cat August 2010-4.jpg",
+    "artist": "Alvesgaspar",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Cat_August_2010-4.jpg",
+    "changes": "Resized by Wikimedia; displayed with cropping."
+  },
+  {
+    "id": "leopard",
+    "file": "/assets/leopard.jpg",
+    "title": "African_leopard_male_(cropped).jpg",
+    "artist": "Sumeet Moghe",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:African_leopard_male_(cropped).jpg",
+    "changes": "Resized by Wikimedia; displayed with cropping."
+  },
+  {
+    "id": "dog",
+    "file": "/assets/dog.jpg",
+    "title": "Golden_Retriever_Dukedestiny01_drvd.jpg",
+    "artist": "Janneke Vreugdenhil; derivative work by Anka Friedrich",
+    "license": "Public domain",
+    "license_url": "",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Golden_Retriever_Dukedestiny01_drvd.jpg",
+    "changes": "Resized by Wikimedia; displayed with cropping."
+  }
+]

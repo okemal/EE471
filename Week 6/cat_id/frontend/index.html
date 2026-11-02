@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5f4ee" />
+    <meta
+      name="description"
+      content="Meet the cat behind the photograph. A local AI identifier and thoughtfully sourced field guide to the Felidae family."
+    />
+    <title>Felis — A field guide to the cat family</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header shell">
+      <a class="brand" href="#identify" aria-label="Felis home">
+        <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+          <path
+            d="M8 17 7 6l11 7h4l11-7-1 11c3 4 3 10-1 14-6 6-16 6-22 0-4-4-4-10-1-14Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linejoin="round"
+          />
+          <path
+            d="m12 23 4 1m8 0 4-1m-10 6 2 2 2-2"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+        <span>felis<span class="brand-dot">.</span></span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#identify" data-nav="identify" class="active">Identify</a>
+        <a href="#field-guide" data-nav="field-guide">Field guide</a>
+        <a href="#about" data-nav="about"
+          >How it works <span aria-hidden="true">↗</span></a
+        >
+      </nav>
+      <div
+        class="local-badge"
+        title="Your photographs are processed on this computer"
+      >
+        <span class="status-dot"></span> Locally curious.
+        <span class="badge-extra">Privately yours.</span>
+      </div>
+    </header>
+
+    <main id="main" class="shell" tabindex="-1">
+      <section id="identify-view" class="view" aria-label="Identify a cat">
+        <div id="landing" class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">
+              <span class="little-line"></span> A FIELD GUIDE TO THE CAT FAMILY
+            </p>
+            <h1>A familiar face.<br />A <em>wild</em> story.</h1>
+            <p class="hero-description">
+              From your sofa to the savanna. Discover the cat in your
+              photograph, and get to know its wild relatives.
+            </p>
+            <div class="dropzone" id="dropzone">
+              <div class="upload-symbol" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect x="3" y="4" width="18" height="16" rx="3" />
+                  <path d="m3 16 5-5 5 5 3-3 5 5" />
+                  <circle cx="16.5" cy="8.5" r="1.5" /></svg
+                ><span>+</span>
+              </div>
+              <div class="drop-copy">
+                <h2>Let’s meet your mystery cat.</h2>
+                <p>Drop a photo here, or choose one below.</p>
+              </div>
+              <button class="button primary" id="choose-file">
+                Choose a photograph <span aria-hidden="true">↗</span>
+              </button>
+              <p class="upload-formats">
+                JPG, PNG or WebP <span>·</span> Up to 10 MB
+              </p>
+            </div>
+            <input
+              id="image-input"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              class="visually-hidden"
+              tabindex="-1"
+              aria-label="Choose a cat photograph"
+            />
+            <p id="upload-error" class="error-message" role="alert" hidden></p>
+            <div class="examples">
+              <span>Just exploring?</span
+              ><button class="example" data-example="domestic-cat">
+                <img
+                  src="/assets/domestic-cat.jpg"
+                  alt=""
+                  width="30"
+                  height="30"
+                />
+                Try a cat</button
+              ><button class="example" data-example="tiger">
+                <img src="/assets/tiger.jpg" alt="" width="30" height="30" /> A
+                tiger</button
+              ><button class="example text-example" data-example="dog">
+                Not a cat <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+            <p class="privacy-note">
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 2 6 3v5c0 4-6 7-6 7S4 14 4 10V5l6-3Z" />
+                <path d="m7 9 2 2 4-4" />
+              </svg>
+              Your photo stays on this computer. Always.
+            </p>
+          </div>
+          <figure class="hero-photo">
+            <img
+              src="/assets/snow-leopard.jpg"
+              alt="A snow leopard resting on a rocky ledge"
+              fetchpriority="high"
+              width="1400"
+              height="1050"
+            />
+            <div class="photo-topline">
+              <span>THE ELUSIVE ONES</span
+              ><svg viewBox="0 0 32 32" aria-hidden="true">
+                <path d="M16 2v28M2 16h28" />
+                <circle cx="16" cy="16" r="11" />
+              </svg>
+            </div>
+            <figcaption>
+              <div>
+                <span class="eyebrow">FIELD NOTE / 001</span>
+                <h2>Snow leopard</h2>
+                <i>Panthera uncia</i>
+              </div>
+              <button
+                class="photo-link"
+                data-scientific="Panthera uncia"
+                aria-label="Explore the snow leopard"
+              >
+                ↗
+              </button>
+            </figcaption>
+            <span class="photo-edge-note"
+              >HIGH MOUNTAINS. QUIET FOOTSTEPS.</span
+            >
+          </figure>
+        </div>
+
+        <section id="analysis" hidden aria-labelledby="analysis-title">
+          <div class="section-top">
+            <button id="start-over" class="text-button">
+              ← Start with another photo</button
+            ><span class="eyebrow">YOUR FIELD OBSERVATION</span>
+          </div>
+          <div class="analysis-grid">
+            <div class="observation-photo">
+              <img id="preview" alt="Your selected photograph" />
+              <div class="observation-caption">
+                <span id="file-name"></span><span id="file-size"></span>
+              </div>
+              <div class="scan-line" hidden></div>
+            </div>
+            <div
+              id="result-panel"
+              class="result-panel"
+              aria-live="polite"
+              aria-atomic="true"
+            ></div>
+          </div>
+          <p class="analysis-footnote">
+            A photograph offers clues, not certainty. Lookalike species,
+            hybrids, small subjects, and multiple animals can be difficult to
+            identify.
+          </p>
+        </section>
+
+        <section class="discovery-section" aria-labelledby="discover-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">ONE FAMILY. MANY WAYS TO BE A CAT.</p>
+              <h2 id="discover-title">Meet the relatives.</h2>
+            </div>
+            <a class="text-link" href="#field-guide"
+              >Explore the field guide <span aria-hidden="true">↗</span></a
+            >
+          </div>
+          <div
+            id="featured-species"
+            class="featured-grid"
+            aria-live="polite"
+          ></div>
+        </section>
+        <div class="principles">
+          <div>
+            <span class="principle-icon" aria-hidden="true">01</span>
+            <p>
+              <strong>A broader family portrait</strong
+              ><span>41 species concepts, from house cats to big cats.</span>
+            </p>
+          </div>
+          <div>
+            <span class="principle-icon" aria-hidden="true">02</span>
+            <p>
+              <strong>Room for uncertainty</strong
+              ><span>If the evidence is unclear, we’ll tell you.</span>
+            </p>
+          </div>
+          <div>
+            <span class="principle-icon" aria-hidden="true">03</span>
+            <p>
+              <strong>Curiosity, kept local</strong
+              ><span>On-device identification. No photo storage.</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="field-guide-view"
+        class="view"
+        hidden
+        aria-labelledby="guide-title"
+      >
+        <div class="page-intro">
+          <p class="eyebrow">A FAMILY RESEMBLANCE</p>
+          <h1 id="guide-title">The Felidae <em>field guide.</em></h1>
+          <p>
+            Small paws, big personalities, remarkable adaptations. Get
+            acquainted with the cats in our identification catalogue.
+          </p>
+        </div>
+        <div class="guide-toolbar">
+          <label class="search-box"
+            ><svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="10.5" cy="10.5" r="6.5" />
+              <path d="m16 16 5 5" /></svg
+            ><input
+              id="species-search"
+              type="search"
+              placeholder="Search common or scientific names…"
+              aria-label="Search species" /></label
+          ><label class="filter-label"
+            >Subfamily<select id="subfamily-filter">
+              <option value="all">All cats</option>
+              <option value="Felinae">Felinae</option>
+              <option value="Pantherinae">Pantherinae</option>
+            </select></label
+          >
+        </div>
+        <div class="catalogue-meta">
+          <span id="species-count" aria-live="polite"></span
+          ><span
+            >IUCN CCTF 2017 taxonomy
+            <button
+              class="inline-button"
+              data-open="taxonomy"
+              aria-label="About the catalogue taxonomy"
+            >
+              ⓘ
+            </button></span
+          >
+        </div>
+        <div id="species-grid" class="species-grid"></div>
+        <p id="empty-search" class="empty-search" hidden>
+          No cats by that name. Try a common name, scientific name, or genus.
+        </p>
+      </section>
+
+      <section
+        id="about-view"
+        class="view"
+        hidden
+        aria-labelledby="about-title"
+      >
+        <div class="page-intro">
+          <p class="eyebrow">A LITTLE SCIENCE. A LOT OF CURIOSITY.</p>
+          <h1 id="about-title">Follow the <em>clues.</em></h1>
+          <p>
+            A thoughtful introduction to image classification — with a cat’s-eye
+            view of the natural world.
+          </p>
+        </div>
+        <div class="about-steps">
+          <article>
+            <span class="step-number">01 / OBSERVE</span>
+            <h2>A clear photograph</h2>
+            <p>
+              Choose one cat, large in the frame, with its face and coat
+              visible. Natural photographs work best; tiny subjects,
+              illustrations, and mixed groups can confuse the models.
+            </p>
+          </article>
+          <article>
+            <span class="step-number">02 / COMPARE</span>
+            <h2>Two sets of eyes</h2>
+            <p>
+              A general vision model first compares cats with other animals and
+              objects. BioCLIP 2.5 then compares the photograph with
+              descriptions of the 41 species in our catalogue.
+            </p>
+          </article>
+          <article>
+            <span class="step-number">03 / DISCOVER</span>
+            <h2>A starting point</h2>
+            <p>
+              Explore the closest matches and the clues that separate them. If
+              the evidence is weak or species look alike, the result stays
+              uncertain. Sometimes, no reliable cat match is found.
+            </p>
+          </article>
+        </div>
+        <div class="about-notes">
+          <article>
+            <p class="eyebrow">HONEST BY DESIGN</p>
+            <h2>Similarity isn’t certainty.</h2>
+            <p>
+              The scores describe how closely an image and a species description
+              align in the model. They are not percentages, probabilities, or
+              proof of identity. Rejection rules are conservative heuristics,
+              not a guarantee that every unfamiliar image will be rejected.
+            </p>
+            <p>
+              This is an educational demonstration. It does not identify breeds,
+              confirm hybrids, detect every animal in a group, or replace an
+              expert’s assessment. Geography and other evidence may be essential
+              for a reliable species identification.
+            </p>
+            <a
+              class="text-link"
+              href="https://huggingface.co/imageomics/bioclip-2.5-vith14"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Read the BioCLIP model card ↗</a
+            >
+          </article>
+          <article class="privacy-card">
+            <p class="eyebrow">YOUR PHOTO, YOUR COMPUTER</p>
+            <h2>Stay curious.<br />Stay private.</h2>
+            <p>
+              Image analysis runs locally. Your photograph is held in memory for
+              the request and is not saved by the application.
+            </p>
+            <p>
+              Optional Wikipedia lookups send only a known article title. The
+              field guide and identification still work without internet after
+              the models are downloaded.
+            </p>
+            <div id="model-info" class="model-info">
+              Checking the local model…
+            </div>
+          </article>
+        </div>
+        <div class="source-note">
+          <h3>A note on names</h3>
+          <p>
+            Our 41 species concepts follow the IUCN Cat Classification Task
+            Force’s 2017 reference, including the domestic cat. Taxonomy
+            evolves: some more recent splits are grouped under the older
+            concepts here. This is a versioned catalogue, not a claim to cover
+            every currently proposed species.
+          </p>
+          <a
+            href="https://www.catsg.org/living-species"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Explore the IUCN Cat Specialist Group ↗</a
+          >
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer shell">
+      <div>
+        <a href="#identify" class="footer-brand">felis.</a
+        ><span>A little closer to the wild.</span>
+      </div>
+      <div class="footer-links">
+        <span id="model-status"
+          ><span class="status-dot warming"></span> Connecting to local
+          model</span
+        ><button class="text-button" data-open="credits">
+          Sources & photo credits</button
+        ><span>Made for curiosity.</span>
+      </div>
+    </footer>
+    <dialog id="detail-dialog" aria-labelledby="dialog-title">
+      <button id="close-dialog" class="close-button" aria-label="Close details">
+        ×
+      </button>
+      <div id="dialog-content"></div>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <noscript
+      ><p class="noscript">
+        Felis needs JavaScript to upload and identify photographs. Enable it and
+        reload this local page.
+      </p></noscript
+    >
+  </body>
+</html>

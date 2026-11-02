@@ -1,0 +1,20 @@
+{
+  "id": "iucn-cctf-2017",
+  "name": "IUCN Cat Classification Task Force (2017)",
+  "version": "1.0.0",
+  "reviewed_on": "2026-11-02",
+  "family": "Felidae",
+  "species_count": 41,
+  "scope": "40 wild species concepts and the domestic cat; pinned to CCTF 2017, not a claim to include every later proposed species.",
+  "reference": "Kitchener et al. (2017). A revised taxonomy of the Felidae. Cat News Special Issue 11.",
+  "reference_url": "https://repository.si.edu/handle/10088/32616",
+  "classification_url": "https://www.catsg.org/classification",
+  "species_index_url": "https://www.catsg.org/cats/livingspecies",
+  "profile_sources": "IUCN/SSC Cat Specialist Group species accounts; Felidae Conservation Fund for the domestic cat. Brief original paraphrases, with a source URL per record.",
+  "limitations": [
+    "Later taxonomic splits are intentionally not mixed into the 2017 label set.",
+    "Identification features are typical comparisons, not exclusive diagnostic keys.",
+    "Range descriptions are broad background information, not locations inferred from an uploaded image.",
+    "No conservation status, population totals or subspecies claims are included."
+  ]
+}

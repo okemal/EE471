@@ -1,0 +1,45 @@
+[project]
+name = "felis-cat-id"
+version = "1.0.0"
+description = "A local, privacy-conscious field guide and Felidae image identifier."
+requires-python = ">=3.11,<3.13"
+dependencies = [
+  "fastapi>=0.115.12,<1",
+  "uvicorn>=0.34,<1",
+  "httpx>=0.28,<1",
+  "pillow>=11.2,<13",
+  "open-clip-torch>=3.2,<4",
+  "huggingface-hub>=0.33,<2",
+  "torch==2.8.0",
+  "torchvision==0.23.0",
+  "safetensors>=0.5.3,<1",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3,<10", "pytest-asyncio>=1,<2", "ruff>=0.11,<1", "playwright>=1.51,<2"]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu128", marker = "sys_platform == 'linux' or sys_platform == 'win32'" }]
+torchvision = [{ index = "pytorch-cu128", marker = "sys_platform == 'linux' or sys_platform == 'win32'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = ["model: opt-in tests requiring downloaded models and inference", "browser: opt-in browser checks against a running server"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

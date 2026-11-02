@@ -1,0 +1,30 @@
+name: felis-cat-id
+services:
+  web:
+    build:
+      context: .
+      args:
+        INFERENCE_DEVICE: cpu
+    image: felis-cat-id:cpu
+    ports:
+      - "127.0.0.1:${CAT_ID_PORT:-8000}:8000"
+    environment:
+      CAT_ID_DEVICE: cpu
+      CAT_ID_OFFLINE: "1"
+      CAT_ID_WIKIPEDIA: "0"
+      CAT_ID_MODEL_CACHE: /models
+    volumes:
+      - type: bind
+        source: ./.cache/models
+        target: /models
+        read_only: true
+    read_only: true
+    tmpfs:
+      - /tmp:size=128m,noexec,nosuid
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    init: true
+    pids_limit: 128
+    mem_limit: 10g
