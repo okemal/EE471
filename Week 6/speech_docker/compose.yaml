@@ -1,0 +1,43 @@
+name: ee471-speech
+
+x-runtime: &runtime
+  init: true
+  restart: unless-stopped
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  pids_limit: 256
+  tmpfs:
+    - /tmp:size=64m,mode=1777,noexec,nosuid
+  environment:
+    AZURE_SPEECH_KEY_FILE: /run/secrets/azure_speech_key
+    AZURE_SPEECH_REGION: ${AZURE_SPEECH_REGION:-}
+  secrets: [azure_speech_key]
+  stop_grace_period: 15s
+
+services:
+  speech-studio:
+    <<: *runtime
+    image: ee471-speech-studio:week6
+    build:
+      context: .
+      dockerfile: speech-studio/Dockerfile
+      target: runtime
+    ports:
+      - "127.0.0.1:${STUDIO_PORT:-5000}:8000"
+    mem_limit: 768m
+
+  voice-calculator:
+    <<: *runtime
+    image: ee471-voice-calculator:week6
+    build:
+      context: .
+      dockerfile: voice-calculator/Dockerfile
+      target: runtime
+    ports:
+      - "127.0.0.1:${CALCULATOR_PORT:-5001}:8000"
+    mem_limit: 256m
+
+secrets:
+  azure_speech_key:
+    file: ./.secrets/azure_speech_key

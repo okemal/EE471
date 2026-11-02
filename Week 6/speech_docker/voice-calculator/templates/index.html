@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#1976d2">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/calculator.js') }}" type="module"></script>
+  </head>
+  <body>
+    <main class="calculator" aria-label="Calculator">
+      <div class="voice-controls">
+        <button type="button" class="microphone" id="microphone" aria-label="Start voice command" aria-pressed="false" aria-describedby="voice-status">
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+        <p id="voice-status" role="status">Tap the mic, then say a command.</p>
+      </div>
+      <section class="display" aria-live="polite" aria-atomic="true">
+        <div class="expression" id="expression"></div>
+        <output class="result" id="result">0</output>
+      </section>
+      <section class="keypad" aria-label="Calculator keys">
+        <button class="key key-function" data-action="clear">AC</button>
+        <button class="key key-function" data-action="sign">+/−</button>
+        <button class="key key-function" data-action="percent">%</button>
+        <button class="key key-operator" data-operator="/" aria-label="Divide">÷</button>
+
+        <button class="key" data-digit="7">7</button>
+        <button class="key" data-digit="8">8</button>
+        <button class="key" data-digit="9">9</button>
+        <button class="key key-operator" data-operator="*" aria-label="Multiply">×</button>
+
+        <button class="key" data-digit="4">4</button>
+        <button class="key" data-digit="5">5</button>
+        <button class="key" data-digit="6">6</button>
+        <button class="key key-operator" data-operator="-" aria-label="Subtract">−</button>
+
+        <button class="key" data-digit="1">1</button>
+        <button class="key" data-digit="2">2</button>
+        <button class="key" data-digit="3">3</button>
+        <button class="key key-operator" data-operator="+" aria-label="Add">+</button>
+
+        <button class="key" data-action="backspace" aria-label="Delete last digit">⌫</button>
+        <button class="key" data-digit="0">0</button>
+        <button class="key" data-action="decimal">.</button>
+        <button class="key key-operator" data-action="equals" aria-label="Equals">=</button>
+      </section>
+      <p class="keyboard-hint">You can also use your keyboard</p>
+      <details class="voice-help">
+        <summary>Voice commands</summary>
+        <p>Zero–Nine · Point · Over (÷) · Times (×) · Plus · Minus · Is (=)</p>
+        <p>Try “three plus five is”. Pause to finish, or tap the mic again. Each tap listens for up to 10 seconds.</p>
+        <p>Also: Clear · Change sign · Percent · Backspace</p>
+      </details>
+    </main>
+  </body>
+</html>
