@@ -1,0 +1,54 @@
+# Standalone assignment stack: docker compose -f compose.cog.yaml up -d
+name: felis-cat-id
+services:
+  cog:
+    image: felis-cat-id:cog
+    ports:
+      - "127.0.0.1:${CAT_ID_COG_PORT:-5002}:5000"
+    environment:
+      CAT_ID_DEVICE: cpu
+      CAT_ID_MODEL_CACHE: /models
+      CAT_ID_OFFLINE: "1"
+      HF_HUB_DISABLE_TELEMETRY: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUNBUFFERED: "1"
+    volumes:
+      - type: bind
+        source: ./.cache/models
+        target: /models
+        read_only: true
+    user: "10001:10001"
+    read_only: true
+    tmpfs:
+      - /tmp:size=128m,noexec,nosuid,mode=1777
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    # Cog's generated image already starts with Tini as PID 1.
+    pids_limit: 128
+    mem_limit: 10g
+    healthcheck:
+      test: ["CMD", "python", "-c", "import json,urllib.request; assert json.load(urllib.request.urlopen('http://127.0.0.1:5000/health-check', timeout=3))['status'] in ('READY','BUSY')"]
+      start_period: 180s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  web:
+    build: .
+    image: felis-cat-id:cpu
+    ports:
+      - "127.0.0.1:${CAT_ID_PORT:-8000}:8000"
+    environment:
+      CAT_ID_COG_URL: http://cog:5000
+      CAT_ID_OFFLINE: "1"
+      CAT_ID_WIKIPEDIA: "0"
+    depends_on:
+      cog:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,noexec,nosuid
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    init: true
+    pids_limit: 64
+    mem_limit: 512m

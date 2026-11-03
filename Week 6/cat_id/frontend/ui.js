@@ -202,6 +202,29 @@ export function renderResult(result) {
   }
   if (result.candidates.length)
     content.append(candidatesList(result.candidates, result.score_note));
+  if (result.baseline) {
+    const baseline = element("section", "baseline-result");
+    baseline.append(
+      element("p", "eyebrow", "RESNET50 · IMAGENET CLASSIFICATION"),
+      element("h2", "", result.baseline.predicted_class),
+      element(
+        "p", "score-note",
+        "The course model’s closest image category. ImageNet labels mix species, domestic-cat appearances, and objects; they are not a complete species catalogue.",
+      ),
+    );
+    const classes = element("ul", "baseline-classes");
+    for (const item of result.baseline.top_classes) {
+      classes.append(element("li", "", `${item.label} · ${item.score.toFixed(3)}`));
+    }
+    baseline.append(
+      classes,
+      element(
+        "p", "score-note",
+        "These are ImageNet softmax scores, not verified identification confidence. “Tiger cat” refers to a domestic-cat category.",
+      ),
+    );
+    content.append(baseline);
+  }
   content.append(
     element(
       "p",

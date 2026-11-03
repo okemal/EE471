@@ -2011,3 +2011,20 @@ dialog::backdrop {
 #analysis-title:focus {
   outline: none;
 }
+.baseline-result {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+}
+
+.baseline-result h2 {
+  margin: 0.4rem 0 0.75rem;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.6rem;
+}
+
+.baseline-classes {
+  padding-left: 1.25rem;
+  line-height: 1.8;
+}

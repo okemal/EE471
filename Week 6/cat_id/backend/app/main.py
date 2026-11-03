@@ -12,6 +12,7 @@ from starlette.concurrency import run_in_threadpool
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from .catalogue import get_species, species_catalogue
+from .cog_client import CogClassifier, ModelBusy
 from .config import ROOT, Settings, settings
 from .images import InvalidImage, decode_image
 from .knowledge import KnowledgeService
@@ -22,7 +23,11 @@ logger = logging.getLogger(__name__)
 
 
 def create_app(config: Settings = settings, classifier=None) -> FastAPI:
-    engine = classifier if classifier is not None else Classifier(config)
+    engine = (
+        classifier
+        if classifier is not None
+        else (CogClassifier(config) if config.cog_url else Classifier(config))
+    )
     knowledge = KnowledgeService(config.wikipedia_enabled and not config.offline)
 
     @asynccontextmanager
@@ -73,10 +78,12 @@ def create_app(config: Settings = settings, classifier=None) -> FastAPI:
 
     @app.get("/api/health", response_model=Health)
     async def health():
+        if isinstance(engine, CogClassifier):
+            await run_in_threadpool(engine.refresh_health)
         return {
             "status": engine.status,
             "device": engine.device,
-            "model": BIOCLIP.name,
+            "model": getattr(engine, "name", BIOCLIP.name),
             "species_count": len(species_catalogue()),
             "error": engine.error,
             "offline": config.offline,
@@ -86,6 +93,8 @@ def create_app(config: Settings = settings, classifier=None) -> FastAPI:
 
     @app.get("/api/ready")
     async def ready():
+        if isinstance(engine, CogClassifier):
+            await run_in_threadpool(engine.refresh_health)
         if engine.status != "ready":
             raise HTTPException(503, "The local model is not ready yet.")
         return {"status": "ready"}
@@ -141,6 +150,8 @@ def create_app(config: Settings = settings, classifier=None) -> FastAPI:
                 raise HTTPException(400, "Invalid upload length.")
             if declared_size > config.max_upload_bytes:
                 raise HTTPException(413, "This image is too large. Choose a file under 10 MB.")
+        if isinstance(engine, CogClassifier):
+            await run_in_threadpool(engine.refresh_health)
         if engine.status != "ready":
             raise HTTPException(
                 503, engine.error or "The local model is warming up. Please try again shortly."
@@ -167,6 +178,12 @@ def create_app(config: Settings = settings, classifier=None) -> FastAPI:
             result = await run_in_threadpool(engine.predict, image)
         except InvalidImage as exc:
             raise HTTPException(422, str(exc)) from None
+        except ModelBusy:
+            raise HTTPException(
+                429,
+                "The Cog model is busy. Please try again shortly.",
+                headers={"Retry-After": "3"},
+            ) from None
         except TimeoutError:
             raise HTTPException(408, "The upload took too long. Please try again.") from None
         except HTTPException:
@@ -182,9 +199,10 @@ def create_app(config: Settings = settings, classifier=None) -> FastAPI:
                 image.close()
             engine.lock.release()
         result["elapsed_ms"] = round((time.perf_counter() - start) * 1000)
-        result["model"] = BIOCLIP.name
+        result["model"] = getattr(engine, "name", BIOCLIP.name)
         result["score_note"] = (
-            "Cosine similarities compare this photo with catalogue descriptions. They are not probabilities or verified confidence."
+            "Cosine similarities compare this photo with catalogue descriptions. "
+            "They are not probabilities or verified confidence."
         )
         if result["status"] == "matched":
             result["knowledge"] = await knowledge.get(result["candidates"][0]["species"])

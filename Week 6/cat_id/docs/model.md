@@ -8,6 +8,21 @@ illustrates a generic pretrained classifier. ImageNet ResNet50 has a fixed
 species, only some wild cats have labels, and some labels are broader than a
 single species. It cannot directly rank a complete Felidae species catalogue.
 
+The assignment configuration nevertheless runs **that exact tutorial baseline**
+for every upload: TorchVision `ResNet50_Weights.IMAGENET1K_V1`, its standard
+preprocessing, frozen ResNet50, and top-three softmax classes. The website shows
+these separately and the Cog API exposes `output.baseline.predicted_class`.
+The BioCLIP/OpenCLIP pipeline below provides the additional species-level result;
+ResNet50 does not override its abstention rules. For example, an ImageNet
+“tiger cat” prediction is a domestic-cat appearance label, not *Panthera tigris*,
+and “lynx” alone does not resolve one of the four catalogue lynx species.
+
+The official file is `resnet50-0676ba61.pth`, SHA-256
+`0676ba61b6795bbe1773cffd859882e5e297624d384b6993f7c9e683e722fb8a`.
+`resnet.py` checks that digest before restricted `weights_only=True` loading,
+including when the file was already cached. Offline startup fails if it is
+missing or altered. Only this fixed official checkpoint is accepted.
+
 [BioCLIP 2.5 Huge](https://huggingface.co/imageomics/bioclip-2.5-vith14) is a
 biodiversity-trained ViT-H/14 model. It supports zero-shot comparison with
 scientific, vernacular, and taxonomic descriptions and reports improvements

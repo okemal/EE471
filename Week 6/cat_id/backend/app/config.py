@@ -17,6 +17,8 @@ class Settings:
     offline: bool = os.getenv("CAT_ID_OFFLINE", "0") == "1"
     wikipedia_enabled: bool = os.getenv("CAT_ID_WIKIPEDIA", "1") == "1"
     load_model: bool = os.getenv("CAT_ID_LOAD_MODEL", "1") == "1"
+    # Empty keeps direct host inference; the assignment stack uses its Cog service.
+    cog_url: str = os.getenv("CAT_ID_COG_URL", "")
     # Deliberately fixed, documented heuristics. They are not calibrated probabilities.
     gate_min_similarity: float = 0.23
     gate_min_margin: float = 0.015

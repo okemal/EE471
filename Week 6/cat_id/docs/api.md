@@ -45,7 +45,37 @@ Application errors use `{"detail": "human-readable message"}`. Uvicorn may
 return a plain `503` when its own HTTP concurrency limit is reached. There is no
 queue, batch endpoint, arbitrary URL fetch, or public API authentication layer.
 
-## Health and readiness
+## Cog inference endpoint (assignment stack)
+
+Cog runs separately at `http://127.0.0.1:5002`. `GET /health-check` reports its
+readiness and `GET /openapi.json` describes the generated inference API.
+`POST /predictions` accepts a JSON envelope:
+
+```json
+{"input": {"image": "data:image/jpeg;base64,<actual encoded image bytes>"}}
+```
+
+The placeholder above must be replaced with real bytes. Use
+`scripts/prepare_postman.py` and the included collection as described in the
+[recording guide](assignment.md). The input is deliberately a data URI string;
+external URLs, file paths, and multipart forms are unsupported. The predictor
+applies the same image limits as the website after Cog parses the JSON body.
+
+A successful Cog response has `status: "succeeded"` and an `output` object with
+the species `status`, `candidates`, and diagnostics. It also contains `baseline`:
+`model: "ResNet50"`, `weights: "IMAGENET1K_V1"`, `predicted_class`, and three
+`top_classes` entries with ImageNet `label` and softmax `score`. These scores
+are not the species cosine similarities. A successful non-cat prediction still
+has Cog status `succeeded`, with `output.status: "no_match"`.
+
+The website adds its usual cited knowledge and returns the same optional
+`baseline` field. A busy Cog returns `409` (website: `429`). Cog prediction
+failures use its `status: "failed"`/`error` envelope; callers must check that
+status even when the HTTP transport succeeds. No invalid/failed upload is
+converted to a no-match result. The raw Cog response may echo its input data
+URI; the website response does not.
+
+## Health and readiness (website)
 
 `GET /api/health` is available while models load. Its `status` is `loading`,
 `ready`, `error`, or `disabled`. It also reports device, model name, catalogue

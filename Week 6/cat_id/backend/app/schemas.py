@@ -35,6 +35,18 @@ class Candidate(BaseModel):
     similarity: float = Field(ge=-1, le=1, description="Cosine similarity, not a probability")
 
 
+class ImageNetClass(BaseModel):
+    label: str
+    score: float = Field(ge=0, le=1)
+
+
+class Baseline(BaseModel):
+    model: Literal["ResNet50"]
+    weights: Literal["IMAGENET1K_V1"]
+    predicted_class: str
+    top_classes: list[ImageNetClass] = Field(min_length=3, max_length=3)
+
+
 class Identification(BaseModel):
     status: Literal["matched", "uncertain", "no_match"]
     message: str
@@ -44,6 +56,7 @@ class Identification(BaseModel):
     model: str
     score_note: str
     knowledge: Knowledge | None = None
+    baseline: Baseline | None = None
 
 
 class SpeciesDetail(BaseModel):

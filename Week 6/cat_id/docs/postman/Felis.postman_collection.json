@@ -1,0 +1,66 @@
+{
+  "info": {
+    "name": "Felis - Week 6 Cog verification",
+    "description": "Run scripts/prepare_postman.py with a local image. Import the generated local environment, select it, then send these requests. The image bytes are uploaded as a base64 data URI in Cog's JSON input; no remote image host is used.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "cog_url", "value": "http://127.0.0.1:5002" },
+    { "key": "image_data_uri", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Cog readiness",
+      "request": { "method": "GET", "url": "{{cog_url}}/health-check" },
+      "event": [{
+        "listen": "test",
+        "script": { "type": "text/javascript", "exec": [
+          "pm.test('Cog is ready', () => {",
+          "  pm.response.to.have.status(200);",
+          "  pm.expect(pm.response.json().status).to.eql('READY');",
+          "});"
+        ] }
+      }]
+    },
+    {
+      "name": "Classify uploaded image",
+      "request": {
+        "method": "POST",
+        "url": "{{cog_url}}/predictions",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"input\": {\n    \"image\": \"{{image_data_uri}}\"\n  }\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": { "type": "text/javascript", "exec": [
+            "if (!String(pm.variables.get('image_data_uri') || '').startsWith('data:image/')) {",
+            "  throw new Error('Run scripts/prepare_postman.py, import its environment, and select it first.');",
+            "}"
+          ] }
+        },
+        {
+          "listen": "test",
+          "script": { "type": "text/javascript", "exec": [
+            "pm.test('Prediction succeeded', () => {",
+            "  pm.response.to.have.status(200);",
+            "  pm.expect(pm.response.json().status).to.eql('succeeded');",
+            "});",
+            "pm.test('Tutorial ResNet50 returned a predicted class', () => {",
+            "  const output = pm.response.json().output;",
+            "  pm.expect(output.baseline.model).to.eql('ResNet50');",
+            "  pm.expect(output.baseline.weights).to.eql('IMAGENET1K_V1');",
+            "  pm.expect(output.baseline.predicted_class).to.be.a('string').and.not.empty;",
+            "  pm.expect(output.baseline.top_classes).to.have.lengthOf(3);",
+            "  pm.expect(output.status).to.be.oneOf(['matched', 'uncertain', 'no_match']);",
+            "});"
+          ] }
+        }
+      ]
+    }
+  ]
+}

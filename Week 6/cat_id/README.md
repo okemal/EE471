@@ -9,7 +9,43 @@ real example photographs, a searchable catalogue, and optional JSON observation
 exports. Photos are processed in memory and are not saved by the application.
 No API key, account, Node.js installation, or frontend build is needed.
 
-## Start the local demo
+## Week 6 assignment: build and run with Cog
+
+The assignment explicitly requires Cog and the tutorial's pretrained ResNet50.
+Use this path for the course demonstration; each upload runs **ResNet50
+IMAGENET1K_V1** inside Cog as well as the broader Felidae species classifier.
+Both outputs appear on the website. ImageNet classes and species suggestions
+are kept separate because labels such as “tiger cat” refer to domestic cats.
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/), Docker,
+and Cog first if they are not already available.
+
+```bash
+cd "Week 6/cat_id"
+uv sync --frozen
+uv run --frozen python scripts/download_models.py
+uv run --frozen python scripts/download_resnet.py
+cog build --use-cog-base-image=false
+docker compose -f compose.cog.yaml build web
+docker compose stop web  # stop an earlier direct-inference demo, if present
+docker compose -f compose.cog.yaml up -d --wait --wait-timeout 240
+```
+
+Open **http://127.0.0.1:8000**; Cog serves **http://127.0.0.1:5002/predictions**.
+Use Cog 0.23.1 and allocate at least 10 GiB of Docker Desktop VM memory.
+The build flag uses a clean Python base instead of inheriting unrelated packages
+from Cog's prebuilt image.
+The standalone `compose.cog.yaml` connects a web container to a Cog inference
+container; only Cog loads the models from its read-only cache. Both services run
+offline. See the [assignment and recording guide](docs/assignment.md) for
+inside-container logs, the Postman image-upload collection, the three required
+AVI filenames, and the code-explanation walkthrough. The recordings still need
+to be made; test records do not substitute for the required videos.
+
+## Start the direct local demo
+
+This is an alternative to the assignment stack. If that stack is running, stop
+it with `docker compose -f compose.cog.yaml down` from this directory first so
+port 8000 and model memory are available.
 
 From the repository root:
 
@@ -67,7 +103,7 @@ stays uncertain between the caracal and African golden cat.
 
 ## Models and interpretation
 
-Felis uses two freely available, MIT-licensed checkpoints:
+The species classifier uses two freely available, MIT-licensed checkpoints:
 
 - [OpenCLIP ViT-B/32](https://huggingface.co/laion/CLIP-ViT-B-32-laion2B-s34B-b79K)
   compares cat descriptions with non-cat animals, objects, and non-photographic
@@ -80,6 +116,13 @@ Felis uses two freely available, MIT-licensed checkpoints:
 Both repositories are pinned to exact revisions in `backend/app/model.py`.
 Only safetensors weights and preprocessing configuration are downloaded; remote
 Python code and pickle checkpoints are not loaded.
+
+The Cog assignment path additionally uses the exact ResNet50 weight variant in
+the [Cog tutorial](https://github.com/replicate/cog/blob/main/docs/getting-started.md).
+The official TorchVision checkpoint is SHA-256 verified and loaded using
+`torch.load(..., weights_only=True)`. Its 1,000 ImageNet categories are not a
+complete Felidae taxonomy. Its softmax scores are separate from BioCLIP cosine
+similarities and are not verified identification confidence.
 
 The catalogue contains **41 species concepts from IUCN CCTF 2017**, including
 *Felis catus*. It is a versioned reference, not every species proposed by newer
@@ -118,12 +161,18 @@ is a reference; the host launcher does **not** automatically execute `.env`.
 - `CAT_ID_MODEL_CACHE=/absolute/path`: override `.cache/models`.
 - `CAT_ID_PORT=8001`: change the local launch/Compose port.
 - `CAT_ID_LOAD_MODEL=0`: UI-only development; identification is visibly disabled.
+- `CAT_ID_COG_URL=http://cog:5000`: delegate web inference to the local Cog service
+  (set by `compose.cog.yaml`). With no value, the direct model runs in FastAPI.
 
 Keep **one Uvicorn worker**. Multiple workers load multiple copies of the models
 and can exhaust VRAM. The application admits one image-processing request at a
 time and returns `429` with `Retry-After` when busy.
 
 ## Docker
+
+These are the alternative direct-inference containers. Before switching from
+the Cog stack, run `docker compose -f compose.cog.yaml down`; do not leave its
+large inference service running alongside another CPU model instance.
 
 A CPU image is the portable default. It uses a separately hashed Linux/Python
 3.11 CPU dependency lock, a non-root user, a read-only filesystem and model mount,
@@ -159,9 +208,10 @@ separately configured Docker Engine with NVIDIA Container Toolkit for that path.
 See [Docker's GPU support documentation](https://docs.docker.com/desktop/features/gpu/)
 and the [testing record](docs/testing.md).
 
-The website runs its inference module directly in FastAPI; Cog is not required.
-The model module, upload validation, and decision layer are separated so that
-other local inference wrappers can reuse them without coupling to the UI.
+These original Docker commands use direct FastAPI inference. For assignment
+compliance, use the Cog stack at the top of this document. Both share model,
+image-validation, and decision modules; the Cog mode adds the tutorial baseline
+and an independently accessible prediction API.
 
 ## Development and verification
 
@@ -234,6 +284,12 @@ uv pip compile pyproject.toml --no-sources --python-version 3.11 \
   --index-strategy unsafe-best-match --generate-hashes \
   --output-file requirements-cpu.lock
 ```
+
+Keep the `--extra-index-url https://download.pytorch.org/whl/cpu` line in the
+CPU lock: Cog reads this same flat dependency file and cannot follow `-r`
+includes. The Dockerfile enforces its hashes; Cog resolves the pinned versions
+through its own generated requirements/install steps. Check `pip check` inside
+the resulting Cog container after dependency updates.
 
 Changes to model revisions, prompts, preprocessing, taxonomy, or thresholds are
 model changes and require a fresh evaluation. Never lower rejection thresholds

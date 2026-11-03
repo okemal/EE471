@@ -41,7 +41,7 @@ def main():
         expect(page.locator("#identify-button")).to_be_enabled()
         page.locator("#identify-button").click()
         expect(page.locator("#analysis-title")).to_have_text("Domestic cat", timeout=180000)
-        expect(page.locator(".score-note")).to_contain_text("not probabilities")
+        expect(page.locator(".candidates .score-note")).to_contain_text("not probabilities")
         page.screenshot(path=str(OUT / "result-desktop.png"), full_page=True)
         with page.expect_download() as download:
             page.locator("#save-result").click()
@@ -50,6 +50,12 @@ def main():
         record = json.loads(record_path.read_text())
         assert record["candidates"][0]["species"]["scientific_name"] == "Felis catus"
         assert "image" not in record
+        if "baseline" in record:
+            expect(page.locator(".baseline-result h2")).to_have_text(
+                record["baseline"]["predicted_class"]
+            )
+            expect(page.locator(".baseline-classes li")).to_have_count(3)
+            assert record["baseline"]["weights"] == "IMAGENET1K_V1"
         page.get_by_role("button", name="Meet this species").click()
         expect(page.locator("#detail-dialog")).to_be_visible()
         expect(page.locator("#dialog-title")).to_have_text("Domestic cat")

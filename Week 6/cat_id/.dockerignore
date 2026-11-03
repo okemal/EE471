@@ -3,6 +3,8 @@
 !pyproject.toml
 !uv.lock
 !requirements-cpu.lock
+!cog.yaml
+!run.py
 !backend/
 !backend/**
 !frontend/

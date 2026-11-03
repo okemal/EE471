@@ -1,11 +1,13 @@
 # Verification record
 
-Verified on 2 November 2026 in the local development environment. Tests describe
+Verified on 2–3 November 2026 in the local development environment. Tests describe
 what was observed, not a guarantee of future model accuracy or deployment safety.
+The original host/direct-container records are from 2 November; the Cog
+assignment integration and updated automated suite were checked on 3 November.
 
 ## Automated application tests
 
-`uv run --frozen pytest -q`: **49 passed**.
+`uv run --frozen pytest -q`: **66 passed** (49 original tests plus 17 Cog cases).
 
 Coverage includes:
 
@@ -22,6 +24,10 @@ Coverage includes:
 - Catalogue uniqueness and counts for the declared taxonomy.
 - Wikipedia attribution, caching, malformed or oversized replies, disambiguation,
   HTTP failures, and offline behaviour.
+- Cog lossless image transport, invalid/oversized data URIs, rejection of remote
+  image URLs and local-file paths, local service address restrictions, recovery
+  after connection failure, malformed readiness replies, busy responses, and safe rejection of malformed
+  model output without falling back to direct inference.
 
 The test double is limited to model-independent tests. It is never selectable
 by the application or exposed as a demo mode. There is one upstream Starlette
@@ -102,6 +108,9 @@ firewall isolation was not separately enforced during that run.
 
 ## Container verification
 
+The following is the original **direct-inference** container record. The current
+assignment's two-container Cog stack is verified separately below.
+
 The **CPU container is now verified end to end** with Docker Desktop 4.97.0,
 Docker Engine 29.9.2, and Docker Compose 5.6.1 on the `desktop-linux` context.
 The earlier daemon interruption no longer blocks this path.
@@ -152,3 +161,60 @@ To reproduce while the Compose service is running:
 CAT_ID_ARTIFACT_DIR=artifacts/container uv run --frozen python scripts/evaluate.py
 CAT_ID_ARTIFACT_DIR=artifacts/container/browser uv run --frozen python scripts/check_browser.py
 ```
+
+## Cog assignment verification (3 November)
+
+`cog build --use-cog-base-image=false` and the web Docker build completed with
+Cog CLI/SDK/coglet 0.23.1. The plain Python base avoids an unused OpenCV/NumPy
+dependency conflict in Cog's prebuilt base. `python -m pip check` inside the
+final Cog container returned **No broken requirements found**. Cog consumes
+pinned versions from the shared CPU lock through its generated install steps;
+the hand-written web Dockerfile additionally enforces the lock's hashes.
+
+`docker compose -f compose.cog.yaml up -d --wait --wait-timeout 240` started both
+services with healthy status. The website at port 8000 uses the Cog service at
+port 5002; web loads no vision models. Both run as UID 10001 with read-only roots,
+dropped capabilities, no-new-privileges, and loopback-only ports. No OOM kills
+were recorded. All 31 packaged backend/frontend files in web, and those files
+plus `run.py`, `cog.yaml`, and the CPU lock in Cog, matched the checkout by SHA-256.
+Both existing speech containers remained healthy on ports 5000 and 5001.
+
+`scripts/verify_cog.py` exercised real `POST /predictions` requests and verified:
+
+- Domestic cat: species `Felis catus`, tutorial ResNet50 class `tabby`.
+- Tiger: species `Panthera tigris`, tutorial ResNet50 class `tiger`.
+- Dog: `no_match` with no species candidates, ResNet50 class `golden retriever`.
+- A submitted HTTP image URL was rejected without remote image fetching.
+
+The full browser script passed against this final stack, including the new
+baseline panel, the exported baseline fields, real cat/tiger/dog/caracal cases,
+keyboard/dialogs, filters, upload validation, and four responsive widths.
+Desktop and mobile result screenshots were inspected. The 19-image smoke set
+also completed through the website and Cog: **eight correct matched cats, two
+uncertain cats, and nine rejected negatives**, consistent with the earlier
+species results. Observed web-request durations were 105–2406 ms in this run.
+These convenience cases remain unsuitable as a general accuracy estimate.
+
+Inside-container `exec`, `id`, and reads of `/tmp/felis-predictions.jsonl`
+confirmed the live prediction records contain status, ImageNet class, closest
+species, and duration. Photos and filenames are absent. The log is a rotating
+tmpfs file; the application also writes these events to container stdout.
+
+The Postman collection and generated environment form a real uploaded-image
+request; that exact resolved payload was also sent to Cog successfully using
+HTTPX. **The Postman desktop UI and the required AVI recordings have not been
+recorded or verified here.** The student must demonstrate Postman in Task 2 and
+provide the narrated code explanation. Follow [assignment.md](assignment.md).
+
+Reproducible commands and local evidence:
+
+```bash
+uv run --frozen python scripts/verify_cog.py
+CAT_ID_ARTIFACT_DIR=artifacts/cog/browser uv run --frozen python scripts/check_browser.py
+CAT_ID_ARTIFACT_DIR=artifacts/cog uv run --frozen python scripts/evaluate.py
+```
+
+Generated API records, screenshots, Postman upload data, build logs, and runtime
+checks are under ignored `artifacts/`. They contain no additional source files
+needed to run the application. Model caches, `.cog/` build intermediates, and
+AVI recordings are also excluded from version control.
