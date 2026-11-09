@@ -13,3 +13,23 @@ __pycache__/
 # Local browser test artifacts
 test-results/
 playwright-report/
+
+# OpenCode config and files
+.opencode/
+opencode.jsonc
+
+# VSCodium files
+.vscode/
+AGENTS.md
+
+# Previous session exports
+Week-5-task-1-transcript.md
+Week-5-task-2-transcript.md
+Week-6-task-1.md
+Week-6-task-2.md
+codex-ran-out-tokens.md
+
+# Postman related files
+"Week 6/cat_id/docs/postman/Felis - Week 6 Cog verification/"
+.postman/
+postman/
