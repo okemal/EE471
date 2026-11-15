@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5f4ee" />
+    <meta
+      name="description"
+      content="FashionMNIST garment classification comparing a PyTorch Quickstart baseline MLP against an HPO-optimized ConvNet inside a Cog container."
+    />
+    <title>Atelier — Garment Classifier &amp; HPO Studio</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header shell">
+      <a class="brand" href="#identify" aria-label="Atelier home">
+        <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+          <path
+            d="M20 9a3 3 0 1 1 2.4 4.8L20 15.5 7 24a2 2 0 0 0 1.1 3.7h23.8A2 2 0 0 0 33 24l-13-8.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.1"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M11 32h18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          />
+        </svg>
+        <span>atelier<span class="brand-dot">.</span></span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#identify" data-nav="identify" class="active">Classify</a>
+        <a href="#catalogue" data-nav="catalogue">Garment catalogue</a>
+        <a href="#about" data-nav="about"
+          >HPO &amp; Benchmarks <span aria-hidden="true">↗</span></a
+        >
+      </nav>
+      <div
+        class="local-badge"
+        title="Inference runs locally inside your Cog container"
+      >
+        <span class="status-dot"></span> Local PyTorch + Cog.
+        <span class="badge-extra">No cloud storage.</span>
+      </div>
+    </header>
+
+    <main id="main" class="shell" tabindex="-1">
+      <section id="identify-view" class="view" aria-label="Classify a garment">
+        <div id="landing" class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">
+              <span class="little-line"></span> FASHIONMNIST · BASELINE VS. OPTIMIZED
+            </p>
+            <h1>Every silhouette.<br />Two <em>models</em>.</h1>
+            <p class="hero-description">
+              Upload any garment image and compare the PyTorch Quickstart baseline
+              MLP side by side against our hyperparameter-optimized convolutional
+              classifier.
+            </p>
+            <div class="dropzone" id="dropzone">
+              <div class="upload-symbol" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect x="3" y="4" width="18" height="16" rx="3" />
+                  <path d="m3 16 5-5 5 5 3-3 5 5" />
+                  <circle cx="16.5" cy="8.5" r="1.5" /></svg
+                ><span>+</span>
+              </div>
+              <div class="drop-copy">
+                <h2>Inspect a garment side by side.</h2>
+                <p>Drop an image here, or choose a file below.</p>
+              </div>
+              <button class="button primary" id="choose-file">
+                Choose a garment image <span aria-hidden="true">↗</span>
+              </button>
+              <p class="upload-formats">
+                JPG, PNG or WebP <span>·</span> At least 28×28 px <span>·</span> Up to 10 MB
+              </p>
+            </div>
+            <input
+              id="image-input"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              class="visually-hidden"
+              tabindex="-1"
+              aria-label="Choose a garment image"
+            />
+            <p id="upload-error" class="error-message" role="alert" hidden></p>
+            <div class="examples">
+              <span>Try a sample:</span
+              ><button class="example" data-example="sneaker">
+                <img
+                  src="/assets/sneaker.png"
+                  alt=""
+                  width="30"
+                  height="30"
+                />
+                Sneaker</button
+              ><button class="example" data-example="shirt">
+                <img src="/assets/shirt.png" alt="" width="30" height="30" />
+                Shirt</button
+              ><button class="example" data-example="ankle-boot">
+                <img src="/assets/ankle-boot.png" alt="" width="30" height="30" />
+                Ankle boot</button
+              ><button class="example text-example" data-example="studio-tee">
+                Studio tee (light bg) <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+            <p class="privacy-note">
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m10 2 6 3v5c0 4-6 7-6 7S4 14 4 10V5l6-3Z" />
+                <path d="m7 9 2 2 4-4" />
+              </svg>
+              Processed in memory inside your local service. Images are never stored.
+            </p>
+          </div>
+          <figure class="hero-photo">
+            <img
+              src="/assets/hero-fashion.png"
+              alt="FashionMNIST garment silhouettes showcase"
+              fetchpriority="high"
+              width="1200"
+              height="900"
+            />
+            <div class="photo-topline">
+              <span>10 GARMENT CATEGORIES</span
+              ><svg viewBox="0 0 32 32" aria-hidden="true">
+                <path d="M16 2v28M2 16h28" />
+                <circle cx="16" cy="16" r="11" />
+              </svg>
+            </div>
+            <figcaption>
+              <div>
+                <span class="eyebrow">WEEK 7 / TASK 1</span>
+                <h2>FashionMNIST</h2>
+                <i>Quickstart MLP vs. HPO GarmentConvNet</i>
+              </div>
+              <button
+                class="photo-link"
+                data-nav-target="about"
+                aria-label="Explore hyperparameter optimization benchmarks"
+              >
+                ↗
+              </button>
+            </figcaption>
+            <span class="photo-edge-note"
+              >28×28 GRAYSCALE TENSORS · SIDE-BY-SIDE INFERENCE</span
+            >
+          </figure>
+        </div>
+
+        <section id="analysis" hidden aria-labelledby="analysis-title">
+          <div class="section-top">
+            <button id="start-over" class="text-button">
+              ← Classify another image</button
+            ><span class="eyebrow">SIDE-BY-SIDE CLASSIFICATION</span>
+          </div>
+          <div class="analysis-grid">
+            <div class="observation-photo">
+              <img id="preview" alt="Your selected garment image" />
+              <div class="observation-caption">
+                <span id="file-name"></span><span id="file-size"></span>
+              </div>
+              <div class="scan-line" hidden></div>
+            </div>
+            <div
+              id="result-panel"
+              class="result-panel"
+              aria-live="polite"
+              aria-atomic="true"
+            ></div>
+          </div>
+          <p class="analysis-footnote">
+            Both models run on the same preprocessed 28×28 grayscale tensor. Light
+            studio backgrounds are automatically inverted to match FashionMNIST polarity.
+          </p>
+        </section>
+
+        <section class="discovery-section" aria-labelledby="discover-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">TEN SILHOUETTES. ONE BENCHMARK.</p>
+              <h2 id="discover-title">Explore the garment classes.</h2>
+            </div>
+            <a class="text-link" href="#catalogue"
+              >Open the full catalogue <span aria-hidden="true">↗</span></a
+            >
+          </div>
+          <div
+            id="featured-garments"
+            class="featured-grid"
+            aria-live="polite"
+          ></div>
+        </section>
+
+        <div class="principles">
+          <div>
+            <span class="principle-icon" aria-hidden="true">01</span>
+            <p>
+              <strong>PyTorch Quickstart baseline</strong
+              ><span>5-epoch MLP (SGD, lr=0.001, batch=64) faithfully reproduced.</span>
+            </p>
+          </div>
+          <div>
+            <span class="principle-icon" aria-hidden="true">02</span>
+            <p>
+              <strong>Hyperparameter optimization</strong
+              ><span>Systematic 6-trial sweep tuning optimizer, LR, schedule &amp; CNN capacity.</span>
+            </p>
+          </div>
+          <div>
+            <span class="principle-icon" aria-hidden="true">03</span>
+            <p>
+              <strong>Containerized with Cog</strong
+              ><span>Standalone /predictions endpoint with live inside-container logs.</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="catalogue-view"
+        class="view"
+        hidden
+        aria-labelledby="guide-title"
+      >
+        <div class="page-intro">
+          <p class="eyebrow">FASHIONMNIST TAXONOMY</p>
+          <h1 id="guide-title">The garment <em>catalogue.</em></h1>
+          <p>
+            Inspect all 10 FashionMNIST categories, visual cues at 28×28 resolution,
+            common confusions, and per-class accuracy gains from hyperparameter optimization.
+          </p>
+        </div>
+        <div class="guide-toolbar">
+          <label class="search-box"
+            ><svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="10.5" cy="10.5" r="6.5" />
+              <path d="m16 16 5 5" /></svg
+            ><input
+              id="garment-search"
+              type="search"
+              placeholder="Search garment categories or aliases…"
+              aria-label="Search garment categories" /></label
+          ><label class="filter-label"
+            >Group<select id="group-filter">
+              <option value="all">All garments</option>
+              <option value="Tops">Tops</option>
+              <option value="Bottoms">Bottoms</option>
+              <option value="Outerwear & Knitwear">Outerwear &amp; Knitwear</option>
+              <option value="Full-body">Full-body</option>
+              <option value="Footwear">Footwear</option>
+              <option value="Accessories">Accessories</option>
+            </select></label
+          >
+        </div>
+        <div class="catalogue-meta">
+          <span id="garment-count" aria-live="polite"></span
+          ><span>Zalando FashionMNIST · 60,000 train / 10,000 test images</span>
+        </div>
+        <div id="garments-grid" class="species-grid"></div>
+        <p id="empty-search" class="empty-search" hidden>
+          No garments match that search. Try a category name like Shirt, Sneaker, or Coat.
+        </p>
+      </section>
+
+      <section
+        id="about-view"
+        class="view"
+        hidden
+        aria-labelledby="about-title"
+      >
+        <div class="page-intro">
+          <p class="eyebrow">HYPERPARAMETER OPTIMIZATION STUDY</p>
+          <h1 id="about-title">From baseline to <em>optimized.</em></h1>
+          <p>
+            A quantitative comparison of the PyTorch Quickstart tutorial model and our
+            HPO-tuned convolutional network across the 10,000-image FashionMNIST test split.
+          </p>
+        </div>
+        <div class="about-steps">
+          <article>
+            <span class="step-number">01 / QUICKSTART BASELINE</span>
+            <h2>5-Epoch MLP</h2>
+            <p>
+              Following the official PyTorch Quickstart tutorial, inputs are flattened
+              into 784 features and trained with SGD (lr=0.001, batch=64) for 5 epochs.
+              Under-training and lack of spatial filters limit accuracy on overlapping tops.
+            </p>
+          </article>
+          <article>
+            <span class="step-number">02 / HPO SWEEP</span>
+            <h2>Systematic Search</h2>
+            <p>
+              We evaluated learning rates (1e-3 to 1.5e-2), SGD+Momentum vs. AdamW,
+              batch sizes (32, 64, 128), cosine/step LR schedules, dropout, weight decay,
+              and geometric augmentations on a 54k/6k validation split.
+            </p>
+          </article>
+          <article>
+            <span class="step-number">03 / OPTIMIZED CNN</span>
+            <h2>Spatial Hierarchy</h2>
+            <p>
+              Pairing 3×3 convolutional blocks with BatchNorm, GELU, Flip+Affine
+              augmentation, AdamW, and CosineAnnealingLR resolves collar and sleeve
+              ambiguities, cutting classification error rate by over 75%.
+            </p>
+          </article>
+        </div>
+
+        <section id="hpo-benchmark-section" class="benchmark-section">
+          <div id="benchmark-kpis" class="kpi-grid"></div>
+          <h2 class="benchmark-heading">Hyperparameter Optimization Trials</h2>
+          <div class="table-wrap">
+            <table class="benchmark-table">
+              <thead>
+                <tr>
+                  <th>Experiment</th>
+                  <th>Architecture</th>
+                  <th>Optimizer &amp; Schedule</th>
+                  <th>LR</th>
+                  <th>Batch</th>
+                  <th>Epochs</th>
+                  <th>Augmentation</th>
+                  <th>Val Acc</th>
+                  <th>Test Acc</th>
+                </tr>
+              </thead>
+              <tbody id="hpo-table-body"></tbody>
+            </table>
+          </div>
+          <h2 class="benchmark-heading">Per-Class Test Accuracy Breakdown</h2>
+          <div class="table-wrap">
+            <table class="benchmark-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Category</th>
+                  <th>Group</th>
+                  <th>Baseline Acc</th>
+                  <th>Optimized Acc</th>
+                  <th>Gain</th>
+                </tr>
+              </thead>
+              <tbody id="per-class-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <div class="about-notes">
+          <article>
+            <p class="eyebrow">CONTAINER ARCHITECTURE</p>
+            <h2>Cog + FastAPI separation.</h2>
+            <p>
+              All PyTorch model weights are verified by SHA-256 checksum and loaded
+              once inside the Cog inference container using <code>safetensors</code>.
+              The web container validates uploads, strips EXIF metadata, and calls Cog
+              over the internal Docker network.
+            </p>
+          </article>
+          <article class="privacy-card">
+            <p class="eyebrow">LOCAL &amp; DETERMINISTIC</p>
+            <h2>Stay fast.<br />Stay verifiable.</h2>
+            <p>
+              Prediction events are logged inside the running Cog container at
+              <code>/tmp/garment-predictions.jsonl</code> without storing any user
+              pixel bytes or filenames.
+            </p>
+            <div id="model-info" class="model-info">
+              Checking local inference engine…
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer shell">
+      <div>
+        <a href="#identify" class="footer-brand">atelier.</a
+        ><span>Week 7 Task 1 · FashionMNIST Classifier</span>
+      </div>
+      <div class="footer-links">
+        <span id="model-status"
+          ><span class="status-dot warming"></span> Connecting to local model</span
+        ><button class="text-button" data-open="credits">
+          Dataset &amp; model credits</button
+        ><span>Built with PyTorch &amp; Cog.</span>
+      </div>
+    </footer>
+    <dialog id="detail-dialog" aria-labelledby="dialog-title">
+      <button id="close-dialog" class="close-button" aria-label="Close details">
+        ×
+      </button>
+      <div id="dialog-content"></div>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <noscript
+      ><p class="noscript">
+        Atelier needs JavaScript to upload and classify garment images. Enable it and
+        reload this local page.
+      </p></noscript
+    >
+  </body>
+</html>

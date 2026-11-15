@@ -1,0 +1,152 @@
+[
+  {
+    "id": "airplane",
+    "class_index": 0,
+    "label": "plane",
+    "display_name": "Airplane",
+    "category_group": "Vehicles",
+    "summary": "Fixed-wing aircraft photographed in flight, parked on aprons, or framed against bright sky and runway horizons.",
+    "visual_clues": [
+      "Swept or straight wing silhouette intersecting a tubular fuselage",
+      "Uniform sky-blue or overcast upper background with distinct horizon contrast",
+      "Tail fin vertical stabilizer or metallic jet engine nacelle geometry"
+    ],
+    "common_confusions": ["Bird", "Ship"],
+    "imaging_notes": "At 32x32 resolution, small distant airliners share sky textures with soaring birds; fuselage symmetry separates them."
+  },
+  {
+    "id": "automobile",
+    "class_index": 1,
+    "label": "car",
+    "display_name": "Automobile",
+    "category_group": "Vehicles",
+    "summary": "Passenger sedans, coupes, sports cars, and hatchbacks seen on roads, driveways, or street curbs.",
+    "visual_clues": [
+      "Low cabin profile with angled windshield and rear window glass",
+      "Visible circular wheel wells close to asphalt or pavement shadow",
+      "Horizontal grille, headlamps, or bumper bar across the lower frame"
+    ],
+    "common_confusions": ["Truck"],
+    "imaging_notes": "Head-on or three-quarter passenger cars can resemble pickup trucks or vans if cargo height is obscured."
+  },
+  {
+    "id": "bird",
+    "class_index": 2,
+    "label": "bird",
+    "display_name": "Bird",
+    "category_group": "Animals",
+    "summary": "Passerines, raptors, waterfowl, and ostriches captured perched on branches, wading in reeds, or gliding in flight.",
+    "visual_clues": [
+      "Slender legs, webbed feet, or curved beak silhouette near head",
+      "Textured plumage against foliage, water, or open sky",
+      "Compact oval torso or outstretched feathered wingspan"
+    ],
+    "common_confusions": ["Airplane", "Deer", "Frog"],
+    "imaging_notes": "Brown songbirds on bark overlap color-wise with frogs and deer, making shape context and skip features crucial."
+  },
+  {
+    "id": "cat",
+    "class_index": 3,
+    "label": "cat",
+    "display_name": "Cat",
+    "category_group": "Animals",
+    "summary": "Domestic shorthair, tabby, and longhair cats indoors, curled up, or facing the camera at close range.",
+    "visual_clues": [
+      "Triangular pointed ears framing a rounded forehead and short muzzle",
+      "Whisker contrast and vertical pupil or bright tapetum reflections",
+      "Compact curled or crouched posture on soft domestic backgrounds"
+    ],
+    "common_confusions": ["Dog", "Frog"],
+    "imaging_notes": "Cat vs. dog is classically the hardest pair in CIFAR-10 because ear shape and muzzle depth compress at 32x32."
+  },
+  {
+    "id": "deer",
+    "class_index": 4,
+    "label": "deer",
+    "display_name": "Deer",
+    "category_group": "Animals",
+    "summary": "Wild fallow, white-tailed, and woodland deer photographed standing in meadows, brush, or shaded forests.",
+    "visual_clues": [
+      "Long slender neck, large flared ears, or branching antlers",
+      "Thin lower legs standing among green meadow grass or dry scrub",
+      "Tawny tan coat with pale underbelly or rump patch"
+    ],
+    "common_confusions": ["Horse", "Bird", "Dog"],
+    "imaging_notes": "Profile silhouettes of does share long legs and brown coats with horses; head angle and neck thickness separate them."
+  },
+  {
+    "id": "dog",
+    "class_index": 5,
+    "label": "dog",
+    "display_name": "Dog",
+    "category_group": "Animals",
+    "summary": "Companion breeds, hounds, and working dogs photographed indoors, on lawns, or in close-up portraits.",
+    "visual_clues": [
+      "Longer projecting snout and floppy or folded ears compared to cats",
+      "Wet dark nose prominence centered beneath the eyes",
+      "Standing or sitting canine chest contour with visible collar or paws"
+    ],
+    "common_confusions": ["Cat", "Horse"],
+    "imaging_notes": "Shallow 2-conv baselines frequently misclassify fluffy terriers and pugs as cats; batch normalization sharpens edges."
+  },
+  {
+    "id": "frog",
+    "class_index": 6,
+    "label": "frog",
+    "display_name": "Frog",
+    "category_group": "Animals",
+    "summary": "Amphibians resting on moss, rocks, lily pads, or hands with prominent bulbous eyes and crouching limbs.",
+    "visual_clues": [
+      "Squat triangular body posture with folded hind thighs",
+      "Protruding dorsally placed eyes and mottled green, olive, or brown skin",
+      "Mossy, wet-stone, or aquatic leaf surroundings"
+    ],
+    "common_confusions": ["Bird", "Cat"],
+    "imaging_notes": "Textured green-brown amphibians often trip weak baselines when resting on speckled soil or wooden planks."
+  },
+  {
+    "id": "horse",
+    "class_index": 7,
+    "label": "horse",
+    "display_name": "Horse",
+    "category_group": "Animals",
+    "summary": "Saddled riding horses, foals, and pasture herds viewed laterally in paddocks or tracks.",
+    "visual_clues": [
+      "Broad muscular neck topped by a mane and elongated equine head",
+      "Tall sturdy legs terminating in hooves over grass or dirt",
+      "Optional saddle, bridle, or rider seated high on the back"
+    ],
+    "common_confusions": ["Deer", "Dog"],
+    "imaging_notes": "Residual spatial pyramid features distinguish thicker equine necks and saddles from slender wild deer."
+  },
+  {
+    "id": "ship",
+    "class_index": 8,
+    "label": "ship",
+    "display_name": "Ship",
+    "category_group": "Vehicles",
+    "summary": "Cargo vessels, cruise liners, sailboats, and trawlers framed against open sea or harbor docks.",
+    "visual_clues": [
+      "Strong horizontal hull line separating water reflections from sky",
+      "White superstructure bridge, smokestacks, cranes, or tall rigging masts",
+      "Open blue-grey ocean waves or harbor wake trailing the stern"
+    ],
+    "common_confusions": ["Airplane", "Truck"],
+    "imaging_notes": "Waterline horizon edges give strong global cue separation from land-based trucks and bright sky planes."
+  },
+  {
+    "id": "truck",
+    "class_index": 9,
+    "label": "truck",
+    "display_name": "Truck",
+    "category_group": "Vehicles",
+    "summary": "Box trucks, semi-trailers, fire engines, and heavy commercial haulers parked or moving along highways.",
+    "visual_clues": [
+      "Tall flat-sided cargo container or cab-over boxy silhouette",
+      "Elevated clearance over multi-axle wheels on tarmac",
+      "Large vertical windshield and chrome bumper grid"
+    ],
+    "common_confusions": ["Automobile", "Ship"],
+    "imaging_notes": "Boxy front cabins vs. sloping sedans depend on roof-height ratios preserved well by padded 3x3 ResNet blocks."
+  }
+]

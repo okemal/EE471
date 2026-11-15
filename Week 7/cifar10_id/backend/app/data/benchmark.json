@@ -1,0 +1,437 @@
+{
+  "dataset": "CIFAR-10",
+  "generated_at": "2026-11-15T04:10:15.274977+00:00",
+  "device": "cuda",
+  "baseline": {
+    "trial_id": "tutorial-baseline",
+    "name": "PyTorch CIFAR-10 Tutorial Baseline Net",
+    "role": "baseline",
+    "architecture": "TutorialCifarNet",
+    "optimizer": "SGD",
+    "learning_rate": 0.001,
+    "batch_size": 4,
+    "epochs": 2,
+    "scheduler": "none",
+    "weight_decay": 0.0,
+    "augmentation": "none",
+    "dropout": 0.0,
+    "best_val_accuracy": 0.5722,
+    "test_accuracy": 0.558,
+    "train_seconds": 17.92,
+    "parameter_count": 62006
+  },
+  "optimized": {
+    "trial_id": "resnet9-adamw-48ch",
+    "name": "HPO 4 \u00b7 ResNet-9 (48ch) AdamW + Cutout + Cosine",
+    "role": "optimized",
+    "architecture": "CifarResNet9",
+    "optimizer": "AdamW",
+    "learning_rate": 0.0025,
+    "batch_size": 128,
+    "epochs": 26,
+    "scheduler": "CosineAnnealingLR",
+    "weight_decay": 0.0005,
+    "augmentation": "Flip+Crop+Cutout",
+    "dropout": 0.2,
+    "best_val_accuracy": 0.9312,
+    "test_accuracy": 0.9249,
+    "train_seconds": 376.82,
+    "parameter_count": 3699514
+  },
+  "trials": [
+    {
+      "trial_id": "tutorial-baseline",
+      "name": "PyTorch CIFAR-10 Tutorial Baseline Net",
+      "role": "baseline",
+      "architecture": "TutorialCifarNet",
+      "optimizer": "SGD",
+      "learning_rate": 0.001,
+      "batch_size": 4,
+      "epochs": 2,
+      "scheduler": "none",
+      "weight_decay": 0.0,
+      "augmentation": "none",
+      "dropout": 0.0,
+      "best_val_accuracy": 0.5722,
+      "test_accuracy": 0.558,
+      "train_seconds": 17.92,
+      "parameter_count": 62006
+    },
+    {
+      "trial_id": "cifarnet-adamw-hpo",
+      "name": "HPO 1 \u00b7 Tutorial Net + AdamW + Flip",
+      "role": "hpo_candidate",
+      "architecture": "TutorialCifarNet",
+      "optimizer": "AdamW",
+      "learning_rate": 0.0015,
+      "batch_size": 64,
+      "epochs": 15,
+      "scheduler": "CosineAnnealingLR",
+      "weight_decay": 0.0001,
+      "augmentation": "HorizontalFlip",
+      "dropout": 0.0,
+      "best_val_accuracy": 0.6672,
+      "test_accuracy": 0.6683,
+      "train_seconds": 9.6,
+      "parameter_count": 62006
+    },
+    {
+      "trial_id": "resnet9-sgd-32ch",
+      "name": "HPO 2 \u00b7 ResNet-9 (32ch) SGD+Momentum",
+      "role": "hpo_candidate",
+      "architecture": "CifarResNet9",
+      "optimizer": "SGD",
+      "learning_rate": 0.05,
+      "batch_size": 128,
+      "epochs": 18,
+      "scheduler": "CosineAnnealingLR",
+      "weight_decay": 0.0005,
+      "augmentation": "Flip+Crop",
+      "dropout": 0.1,
+      "best_val_accuracy": 0.8828,
+      "test_accuracy": 0.8808,
+      "train_seconds": 137.81,
+      "parameter_count": 1646122
+    },
+    {
+      "trial_id": "resnet9-adamw-32ch",
+      "name": "HPO 3 \u00b7 ResNet-9 (32ch) AdamW + Crop",
+      "role": "hpo_candidate",
+      "architecture": "CifarResNet9",
+      "optimizer": "AdamW",
+      "learning_rate": 0.002,
+      "batch_size": 128,
+      "epochs": 22,
+      "scheduler": "CosineAnnealingLR",
+      "weight_decay": 0.0005,
+      "augmentation": "Flip+Crop",
+      "dropout": 0.15,
+      "best_val_accuracy": 0.9236,
+      "test_accuracy": 0.9158,
+      "train_seconds": 169.73,
+      "parameter_count": 1646122
+    },
+    {
+      "trial_id": "resnet9-adamw-48ch",
+      "name": "HPO 4 \u00b7 ResNet-9 (48ch) AdamW + Cutout + Cosine",
+      "role": "optimized",
+      "architecture": "CifarResNet9",
+      "optimizer": "AdamW",
+      "learning_rate": 0.0025,
+      "batch_size": 128,
+      "epochs": 26,
+      "scheduler": "CosineAnnealingLR",
+      "weight_decay": 0.0005,
+      "augmentation": "Flip+Crop+Cutout",
+      "dropout": 0.2,
+      "best_val_accuracy": 0.9312,
+      "test_accuracy": 0.9249,
+      "train_seconds": 376.82,
+      "parameter_count": 3699514
+    }
+  ],
+  "per_class_accuracy": [
+    {
+      "class_index": 0,
+      "id": "airplane",
+      "label": "plane",
+      "display_name": "Airplane",
+      "category_group": "Vehicles",
+      "baseline_accuracy": 0.645,
+      "optimized_accuracy": 0.943,
+      "delta": 0.298
+    },
+    {
+      "class_index": 1,
+      "id": "automobile",
+      "label": "car",
+      "display_name": "Automobile",
+      "category_group": "Vehicles",
+      "baseline_accuracy": 0.754,
+      "optimized_accuracy": 0.976,
+      "delta": 0.222
+    },
+    {
+      "class_index": 2,
+      "id": "bird",
+      "label": "bird",
+      "display_name": "Bird",
+      "category_group": "Animals",
+      "baseline_accuracy": 0.442,
+      "optimized_accuracy": 0.887,
+      "delta": 0.445
+    },
+    {
+      "class_index": 3,
+      "id": "cat",
+      "label": "cat",
+      "display_name": "Cat",
+      "category_group": "Animals",
+      "baseline_accuracy": 0.268,
+      "optimized_accuracy": 0.834,
+      "delta": 0.566
+    },
+    {
+      "class_index": 4,
+      "id": "deer",
+      "label": "deer",
+      "display_name": "Deer",
+      "category_group": "Animals",
+      "baseline_accuracy": 0.347,
+      "optimized_accuracy": 0.932,
+      "delta": 0.585
+    },
+    {
+      "class_index": 5,
+      "id": "dog",
+      "label": "dog",
+      "display_name": "Dog",
+      "category_group": "Animals",
+      "baseline_accuracy": 0.464,
+      "optimized_accuracy": 0.882,
+      "delta": 0.418
+    },
+    {
+      "class_index": 6,
+      "id": "frog",
+      "label": "frog",
+      "display_name": "Frog",
+      "category_group": "Animals",
+      "baseline_accuracy": 0.734,
+      "optimized_accuracy": 0.954,
+      "delta": 0.22
+    },
+    {
+      "class_index": 7,
+      "id": "horse",
+      "label": "horse",
+      "display_name": "Horse",
+      "category_group": "Animals",
+      "baseline_accuracy": 0.73,
+      "optimized_accuracy": 0.941,
+      "delta": 0.211
+    },
+    {
+      "class_index": 8,
+      "id": "ship",
+      "label": "ship",
+      "display_name": "Ship",
+      "category_group": "Vehicles",
+      "baseline_accuracy": 0.649,
+      "optimized_accuracy": 0.952,
+      "delta": 0.303
+    },
+    {
+      "class_index": 9,
+      "id": "truck",
+      "label": "truck",
+      "display_name": "Truck",
+      "category_group": "Vehicles",
+      "baseline_accuracy": 0.547,
+      "optimized_accuracy": 0.948,
+      "delta": 0.401
+    }
+  ],
+  "epoch_history": {
+    "baseline": [
+      {
+        "epoch": 1,
+        "train_loss": 1.6795,
+        "train_accuracy": 0.3816,
+        "val_loss": 1.40518,
+        "val_accuracy": 0.484
+      },
+      {
+        "epoch": 2,
+        "train_loss": 1.3268,
+        "train_accuracy": 0.5237,
+        "val_loss": 1.19958,
+        "val_accuracy": 0.5722
+      }
+    ],
+    "optimized": [
+      {
+        "epoch": 1,
+        "train_loss": 1.7252,
+        "train_accuracy": 0.4205,
+        "val_loss": 1.10408,
+        "val_accuracy": 0.617
+      },
+      {
+        "epoch": 2,
+        "train_loss": 1.2013,
+        "train_accuracy": 0.635,
+        "val_loss": 0.84693,
+        "val_accuracy": 0.705
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.9988,
+        "train_accuracy": 0.7219,
+        "val_loss": 0.70893,
+        "val_accuracy": 0.7566
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.8884,
+        "train_accuracy": 0.7692,
+        "val_loss": 0.54741,
+        "val_accuracy": 0.8134
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.8128,
+        "train_accuracy": 0.7998,
+        "val_loss": 0.54841,
+        "val_accuracy": 0.8146
+      },
+      {
+        "epoch": 6,
+        "train_loss": 0.7443,
+        "train_accuracy": 0.8282,
+        "val_loss": 0.46351,
+        "val_accuracy": 0.8448
+      },
+      {
+        "epoch": 7,
+        "train_loss": 0.6992,
+        "train_accuracy": 0.8455,
+        "val_loss": 0.42077,
+        "val_accuracy": 0.8636
+      },
+      {
+        "epoch": 8,
+        "train_loss": 0.6568,
+        "train_accuracy": 0.8614,
+        "val_loss": 0.43665,
+        "val_accuracy": 0.8514
+      },
+      {
+        "epoch": 9,
+        "train_loss": 0.622,
+        "train_accuracy": 0.8786,
+        "val_loss": 0.36221,
+        "val_accuracy": 0.8834
+      },
+      {
+        "epoch": 10,
+        "train_loss": 0.5916,
+        "train_accuracy": 0.8884,
+        "val_loss": 0.38194,
+        "val_accuracy": 0.8762
+      },
+      {
+        "epoch": 11,
+        "train_loss": 0.5588,
+        "train_accuracy": 0.9008,
+        "val_loss": 0.35304,
+        "val_accuracy": 0.8888
+      },
+      {
+        "epoch": 12,
+        "train_loss": 0.5371,
+        "train_accuracy": 0.9109,
+        "val_loss": 0.31586,
+        "val_accuracy": 0.903
+      },
+      {
+        "epoch": 13,
+        "train_loss": 0.5117,
+        "train_accuracy": 0.9207,
+        "val_loss": 0.31768,
+        "val_accuracy": 0.9022
+      },
+      {
+        "epoch": 14,
+        "train_loss": 0.4903,
+        "train_accuracy": 0.9288,
+        "val_loss": 0.30476,
+        "val_accuracy": 0.9062
+      },
+      {
+        "epoch": 15,
+        "train_loss": 0.4711,
+        "train_accuracy": 0.9372,
+        "val_loss": 0.27681,
+        "val_accuracy": 0.9148
+      },
+      {
+        "epoch": 16,
+        "train_loss": 0.4474,
+        "train_accuracy": 0.9468,
+        "val_loss": 0.27544,
+        "val_accuracy": 0.9182
+      },
+      {
+        "epoch": 17,
+        "train_loss": 0.4342,
+        "train_accuracy": 0.9521,
+        "val_loss": 0.27012,
+        "val_accuracy": 0.921
+      },
+      {
+        "epoch": 18,
+        "train_loss": 0.4174,
+        "train_accuracy": 0.9594,
+        "val_loss": 0.25917,
+        "val_accuracy": 0.926
+      },
+      {
+        "epoch": 19,
+        "train_loss": 0.4056,
+        "train_accuracy": 0.9642,
+        "val_loss": 0.24857,
+        "val_accuracy": 0.9262
+      },
+      {
+        "epoch": 20,
+        "train_loss": 0.3931,
+        "train_accuracy": 0.9705,
+        "val_loss": 0.24158,
+        "val_accuracy": 0.9312
+      },
+      {
+        "epoch": 21,
+        "train_loss": 0.3826,
+        "train_accuracy": 0.9743,
+        "val_loss": 0.24764,
+        "val_accuracy": 0.929
+      },
+      {
+        "epoch": 22,
+        "train_loss": 0.3772,
+        "train_accuracy": 0.9764,
+        "val_loss": 0.24202,
+        "val_accuracy": 0.9298
+      },
+      {
+        "epoch": 23,
+        "train_loss": 0.3711,
+        "train_accuracy": 0.9794,
+        "val_loss": 0.24075,
+        "val_accuracy": 0.9306
+      },
+      {
+        "epoch": 24,
+        "train_loss": 0.3667,
+        "train_accuracy": 0.9811,
+        "val_loss": 0.23813,
+        "val_accuracy": 0.9306
+      },
+      {
+        "epoch": 25,
+        "train_loss": 0.3643,
+        "train_accuracy": 0.9818,
+        "val_loss": 0.2348,
+        "val_accuracy": 0.9308
+      },
+      {
+        "epoch": 26,
+        "train_loss": 0.3633,
+        "train_accuracy": 0.982,
+        "val_loss": 0.23467,
+        "val_accuracy": 0.9304
+      }
+    ]
+  }
+}

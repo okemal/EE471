@@ -1,0 +1,78 @@
+{
+  "info": {
+    "name": "Atelier - Week 7 FashionMNIST Cog verification",
+    "description": "Run scripts/prepare_postman.py with a garment image. Import the generated local environment, select it, then send these requests to your running Cog container.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "cog_url", "value": "http://127.0.0.1:5002" },
+    { "key": "image_data_uri", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Cog readiness",
+      "request": { "method": "GET", "url": "{{cog_url}}/health-check" },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Cog is ready', () => {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json().status).to.eql('READY');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Classify uploaded garment",
+      "request": {
+        "method": "POST",
+        "url": "{{cog_url}}/predictions",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"input\": {\n    \"image\": \"{{image_data_uri}}\"\n  }\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (!String(pm.variables.get('image_data_uri') || '').startsWith('data:image/')) {",
+              "  throw new Error('Run scripts/prepare_postman.py, import its environment, and select it first.');",
+              "}"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Prediction succeeded', () => {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json().status).to.eql('succeeded');",
+              "});",
+              "pm.test('Baseline and HPO-optimized classifiers returned predicted classes', () => {",
+              "  const output = pm.response.json().output;",
+              "  pm.expect(output.baseline.architecture).to.eql('QuickstartMLP');",
+              "  pm.expect(output.optimized.architecture).to.eql('GarmentConvNet');",
+              "  pm.expect(output.baseline.predicted_class).to.be.a('string').and.not.empty;",
+              "  pm.expect(output.optimized.predicted_class).to.be.a('string').and.not.empty;",
+              "  pm.expect(output.optimized.top_classes).to.have.lengthOf(3);",
+              "  pm.expect(output.status).to.be.oneOf(['matched', 'uncertain', 'no_match']);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "title": "CIFAR-10 Test Samples (Classes 0-9)",
+    "source": "Alex Krizhevsky, Vinod Nair, Geoffrey Hinton / TorchVision",
+    "license": "Academic Research Benchmark",
+    "notes": "32x32 RGB natural images extracted directly from the held-out CIFAR-10 test split and bicubic-upscaled solely for browser preview clarity."
+  },
+  {
+    "title": "DM Sans & Fraunces Typefaces",
+    "source": "Google Fonts (self-hosted WOFF2/TTF)",
+    "license": "SIL Open Font License 1.1",
+    "notes": "Bundled inside frontend/assets/fonts so the web UI operates completely offline without external font network calls."
+  }
+]

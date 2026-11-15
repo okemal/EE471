@@ -1,0 +1,103 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[top=0.45in,bottom=0.45in,left=0.52in,right=0.52in]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{microtype}
+
+\definecolor{accent}{HTML}{1E4D2B}
+\definecolor{muted}{HTML}{555B61}
+\pagenumbering{gobble}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+
+\begin{document}
+
+\begin{center}
+{\large \textbf{EE471 Week 7 Performance Report: Impact of Hyperparameter Optimization Across FashionMNIST and CIFAR-10}}\\[2pt]
+{\small \textcolor{muted}{Dual-Model PyTorch Classification (\texttt{garment\_id} \& \texttt{cifar10\_id}) $\cdot$ NVIDIA RTX 4050 GPU \& Cog}}
+\end{center}
+\vspace{-4pt}
+\hrule
+\vspace{6pt}
+
+\textbf{\textcolor{accent}{1. Executive Summary}} ---
+Default tutorial training recipes severely underfit multi-class vision tasks, misdiagnosing minor classes and confusing visually similar categories. Across two containerized PyTorch applications, systematic Hyperparameter Optimization (HPO) lifted untouched test-set accuracy by \textbf{+30.33 pp} on FashionMNIST (\texttt{QuickstartMLP} 64.28\% $\rightarrow$ \texttt{GarmentConvNet} \textbf{94.61\%}) and \textbf{+36.69 pp} on CIFAR-10 (\texttt{TutorialCifarNet} 55.80\% $\rightarrow$ \texttt{CifarResNet9} \textbf{92.49\%}). Optimizer and schedule tuning alone accounted for +25.68 pp on the fixed \texttt{QuickstartMLP} architecture and +11.03 pp on the fixed 62k-param \texttt{TutorialCifarNet} before architectural inductive bias, BatchNorm/skip connections, and targeted data augmentations closed the remaining accuracy gap.
+
+\vspace{4pt}
+\textbf{\textcolor{accent}{2. Task 1 Benchmarks --- FashionMNIST (\texttt{garment\_id}, 10,000 Test Images)}}
+\vspace{2pt}
+
+{\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X r r r r@{}}
+\toprule
+\textbf{Trial ID} & \textbf{Model (Params)} & \textbf{Optimizer / Schedule / Regularization} & \textbf{Ep.} & \textbf{Val Acc} & \textbf{Test Acc} & \textbf{Time (s)} \\
+\midrule
+\texttt{quickstart-baseline} & \texttt{QuickstartMLP} (669,706) & SGD (lr=0.001, bs=64), no aug & 5 & 64.22\% & 64.28\% & 12.50 \\
+\texttt{mlp-tuned-lr} & \texttt{QuickstartMLP} (669,706) & SGD (lr=0.01) & 10 & 84.72\% & 83.96\% & 23.98 \\
+\texttt{mlp-sgd-momentum} & \texttt{QuickstartMLP} (669,706) & SGD+Mom 0.9, StepLR & 15 & 89.10\% & 88.61\% & 37.42 \\
+\texttt{mlp-adamw-cosine} & \texttt{QuickstartMLP} (669,706) & AdamW (lr=0.001, bs=32), CosineLR & 15 & 90.02\% & 89.96\% & 51.34 \\
+\texttt{convnet-sgd-32ch} & \texttt{GarmentConvNet} 32ch (871,530) & SGD+Mom, HFlip & 15 & 94.22\% & 93.73\% & 70.77 \\
+\textbf{\texttt{convnet-adamw-64ch}} & \textbf{\texttt{GarmentConvNet} 64ch (1,868,746)} & \textbf{AdamW (0.001, bs=64), Cosine, Flip+Aff, DO 0.25, LS 0.05} & \textbf{20} & \textbf{95.03\%} & \textbf{94.61\%} & 313.34 \\
+\bottomrule
+\end{tabularx}
+}
+
+\vspace{4pt}
+\textbf{\textcolor{accent}{3. Task 2 Benchmarks --- CIFAR-10 (\texttt{cifar10\_id}, 10,000 Test Images)}}
+\vspace{2pt}
+
+{\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X r r r r@{}}
+\toprule
+\textbf{Trial ID} & \textbf{Model (Params)} & \textbf{Optimizer / Schedule / Regularization} & \textbf{Ep.} & \textbf{Val Acc} & \textbf{Test Acc} & \textbf{Time (s)} \\
+\midrule
+\texttt{tutorial-baseline} & \texttt{TutorialCifarNet} (62,006) & SGD (lr=0.001, bs=4), no aug & 2 & 57.22\% & 55.80\% & 17.92 \\
+\texttt{cifarnet-adamw-hpo} & \texttt{TutorialCifarNet} (62,006) & AdamW (lr=0.0015, bs=64), Cosine, HFlip, WD 1e-4 & 15 & 66.72\% & 66.83\% & 9.60 \\
+\texttt{resnet9-sgd-32ch} & \texttt{CifarResNet9} 32ch (1,646,122) & SGD (lr=0.05, bs=128), Cosine, Flip+Crop, WD 5e-4, DO 0.10 & 18 & 88.28\% & 88.08\% & 137.81 \\
+\texttt{resnet9-adamw-32ch} & \texttt{CifarResNet9} 32ch (1,646,122) & AdamW (lr=0.002, bs=128), Cosine, Flip+Crop, DO 0.15 & 22 & 92.36\% & 91.58\% & 169.73 \\
+\textbf{\texttt{resnet9-adamw-48ch}} & \textbf{\texttt{CifarResNet9} 48ch (3,699,514)} & \textbf{AdamW (0.0025, bs=128), Cosine, Flip+Crop+Cutout, DO 0.20} & \textbf{26} & \textbf{93.12\%} & \textbf{92.49\%} & 376.82 \\
+\bottomrule
+\end{tabularx}
+}
+
+\vspace{4pt}
+\textbf{\textcolor{accent}{4. Per-Class Recovery \& Confusion Matrix Shifts}}
+\vspace{2pt}
+
+\noindent\resizebox{\textwidth}{!}{%
+{\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}l r r r | l r r r@{}}
+\toprule
+\textbf{FashionMNIST Class} & \textbf{Base} & \textbf{Opt} & \textbf{$\Delta$} & \textbf{CIFAR-10 Class} & \textbf{Base} & \textbf{Opt} & \textbf{$\Delta$} \\
+\midrule
+T-shirt/top / Pullover & 77.8\% / 61.5\% & 90.5\% / 92.9\% & +12.7 / +31.4 & Airplane / Automobile & 64.5\% / 75.4\% & 94.3\% / 97.6\% & +29.8 / +22.2 \\
+Trouser / Dress & 90.2\% / 77.1\% & 99.1\% / 95.2\% & +8.9 / +18.1 & Bird / Frog & 44.2\% / 73.4\% & 88.7\% / 95.4\% & +44.5 / +22.0 \\
+Coat / Bag & 54.1\% / 90.7\% & 92.7\% / 99.4\% & +38.6 / +8.7 & \textbf{Cat / Deer} & \textbf{26.8\% / 34.7\%} & \textbf{83.4\% / 93.2\%} & \textbf{+56.6 / +58.5} \\
+\textbf{Sandal / Shirt} & \textbf{1.1\% / 6.8\%} & \textbf{98.7\% / 82.3\%} & \textbf{+97.6 / +75.5} & Dog / Horse & 46.4\% / 73.0\% & 88.2\% / 94.1\% & +41.8 / +21.1 \\
+Sneaker / Ankle boot & 90.3\% / 93.2\% & 98.1\% / 97.2\% & +7.8 / +4.0 & Ship / Truck & 64.9\% / 54.7\% & 95.2\% / 94.8\% & +30.3 / +40.1 \\
+\bottomrule
+\end{tabular}%
+}}
+
+\vspace{3pt}
+Without HPO, overall accuracy masked catastrophic class collapse. On FashionMNIST, \texttt{QuickstartMLP} predicted only 11/1,000 Sandals correctly (524 as Sneaker, 440 as Ankle boot) and 68/1,000 Shirts (315 Coat, 248 Pullover, 246 T-shirt/top); tuned \texttt{GarmentConvNet} recovered 987 Sandals and 823 Shirts. On CIFAR-10, \texttt{TutorialCifarNet} predicted only 268/1,000 Cats (221 as Dog, 145 as Frog), 347/1,000 Deer (167 as Horse, 150 as Frog), and misclassified 230/1,000 Trucks as Automobiles; \texttt{CifarResNet9} cut \texttt{truck$\rightarrow$car} confusion to 30 and lifted Cat and Deer to 83.4\% and 93.2\%.
+
+\vspace{4pt}
+\textbf{\textcolor{accent}{5. Key Findings on Why HPO Is Essential Across Model Families}}
+\vspace{1pt}
+\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}\setlength{\topsep}{2pt}\setlength{\leftmargin}{14pt}
+\item \textbf{Learning Rate, Optimizer \& Schedule Govern Underfitting:} Default \texttt{SGD (lr=0.001)} moves parameters too slowly in 2--5 epochs, leaving class boundaries unseparated even on simple MLPs. Tuning LR (0.01), adding momentum (0.9) or \texttt{AdamW} with \texttt{CosineAnnealingLR}, and normalizing batch size yielded +25.68 pp on FashionMNIST MLP and +11.03 pp on CIFAR-10 without changing a single layer.
+\item \textbf{Capacity Requires Spatial Inductive Bias + Normalization:} Expanding plain MLP epochs plateaus near 90\%, whereas local 3$\times$3 convolutions, \texttt{BatchNorm2d}, \texttt{GELU}, and residual skip paths break through both texture ambiguity (Shirt vs.\ Coat) and RGB pose variance (CIFAR-10 animals: +41.8 to +58.5 pp).
+\item \textbf{Regularization + Augmentation Govern High-Capacity Generalization:} Scaling to 1.87M--3.70M parameters alongside \texttt{Flip+Affine}, \texttt{RandomCrop+Cutout}, weight decay ($5\times 10^{-4}$), dropout (0.20--0.25), and label smoothing (0.05) suppressed train-to-test overfitting: validation vs.\ test gaps remained small (0.42 pp on FashionMNIST, 0.63 pp on CIFAR-10).
+\end{itemize}
+
+\end{document}

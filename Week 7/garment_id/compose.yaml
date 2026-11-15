@@ -1,0 +1,32 @@
+name: atelier-garment-id
+services:
+  web:
+    build:
+      context: .
+      args:
+        INFERENCE_DEVICE: cpu
+    image: atelier-garment-id:cpu
+    ports:
+      - "127.0.0.1:${GARMENT_ID_PORT:-8000}:8000"
+    environment:
+      GARMENT_ID_DEVICE: cpu
+      GARMENT_ID_OFFLINE: "1"
+      GARMENT_ID_MODEL_CACHE: /models
+      OMP_NUM_THREADS: "4"
+      MKL_NUM_THREADS: "4"
+      OPENBLAS_NUM_THREADS: "4"
+    volumes:
+      - type: bind
+        source: ./.cache/models
+        target: /models
+        read_only: true
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    init: true
+    pids_limit: 128
+    mem_limit: 4g

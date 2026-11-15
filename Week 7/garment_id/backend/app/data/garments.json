@@ -1,0 +1,191 @@
+[
+  {
+    "id": "t-shirt-top",
+    "class_index": 0,
+    "label": "T-shirt/top",
+    "display_name": "T-shirt / Top",
+    "category_group": "Tops",
+    "summary": "Short-sleeved upper-body garments, crewneck tees, and sleeveless tops characterized by open necklines and compact sleeve silhouettes.",
+    "silhouette_clues": [
+      "Short or absent sleeves with curved shoulder seams",
+      "Compact torso rectangle narrower at the shoulders than coats",
+      "Open crew, scoop, or V-shaped neckline without collar flaps"
+    ],
+    "common_confusions": [
+      "Shirt (when front plackets or collars are faint at 28x28)",
+      "Pullover (when sleeves extend slightly downward)",
+      "Dress (when hemlines appear elongated)"
+    ],
+    "care_and_construction": "Typically knitted cotton or jersey fabrics forming smooth edges in 28x28 grayscale projections.",
+    "aliases": ["tee", "tshirt", "top", "blouse", "tank"]
+  },
+  {
+    "id": "trouser",
+    "class_index": 1,
+    "label": "Trouser",
+    "display_name": "Trouser",
+    "category_group": "Bottoms",
+    "summary": "Full-length bifurcated legwear including slacks, jeans, and tailored pants with a clean central leg split.",
+    "silhouette_clues": [
+      "Distinct vertical bifurcation separating left and right pant legs",
+      "Horizontal waistband at the top edge with minimal upper flare",
+      "Uniform narrow vertical silhouette from hip to cuff"
+    ],
+    "common_confusions": [
+      "Dress (very narrow column silhouettes in rare cases)"
+    ],
+    "care_and_construction": "Tailored or denim legwear; the clean central gap makes Trouser one of the highest-accuracy classes.",
+    "aliases": ["pants", "jeans", "slacks", "chinos"]
+  },
+  {
+    "id": "pullover",
+    "class_index": 2,
+    "label": "Pullover",
+    "display_name": "Pullover",
+    "category_group": "Outerwear & Knitwear",
+    "summary": "Long-sleeved knitted sweaters, sweatshirts, and crewnecks pulled over the head without a full front opening.",
+    "silhouette_clues": [
+      "Full-length sleeves angled outward or downward beside the torso",
+      "Continuous solid chest surface without central button placket",
+      "Ribbed cuffs and waistband edges visible as soft brightness transitions"
+    ],
+    "common_confusions": [
+      "Coat (similar long-sleeve coverage, usually shorter hem on pullovers)",
+      "Shirt (similar silhouette, though shirts often show collars or front seams)"
+    ],
+    "care_and_construction": "Knit wool, fleece, or cotton blends that produce dense, uniform grayscale textures.",
+    "aliases": ["sweater", "jumper", "sweatshirt", "knitwear"]
+  },
+  {
+    "id": "dress",
+    "class_index": 3,
+    "label": "Dress",
+    "display_name": "Dress",
+    "category_group": "Full-body",
+    "summary": "One-piece upper-and-lower garment ranging from fitted sheaths to flared A-line skirts and sundresses.",
+    "silhouette_clues": [
+      "Extended vertical torso-to-skirt silhouette spanning full frame height",
+      "Waist taper often followed by a wider flared or pleated lower hem",
+      "Sleeveless, cap-sleeve, or narrow-strap upper neckline"
+    ],
+    "common_confusions": [
+      "Coat (long coats share vertical height, though coats have wider sleeves)",
+      "T-shirt/top (cropped or straight-cut silhouettes)"
+    ],
+    "care_and_construction": "Woven or draped fabrics creating strong contrast between narrow waist and flared skirt.",
+    "aliases": ["gown", "sundress", "frock", "one-piece"]
+  },
+  {
+    "id": "coat",
+    "class_index": 4,
+    "label": "Coat",
+    "display_name": "Coat",
+    "category_group": "Outerwear & Knitwear",
+    "summary": "Heavy outer garments including trenches, overcoats, blazers, and parkas with structured shoulders and long sleeves.",
+    "silhouette_clues": [
+      "Long sleeves paired with an extended lower torso or mid-thigh hem",
+      "Structured collar, lapels, or vertical front closure seam",
+      "Heavier shoulder line and thicker sleeve profile than knit pullovers"
+    ],
+    "common_confusions": [
+      "Pullover (shared long-sleeve profile in grayscale)",
+      "Shirt (structured collar and button-front geometry)"
+    ],
+    "care_and_construction": "Structured wool, tweed, or lined outerwear with sharper lapel and cuff edges.",
+    "aliases": ["jacket", "overcoat", "trench", "blazer", "parka"]
+  },
+  {
+    "id": "sandal",
+    "class_index": 5,
+    "label": "Sandal",
+    "display_name": "Sandal",
+    "category_group": "Footwear",
+    "summary": "Open-profile footwear with straps, open toes, or elevated heels showing negative space inside the upper.",
+    "silhouette_clues": [
+      "Open cutouts and thin straps against the background",
+      "Distinct sole/heel contour often tilted along a diagonal",
+      "Sparse pixel density across the instep compared to sneakers or boots"
+    ],
+    "common_confusions": [
+      "Sneaker (low-profile side views with dense straps)",
+      "Ankle boot (heeled boots sharing arch geometry)"
+    ],
+    "care_and_construction": "Strappy leather or synthetic footwear where high-frequency edges distinguish straps from closed uppers.",
+    "aliases": ["heels", "flip-flops", "strappy shoe", "slides"]
+  },
+  {
+    "id": "shirt",
+    "class_index": 6,
+    "label": "Shirt",
+    "display_name": "Shirt",
+    "category_group": "Tops",
+    "summary": "Collared button-down shirts, blouses, and long- or short-sleeved woven tops—historically the hardest FashionMNIST category.",
+    "silhouette_clues": [
+      "Pointed collar tips framing the top center neckline",
+      "Subtle vertical placket or tonal shading down the center front",
+      "Varied sleeve lengths bridging T-shirts, pullovers, and coats"
+    ],
+    "common_confusions": [
+      "T-shirt/top (short-sleeved button-downs share almost identical outlines)",
+      "Pullover and Coat (long-sleeved shirts overlap heavily without local convolution filters)"
+    ],
+    "care_and_construction": "Woven cotton or linen; spatial CNN filters outperform flat MLPs by detecting collar lapels and center seams.",
+    "aliases": ["button-down", "blouse", "dress shirt", "polo"]
+  },
+  {
+    "id": "sneaker",
+    "class_index": 7,
+    "label": "Sneaker",
+    "display_name": "Sneaker",
+    "category_group": "Footwear",
+    "summary": "Closed low-top athletic and casual shoes oriented horizontally in side profile with a flat sole and laced upper.",
+    "silhouette_clues": [
+      "Horizontal side profile facing left with flat continuous rubber outsole",
+      "Low ankle collar well below the mid-height of the frame",
+      "Solid filled upper body without strappy cutouts"
+    ],
+    "common_confusions": [
+      "Ankle boot (high-top sneakers share shaft height with low ankle boots)",
+      "Sandal (mesh or dual-tone athletic shoes)"
+    ],
+    "care_and_construction": "Canvas, leather, or synthetic mesh uppers atop sculpted cushioned midsoles.",
+    "aliases": ["trainer", "running shoe", "tennis shoe", "kicks"]
+  },
+  {
+    "id": "bag",
+    "class_index": 8,
+    "label": "Bag",
+    "display_name": "Bag",
+    "category_group": "Accessories",
+    "summary": "Handbags, totes, satchels, clutches, and backpacks featuring rectangular or rounded bodies with top handles or straps.",
+    "silhouette_clues": [
+      "Compact rectangular, trapezoidal, or semicircular main compartment",
+      "Arched top handles or diagonal shoulder strap loop above the body",
+      "Absence of sleeves, leg openings, or shoe sole geometry"
+    ],
+    "common_confusions": [
+      "Rare overlap with folded tops when handles are faint"
+    ],
+    "care_and_construction": "Leather, canvas, or structured textiles; distinctive handle loops yield high separability.",
+    "aliases": ["handbag", "tote", "backpack", "satchel", "purse"]
+  },
+  {
+    "id": "ankle-boot",
+    "class_index": 9,
+    "label": "Ankle boot",
+    "display_name": "Ankle boot",
+    "category_group": "Footwear",
+    "summary": "Closed shaft footwear rising above the ankle, including Chelsea boots, combat boots, and heeled booties.",
+    "silhouette_clues": [
+      "Tall vertical shaft extending from the heel into the upper half of the frame",
+      "L-shaped overall silhouette combining toe box and ankle cuff",
+      "Visible heel block or lugged sole along the bottom edge"
+    ],
+    "common_confusions": [
+      "Sneaker (low-cut boots vs high-top sneakers)",
+      "Sandal (heeled silhouettes with narrow ankles)"
+    ],
+    "care_and_construction": "Leather or suede shaft construction clearly captured by multi-scale spatial pooling.",
+    "aliases": ["boot", "bootie", "chelsea boot", "work boot"]
+  }
+]

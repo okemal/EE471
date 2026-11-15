@@ -1,0 +1,26 @@
+[
+  {
+    "title": "FashionMNIST Test Samples (Classes 0\u20139)",
+    "source": "Zalando Research / TorchVision",
+    "license": "MIT License",
+    "notes": "28x28 grayscale garment silhouettes extracted directly from the held-out FashionMNIST test split."
+  },
+  {
+    "title": "Studio Light-Background Tee (studio-tee.png)",
+    "source": "Derived from FashionMNIST Test Split",
+    "license": "MIT License",
+    "notes": "Light-studio inverted sample demonstrating automatic border-polarity inversion during preprocessing."
+  },
+  {
+    "title": "Hero Garment Showcase (hero-fashion.png)",
+    "source": "Derived from FashionMNIST Test Split",
+    "license": "MIT License",
+    "notes": "Six-tile editorial grid showcasing Sneaker, Dress, Pullover, Ankle boot, Bag, and Trouser samples."
+  },
+  {
+    "title": "DM Sans & Fraunces Typefaces",
+    "source": "Google Fonts (bundled locally)",
+    "license": "SIL Open Font License 1.1",
+    "notes": "Local variable font binaries in frontend/assets/fonts/ with no external runtime font requests."
+  }
+]

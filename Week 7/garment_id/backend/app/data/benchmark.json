@@ -1,0 +1,434 @@
+{
+  "dataset": "FashionMNIST",
+  "generated_at": "2026-11-15T03:39:59.586140+00:00",
+  "device": "cuda",
+  "baseline": {
+    "trial_id": "quickstart-baseline",
+    "name": "PyTorch Quickstart Baseline MLP",
+    "role": "baseline",
+    "architecture": "QuickstartMLP",
+    "optimizer": "SGD",
+    "learning_rate": 0.001,
+    "batch_size": 64,
+    "epochs": 5,
+    "scheduler": "none",
+    "weight_decay": 0.0,
+    "augmentation": "none",
+    "dropout": 0.0,
+    "best_val_accuracy": 0.6422,
+    "test_accuracy": 0.6428,
+    "train_seconds": 12.5,
+    "parameter_count": 669706
+  },
+  "optimized": {
+    "trial_id": "convnet-adamw-64ch",
+    "name": "HPO 5 \u00b7 ConvNet (64ch) AdamW + Augment + Cosine",
+    "role": "optimized",
+    "architecture": "GarmentConvNet",
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "batch_size": 64,
+    "epochs": 20,
+    "scheduler": "CosineAnnealingLR",
+    "weight_decay": 0.0001,
+    "augmentation": "Flip+Affine",
+    "dropout": 0.25,
+    "best_val_accuracy": 0.9503,
+    "test_accuracy": 0.9461,
+    "train_seconds": 313.34,
+    "parameter_count": 1868746
+  },
+  "trials": [
+    {
+      "trial_id": "quickstart-baseline",
+      "name": "PyTorch Quickstart Baseline MLP",
+      "role": "baseline",
+      "architecture": "QuickstartMLP",
+      "optimizer": "SGD",
+      "learning_rate": 0.001,
+      "batch_size": 64,
+      "epochs": 5,
+      "scheduler": "none",
+      "weight_decay": 0.0,
+      "augmentation": "none",
+      "dropout": 0.0,
+      "best_val_accuracy": 0.6422,
+      "test_accuracy": 0.6428,
+      "train_seconds": 12.5,
+      "parameter_count": 669706
+    },
+    {
+      "trial_id": "mlp-tuned-lr",
+      "name": "HPO 1 \u00b7 MLP Higher LR & 10 Epochs",
+      "role": "hpo_candidate",
+      "architecture": "QuickstartMLP",
+      "optimizer": "SGD",
+      "learning_rate": 0.01,
+      "batch_size": 64,
+      "epochs": 10,
+      "scheduler": "none",
+      "weight_decay": 0.0,
+      "augmentation": "none",
+      "dropout": 0.0,
+      "best_val_accuracy": 0.8472,
+      "test_accuracy": 0.8396,
+      "train_seconds": 23.98,
+      "parameter_count": 669706
+    },
+    {
+      "trial_id": "mlp-sgd-momentum",
+      "name": "HPO 2 \u00b7 MLP SGD+Momentum & StepLR",
+      "role": "hpo_candidate",
+      "architecture": "QuickstartMLP",
+      "optimizer": "SGD",
+      "learning_rate": 0.01,
+      "batch_size": 64,
+      "epochs": 15,
+      "scheduler": "StepLR",
+      "weight_decay": 0.0001,
+      "augmentation": "none",
+      "dropout": 0.0,
+      "best_val_accuracy": 0.891,
+      "test_accuracy": 0.8861,
+      "train_seconds": 37.42,
+      "parameter_count": 669706
+    },
+    {
+      "trial_id": "mlp-adamw-cosine",
+      "name": "HPO 3 \u00b7 MLP AdamW & CosineAnnealing",
+      "role": "hpo_candidate",
+      "architecture": "QuickstartMLP",
+      "optimizer": "AdamW",
+      "learning_rate": 0.001,
+      "batch_size": 32,
+      "epochs": 15,
+      "scheduler": "CosineAnnealingLR",
+      "weight_decay": 0.0001,
+      "augmentation": "none",
+      "dropout": 0.0,
+      "best_val_accuracy": 0.9002,
+      "test_accuracy": 0.8996,
+      "train_seconds": 51.34,
+      "parameter_count": 669706
+    },
+    {
+      "trial_id": "convnet-sgd-32ch",
+      "name": "HPO 4 \u00b7 ConvNet (32ch) SGD+Momentum",
+      "role": "hpo_candidate",
+      "architecture": "GarmentConvNet",
+      "optimizer": "SGD",
+      "learning_rate": 0.015,
+      "batch_size": 128,
+      "epochs": 15,
+      "scheduler": "CosineAnnealingLR",
+      "weight_decay": 0.0001,
+      "augmentation": "RandomHorizontalFlip",
+      "dropout": 0.2,
+      "best_val_accuracy": 0.9422,
+      "test_accuracy": 0.9373,
+      "train_seconds": 70.77,
+      "parameter_count": 871530
+    },
+    {
+      "trial_id": "convnet-adamw-64ch",
+      "name": "HPO 5 \u00b7 ConvNet (64ch) AdamW + Augment + Cosine",
+      "role": "optimized",
+      "architecture": "GarmentConvNet",
+      "optimizer": "AdamW",
+      "learning_rate": 0.001,
+      "batch_size": 64,
+      "epochs": 20,
+      "scheduler": "CosineAnnealingLR",
+      "weight_decay": 0.0001,
+      "augmentation": "Flip+Affine",
+      "dropout": 0.25,
+      "best_val_accuracy": 0.9503,
+      "test_accuracy": 0.9461,
+      "train_seconds": 313.34,
+      "parameter_count": 1868746
+    }
+  ],
+  "per_class_accuracy": [
+    {
+      "class_index": 0,
+      "id": "t-shirt-top",
+      "label": "T-shirt/top",
+      "display_name": "T-shirt / Top",
+      "category_group": "Tops",
+      "baseline_accuracy": 0.778,
+      "optimized_accuracy": 0.905,
+      "delta": 0.127
+    },
+    {
+      "class_index": 1,
+      "id": "trouser",
+      "label": "Trouser",
+      "display_name": "Trouser",
+      "category_group": "Bottoms",
+      "baseline_accuracy": 0.902,
+      "optimized_accuracy": 0.991,
+      "delta": 0.089
+    },
+    {
+      "class_index": 2,
+      "id": "pullover",
+      "label": "Pullover",
+      "display_name": "Pullover",
+      "category_group": "Outerwear & Knitwear",
+      "baseline_accuracy": 0.615,
+      "optimized_accuracy": 0.929,
+      "delta": 0.314
+    },
+    {
+      "class_index": 3,
+      "id": "dress",
+      "label": "Dress",
+      "display_name": "Dress",
+      "category_group": "Full-body",
+      "baseline_accuracy": 0.771,
+      "optimized_accuracy": 0.952,
+      "delta": 0.181
+    },
+    {
+      "class_index": 4,
+      "id": "coat",
+      "label": "Coat",
+      "display_name": "Coat",
+      "category_group": "Outerwear & Knitwear",
+      "baseline_accuracy": 0.541,
+      "optimized_accuracy": 0.927,
+      "delta": 0.386
+    },
+    {
+      "class_index": 5,
+      "id": "sandal",
+      "label": "Sandal",
+      "display_name": "Sandal",
+      "category_group": "Footwear",
+      "baseline_accuracy": 0.011,
+      "optimized_accuracy": 0.987,
+      "delta": 0.976
+    },
+    {
+      "class_index": 6,
+      "id": "shirt",
+      "label": "Shirt",
+      "display_name": "Shirt",
+      "category_group": "Tops",
+      "baseline_accuracy": 0.068,
+      "optimized_accuracy": 0.823,
+      "delta": 0.755
+    },
+    {
+      "class_index": 7,
+      "id": "sneaker",
+      "label": "Sneaker",
+      "display_name": "Sneaker",
+      "category_group": "Footwear",
+      "baseline_accuracy": 0.903,
+      "optimized_accuracy": 0.981,
+      "delta": 0.078
+    },
+    {
+      "class_index": 8,
+      "id": "bag",
+      "label": "Bag",
+      "display_name": "Bag",
+      "category_group": "Accessories",
+      "baseline_accuracy": 0.907,
+      "optimized_accuracy": 0.994,
+      "delta": 0.087
+    },
+    {
+      "class_index": 9,
+      "id": "ankle-boot",
+      "label": "Ankle boot",
+      "display_name": "Ankle boot",
+      "category_group": "Footwear",
+      "baseline_accuracy": 0.932,
+      "optimized_accuracy": 0.972,
+      "delta": 0.04
+    }
+  ],
+  "epoch_history": {
+    "baseline": [
+      {
+        "epoch": 1,
+        "train_loss": 2.2375,
+        "train_accuracy": 0.3751,
+        "val_loss": 2.16507,
+        "val_accuracy": 0.5232
+      },
+      {
+        "epoch": 2,
+        "train_loss": 2.0537,
+        "train_accuracy": 0.5519,
+        "val_loss": 1.91211,
+        "val_accuracy": 0.5735
+      },
+      {
+        "epoch": 3,
+        "train_loss": 1.725,
+        "train_accuracy": 0.588,
+        "val_loss": 1.54004,
+        "val_accuracy": 0.5887
+      },
+      {
+        "epoch": 4,
+        "train_loss": 1.3828,
+        "train_accuracy": 0.6155,
+        "val_loss": 1.26085,
+        "val_accuracy": 0.6225
+      },
+      {
+        "epoch": 5,
+        "train_loss": 1.159,
+        "train_accuracy": 0.6415,
+        "val_loss": 1.09114,
+        "val_accuracy": 0.6422
+      }
+    ],
+    "optimized": [
+      {
+        "epoch": 1,
+        "train_loss": 0.715,
+        "train_accuracy": 0.8293,
+        "val_loss": 0.33362,
+        "val_accuracy": 0.8815
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.5974,
+        "train_accuracy": 0.8802,
+        "val_loss": 0.28758,
+        "val_accuracy": 0.9013
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.5617,
+        "train_accuracy": 0.8952,
+        "val_loss": 0.25369,
+        "val_accuracy": 0.9138
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.5409,
+        "train_accuracy": 0.9035,
+        "val_loss": 0.23614,
+        "val_accuracy": 0.92
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.527,
+        "train_accuracy": 0.9085,
+        "val_loss": 0.22864,
+        "val_accuracy": 0.9288
+      },
+      {
+        "epoch": 6,
+        "train_loss": 0.5125,
+        "train_accuracy": 0.9161,
+        "val_loss": 0.22165,
+        "val_accuracy": 0.9308
+      },
+      {
+        "epoch": 7,
+        "train_loss": 0.5022,
+        "train_accuracy": 0.921,
+        "val_loss": 0.20566,
+        "val_accuracy": 0.9335
+      },
+      {
+        "epoch": 8,
+        "train_loss": 0.4913,
+        "train_accuracy": 0.9241,
+        "val_loss": 0.20417,
+        "val_accuracy": 0.9387
+      },
+      {
+        "epoch": 9,
+        "train_loss": 0.4866,
+        "train_accuracy": 0.9269,
+        "val_loss": 0.20014,
+        "val_accuracy": 0.9377
+      },
+      {
+        "epoch": 10,
+        "train_loss": 0.4762,
+        "train_accuracy": 0.9308,
+        "val_loss": 0.19402,
+        "val_accuracy": 0.9398
+      },
+      {
+        "epoch": 11,
+        "train_loss": 0.4683,
+        "train_accuracy": 0.9339,
+        "val_loss": 0.18876,
+        "val_accuracy": 0.9438
+      },
+      {
+        "epoch": 12,
+        "train_loss": 0.4624,
+        "train_accuracy": 0.9367,
+        "val_loss": 0.18366,
+        "val_accuracy": 0.9432
+      },
+      {
+        "epoch": 13,
+        "train_loss": 0.4564,
+        "train_accuracy": 0.9397,
+        "val_loss": 0.18517,
+        "val_accuracy": 0.9453
+      },
+      {
+        "epoch": 14,
+        "train_loss": 0.4512,
+        "train_accuracy": 0.9405,
+        "val_loss": 0.1849,
+        "val_accuracy": 0.9465
+      },
+      {
+        "epoch": 15,
+        "train_loss": 0.4488,
+        "train_accuracy": 0.9417,
+        "val_loss": 0.18043,
+        "val_accuracy": 0.9458
+      },
+      {
+        "epoch": 16,
+        "train_loss": 0.4408,
+        "train_accuracy": 0.9454,
+        "val_loss": 0.17461,
+        "val_accuracy": 0.9483
+      },
+      {
+        "epoch": 17,
+        "train_loss": 0.4373,
+        "train_accuracy": 0.9465,
+        "val_loss": 0.17379,
+        "val_accuracy": 0.9502
+      },
+      {
+        "epoch": 18,
+        "train_loss": 0.4368,
+        "train_accuracy": 0.9481,
+        "val_loss": 0.17261,
+        "val_accuracy": 0.9495
+      },
+      {
+        "epoch": 19,
+        "train_loss": 0.4342,
+        "train_accuracy": 0.9477,
+        "val_loss": 0.17149,
+        "val_accuracy": 0.95
+      },
+      {
+        "epoch": 20,
+        "train_loss": 0.4357,
+        "train_accuracy": 0.9474,
+        "val_loss": 0.1721,
+        "val_accuracy": 0.9503
+      }
+    ]
+  }
+}

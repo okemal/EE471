@@ -1,0 +1,63 @@
+[project]
+name = "atelier-garment-id"
+version = "1.0.0"
+description = "Local FashionMNIST garment classifier with side-by-side baseline and HPO-optimized PyTorch models, containerized with Cog."
+requires-python = ">=3.11,<3.13"
+dependencies = [
+  "fastapi>=0.115.12,<1",
+  "uvicorn>=0.34,<1",
+  "httpx>=0.28,<1",
+  "pillow>=11.2,<13",
+  "torch==2.8.0",
+  "torchvision==0.23.0",
+  "safetensors>=0.5.3,<1",
+]
+
+[dependency-groups]
+dev = [
+  "httpx2>=2.16,<3",
+  "pytest>=8.3,<10",
+  "pytest-asyncio>=1,<2",
+  "pytest-cov>=6.0,<7",
+  "ruff>=0.11,<1",
+  "playwright>=1.51,<2",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu128", marker = "sys_platform == 'linux' or sys_platform == 'win32'" }]
+torchvision = [{ index = "pytorch-cu128", marker = "sys_platform == 'linux' or sys_platform == 'win32'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+  "model: opt-in tests requiring trained weights on disk",
+  "browser: opt-in browser checks against a running server",
+]
+
+[tool.coverage.run]
+source = ["backend/app", "run"]
+branch = true
+omit = ["tests/*", "scripts/*"]
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+skip_covered = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
