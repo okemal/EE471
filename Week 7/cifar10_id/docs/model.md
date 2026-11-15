@@ -2,7 +2,7 @@
 
 `Vision10` pairs two CIFAR-10 PyTorch classifiers built on `32x32` RGB inputs (`CIFAR10_MEAN = (0.4914, 0.4822, 0.4465)`, `CIFAR10_STD = (0.2470, 0.2435, 0.2616)`):
 
-1. **Baseline (`tutorial-baseline` — `TutorialCifarNet`)**: Mirrors the PyTorch CIFAR-10 tutorial convolutional network (`Conv(3->6, 5x5) -> Pool -> Conv(6->16, 5x5) -> Pool -> FC(400->120->84->10)` with internal `[-1, 1]` scaling `(x - 0.5) / 0.5`), trained with plain SGD (`lr=0.001`, momentum `0.9` in PyTorch tutorial / configured SGD trial, `batch_size=4`, `epochs=2`, no scheduler, no data augmentation). Parameters: `62,006`.
+1. **Baseline (`tutorial-baseline` — `TutorialCifarNet`)**: Mirrors the PyTorch CIFAR-10 tutorial convolutional network (`Conv(3->6, 5x5) -> Pool -> Conv(6->16, 5x5) -> Pool -> FC(400->120->84->10)` with internal `[-1, 1]` scaling `(x - 0.5) / 0.5`), trained with SGD (`lr=0.001`, `momentum=0.9`, `batch_size=4`, `epochs=2`, no scheduler, no data augmentation). Parameters: `62,006`.
 2. **Optimized (`resnet9-adamw-48ch` — `CifarResNet9`)**: Residual convolutional network with `prep (3->48)`, `layer1 (48->96, pool)` + `ResidualBlock(96)`, `layer2 (96->192, pool)`, `layer3 (192->384, pool)` + `ResidualBlock(384)`, and `AdaptiveMaxPool2d(1) -> Flatten -> Dropout(0.2) -> Linear(384->10)`, using `Conv2d(3x3, bias=False) -> BatchNorm2d -> GELU` blocks and channel-wise CIFAR-10 buffer normalization. Parameters: `3,699,514`.
 
 Training uses a stratified `45,000` train / `5,000` validation split (`seed=42`) from CIFAR-10 (`50,000` training images) and evaluates untouched against the `10,000`-image CIFAR-10 test set on an NVIDIA GeForce RTX 4050 Laptop GPU (`--device cuda`).

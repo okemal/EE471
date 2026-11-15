@@ -1,6 +1,6 @@
 # Testing & Verification — Vision10 (`cifar10_id`)
 
-All tests, lint checks, Cog container checks, and headless Chromium E2E checks documented here were executed against `/home/onatkg/Programming/EE471/Week 7/cifar10_id`.
+All tests, lint checks, Cog container checks, and headless Chromium E2E checks documented here were executed against `Week 7/cifar10_id`.
 
 ## 1. Automated Python & JS Verification
 
@@ -30,7 +30,7 @@ node --check frontend/app.js && node --check frontend/ui.js
 - [tests/test_decision.py](../tests/test_decision.py) — Baseline vs. optimized verdict synthesis and low-confidence fallback
 - [tests/test_model.py](../tests/test_model.py) — `DualCifarClassifier` loading, SHA-256 `safetensors` digest enforcement, and top-k response formatting
 - [tests/test_runner.py](../tests/test_runner.py) — Cog `Runner` setup, base64/data-URI prediction, SSRF private-network URL rejection, and JSONL structured logging
-- [tests/test_cog.py](../tests/test_cog.py) & [tests/test_api.py](../tests/test_api.py) — FastAPI routes (`/api/health`, `/api/ready`, `/api/classes`, `/api/benchmarks`, `/api/identify`, `/api/identify-cog`) and Cog HTTP client transport mocking
+- [tests/test_cog.py](../tests/test_cog.py) & [tests/test_api.py](../tests/test_api.py) — FastAPI routes (`/api/health`, `/api/ready`, `/api/classes`, `/api/benchmarks`, `/api/identify`) and Cog HTTP client transport mocking
 - [tests/test_training.py](../tests/test_training.py) — Synthetic RGB dataset HPO runner (`apply_batch_augmentation`, `RandomCutout`, `evaluate_loader`) and benchmark JSON output
 
 ## 2. Container Build & Dependency Integrity
@@ -60,10 +60,10 @@ uv run --frozen python scripts/verify_cog.py
 
 | Case | Baseline (`TutorialCifarNet`) | Optimized (`CifarResNet9`) | Evidence Artifact |
 |---|---|---|---|
-| `airplane` | `plane` (`0.379`) | `plane` (`0.878`) | [artifacts/cog/verification.json](../artifacts/cog/verification.json) |
-| `cat` | `dog` (`0.317`) | `cat` (`0.604`) | [artifacts/cog/verification.json](../artifacts/cog/verification.json) |
-| `ship` | `ship` (`0.809`) | `ship` (`0.867`) | [artifacts/cog/verification.json](../artifacts/cog/verification.json) |
-| `automobile` | `car` (`0.469`) | `car` (`0.444`) | [artifacts/cog/verification.json](../artifacts/cog/verification.json) |
+| `airplane` | `plane` (`0.379`) | `plane` (`0.878`) | `artifacts/cog/verification.json` |
+| `cat` | `dog` (`0.317`) | `cat` (`0.604`) | `artifacts/cog/verification.json` |
+| `ship` | `ship` (`0.809`) | `ship` (`0.867`) | `artifacts/cog/verification.json` |
+| `automobile` | `car` (`0.469`) | `car` (`0.444`) | `artifacts/cog/verification.json` |
 | `http://127.0.0.1/private` URL | Rejected (`failed` / SSRF block) | — | Logged as `{"event": "failed", ...}` |
 
 ### Container Non-Root Identity & Inside-Container JSONL Logs

@@ -9,7 +9,7 @@ All inference stays local (`GARMENT_ID_OFFLINE=1` default). Weights are stored a
 
 ## Project Structure
 
-- [backend/app/](backend/app/) — FastAPI gateway, image validation/stripping, preprocessing (`prepare_fashion_tensor`), dual PyTorch architectures, HPO trainer, Cog HTTP client, and API schemas
+- [backend/app/](backend/app/) — FastAPI gateway, image validation/stripping, preprocessing (`prepare_garment_tensor`), dual PyTorch architectures, HPO trainer, Cog HTTP client, and API schemas
 - [run.py](run.py) — Cog `Runner` class exposing `/predictions` with dual-model output, startup SHA-256 verification, bounded base64/data-URI decoding, SSRF rejection, and structured `/tmp/garment-predictions.jsonl` event logging
 - [frontend/](frontend/) — Static editorial UI (`index.html`, `app.js`, `ui.js`, `styles.css`) and local sample PNGs under `frontend/assets/`
 - [scripts/](scripts/) — GPU/CPU HPO training (`train_models.py`), FashionMNIST sample asset generator (`generate_assets.py`), Postman payload helper (`prepare_postman.py`), preliminary PyTorch walkthrough (`preliminary_basics_demo.py`), Cog verifier (`verify_cog.py`), and Playwright browser E2E suite (`check_browser.py`)

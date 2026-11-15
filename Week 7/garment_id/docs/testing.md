@@ -1,6 +1,6 @@
 # Testing & Verification — Atelier (`garment_id`)
 
-All tests, lint checks, Cog container checks, and headless Chromium E2E checks documented here were executed against `/home/onatkg/Programming/EE471/Week 7/garment_id`. Note: We edited `frontend/styles.css` before rebuilding `web` and running `check_browser.py`; Step 4 re-runs the full host lint, format, test, coverage, and JS syntax suite at the end as well.
+All tests, lint checks, Cog container checks, and headless Chromium E2E checks documented here were executed against `Week 7/garment_id`.
 
 ## 1. Automated Python & JS Verification
 
@@ -25,12 +25,12 @@ node --check frontend/app.js && node --check frontend/ui.js
 
 ### Key Test Modules
 
-- [tests/test_architecture.py](../tests/test_architecture.py) — `QuickstartMLP`, `GarmentConvNet`, tensor shapes, parameter counts, and `prepare_fashion_tensor` preprocessing (including auto-polarity inversion for light-background studio images vs dark FashionMNIST canvases)
+- [tests/test_architecture.py](../tests/test_architecture.py) — `QuickstartMLP`, `GarmentConvNet`, tensor shapes, parameter counts, and `prepare_garment_tensor` preprocessing (including auto-polarity inversion for light-background studio images vs dark FashionMNIST canvases)
 - [tests/test_images.py](../tests/test_images.py) — MIME sniff/magic bytes, oversized stream rejection, corrupted payloads, EXIF/metadata stripping, dimension bounds
 - [tests/test_decision.py](../tests/test_decision.py) — Side-by-side verdict agreement/disagreement synthesis and low-confidence thresholds
 - [tests/test_model.py](../tests/test_model.py) — Dual model loading, SHA-256 `safetensors` checksum verification and tamper rejection, `predict()` formatting
 - [tests/test_runner.py](../tests/test_runner.py) — Cog `Runner` setup, base64/data-URI prediction, SSRF URL rejection (`http://127.0.0.1`), and JSONL structured event writing
-- [tests/test_cog.py](../tests/test_cog.py) & [tests/test_api.py](../tests/test_api.py) — FastAPI endpoints (`/api/health`, `/api/ready`, `/api/classes`, `/api/benchmarks`, `/api/identify`, `/api/identify-cog`) and Cog HTTP client transport mocking
+- [tests/test_cog.py](../tests/test_cog.py) & [tests/test_api.py](../tests/test_api.py) — FastAPI endpoints (`/api/health`, `/api/ready`, `/api/garments`, `/api/benchmarks`, `/api/identify`) and Cog HTTP client transport mocking
 - [tests/test_training.py](../tests/test_training.py) — Synthetic FashionMNIST-like HPO training/evaluation loop and JSON report persistence
 
 ## 2. Container Build & Dependency Integrity
@@ -60,10 +60,10 @@ uv run --frozen python scripts/verify_cog.py
 
 | Case | Baseline (`QuickstartMLP`) | Optimized (`GarmentConvNet`) | Evidence Artifact |
 |---|---|---|---|
-| `sneaker` | `Sneaker` (`0.495`) | `Sneaker` (`0.953`) | [artifacts/cog/verification.json](../artifacts/cog/verification.json) |
-| `shirt` | `Pullover` (`0.257`) | `Shirt` (`0.992`) | [artifacts/cog/verification.json](../artifacts/cog/verification.json) |
-| `ankle-boot` | `Ankle boot` (`0.377`) | `Ankle boot` (`0.963`) | [artifacts/cog/verification.json](../artifacts/cog/verification.json) |
-| `studio-tee` | `Dress` (`0.315`) | `T-shirt/top` (`0.727`) | [artifacts/cog/verification.json](../artifacts/cog/verification.json) |
+| `sneaker` | `Sneaker` (`0.495`) | `Sneaker` (`0.953`) | `artifacts/cog/verification.json` |
+| `shirt` | `Pullover` (`0.257`) | `Shirt` (`0.992`) | `artifacts/cog/verification.json` |
+| `ankle-boot` | `Ankle boot` (`0.377`) | `Ankle boot` (`0.963`) | `artifacts/cog/verification.json` |
+| `studio-tee` | `Dress` (`0.315`) | `T-shirt/top` (`0.727`) | `artifacts/cog/verification.json` |
 | `http://127.0.0.1/private` URL | Rejected (`failed` / non-HTTP error) | — | Logged as `{"event": "failed", ...}` |
 
 ### Container Non-Root Identity & Inside-Container JSONL Logs

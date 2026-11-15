@@ -1,59 +1,14 @@
-# Week 7 Assignment & Recording Guide · Garment Classifier (Task 1)
+# Assignment Mapping & Rubric Evidence (Week 7 · Task 1)
 
-Checked against `course_materials/Week-7-InClass-Exercise.pdf` (EE 471, 9 November 2026).
+This document maps the EE471 Week 7 FashionMNIST classifier requirements onto concrete artifacts in `Week 7/garment_id/`. See [Week 7 README](../../README.md) for unified setup commands and the step-by-step `.avi` screen-recording guide (`Task-pre-demo.avi`, `Task-1-demo.avi`, `Tasks-code-explained.avi`).
 
-## Requirements Covered by `Week 7/garment_id`
-
-1. **PyTorch Quickstart Baseline**: `backend/app/architecture.py:QuickstartMLP` reproduces the tutorial's 3-layer MLP (`Flatten -> 512 -> ReLU -> 512 -> ReLU -> 10`) trained with `SGD(lr=1e-3)`, `batch_size=64`, and 5 epochs (`backend/app/training.py`).
-2. **Website Modified from Week 6**: `frontend/` adapts the Week 6 editorial interface into **Atelier**, supporting image upload, bundled sample silhouettes (including light-background studio polarity inversion), a 10-class searchable garment catalogue, and an interactive HPO benchmark page.
-3. **Hyperparameter Optimization**: `backend/app/training.py` executes a 6-trial progression across learning rates, optimizers (`SGD`, `SGD+Momentum`, `AdamW`), schedulers (`StepLR`, `CosineAnnealingLR`), batch sizes (`32`, `64`, `128`), dropout, weight decay, and geometric data augmentations (`Flip+Affine`), selecting `GarmentConvNet` on the 6,000-image validation split.
-4. **Side-by-Side Comparison UI**: Uploading any garment runs **both** the Quickstart baseline and HPO-optimized CNN on the identical preprocessed 28×28 grayscale tensor, displaying agreement/disagreement, confidence delta, per-class probabilities, and overall test accuracy gap.
-5. **Containerized with Cog**: `cog.yaml` and `run.py:Runner` package both verified `safetensors` models behind Cog's HTTP `/predictions` endpoint and connect to the FastAPI web service via `compose.cog.yaml`.
-
-## Build and Run Commands
-
-```bash
-cd "Week 7/garment_id"
-uv sync --frozen
-uv run --frozen python scripts/train_models.py --device cuda
-uv run --frozen python scripts/generate_assets.py
-cog build --use-cog-base-image=false
-docker compose -f compose.cog.yaml build web
-docker compose -f compose.cog.yaml up -d --wait --wait-timeout 180
-```
-
-Website: **http://127.0.0.1:8000** · Cog API: **http://127.0.0.1:5002/predictions**
-
-## Recording Checklist
-
-### `Task-pre-demo.avi` (Max 5 mins)
-Show and run the preliminary basics script explaining Tensors, Datasets & DataLoaders, Transforms, Neural Network Architecture, Optimizer/Backprop, and Save/Load:
-
-```bash
-uv run --frozen python scripts/preliminary_basics_demo.py
-```
-
-### `Task-1-demo.avi` (Garment Classifier Website + Container Logs + Postman)
-1. Show `cog.yaml`, `Dockerfile`, and `compose.cog.yaml`, then run `cog build --use-cog-base-image=false` and `docker compose -f compose.cog.yaml up -d --wait`.
-2. Open **http://127.0.0.1:8000**, classify `Sneaker`, `Shirt` (baseline vs. optimized disagreement), and `Studio tee (light bg)`, and show the **HPO & Benchmarks** tab.
-3. In a second terminal, exec into the running Cog container and stream live prediction logs while clicking **Classify garment** in the browser:
-
-   ```bash
-   docker compose -f compose.cog.yaml exec cog sh
-   id
-   tail -F /tmp/garment-predictions.jsonl
-   ```
-
-4. Prepare a local garment payload for Postman:
-
-   ```bash
-   uv run --frozen python scripts/prepare_postman.py frontend/assets/shirt.png
-   ```
-
-   Import `docs/postman/Atelier.postman_collection.json` and `artifacts/postman/local.postman_environment.json` into Postman Desktop, select the environment, send **Cog readiness**, and send **Classify uploaded garment** (`POST http://127.0.0.1:5002/predictions`). Expand `output.baseline` and `output.optimized` in the response.
-
-### `Tasks-code-explained.avi` (Max 3 mins, with spoken narration)
-Walk concisely through the core AI classification code blocks:
-- `backend/app/architecture.py`: `QuickstartMLP`, `GarmentConvNet` (internal normalization + conv/BN/GELU blocks), and `prepare_garment_tensor` (border polarity inversion + square crop).
-- `backend/app/training.py`: 54k/6k split, `train_one_epoch`, `evaluate_loader`, `run_trial`, and `save_study_artifacts`.
-- `backend/app/model.py` & `run.py`: SHA-256 verification, `DualGarmentClassifier.predict`, and `Runner.run` JSONL logging.
+| Requirement | Implementation | Evidence |
+|---|---|---|
+| Preliminary PyTorch basics (`Tensors`, `Datasets & DataLoaders`, `Transforms`, `nn.Module`, optimization, save/load) | Interactive terminal walkthrough script and talking-points guide covering `FashionMNIST`, `QuickstartDemoNet`, `CrossEntropyLoss`, `SGD`, and `safetensors` | [scripts/preliminary_basics_demo.py](../scripts/preliminary_basics_demo.py), [docs/preliminary-basics.md](preliminary-basics.md) |
+| Train FashionMNIST PyTorch Quickstart baseline | `QuickstartMLP` (`Flatten -> 512 -> ReLU -> 512 -> ReLU -> 10`), `SGD(lr=0.001)`, `batch_size=64`, `5` epochs (`64.28%` test accuracy) | [backend/app/architecture.py](../backend/app/architecture.py), [backend/app/training.py](../backend/app/training.py) |
+| Perform Hyperparameter Optimization (HPO) | 6-trial progression sweeping learning rate, `SGD+Momentum`, `StepLR`, `AdamW`, `CosineAnnealingLR`, batch size, dropout, label smoothing, and `Flip+Affine`, selecting `GarmentConvNet` (`94.61%` test accuracy) | [backend/app/training.py](../backend/app/training.py), [backend/app/data/benchmark.json](../backend/app/data/benchmark.json), [docs/evaluation.json](evaluation.json), [docs/model.md](model.md) |
+| Modify website with baseline vs. optimized side-by-side comparison | Adapted **Atelier** editorial UI comparing `QuickstartMLP` and `GarmentConvNet` side by side on the identical preprocessed `28×28` tensor, with agreement badge, top-3 bars, 10-class catalogue, and HPO benchmark view | [frontend/index.html](../frontend/index.html), [frontend/ui.js](../frontend/ui.js), [frontend/app.js](../frontend/app.js) |
+| Containerize with Cog & Docker Compose | Standalone `cog.yaml` (`atelier-garment-id:cog`) + `Dockerfile` (`atelier-garment-id:cpu`) + `compose.cog.yaml` with SHA-256 weight verification and non-root read-only hardening | [cog.yaml](../cog.yaml), [run.py](../run.py), [Dockerfile](../Dockerfile), [compose.cog.yaml](../compose.cog.yaml) |
+| Inspect live container logs during predictions | Cog logs structured JSON events (`ready`, `prediction`, `failed`) to `stdout` and `/tmp/garment-predictions.jsonl` without storing raw image bytes | [run.py](../run.py) |
+| Verify Cog container via Postman & automated script | Reproducible Postman collection + payload preparation helper and automated HTTP contract script (`POST http://127.0.0.1:5002/predictions`) | [docs/postman/Atelier.postman_collection.json](postman/Atelier.postman_collection.json), [scripts/prepare_postman.py](../scripts/prepare_postman.py), [scripts/verify_cog.py](../scripts/verify_cog.py) |
+| Automated testing suite (`>= 85%` coverage target) | Unit, security boundary, Cog transport, runner, and E2E Playwright tests (`95.00%` coverage observed) | [tests/](../tests/), [docs/testing.md](testing.md) |
