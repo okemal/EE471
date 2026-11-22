@@ -1,0 +1,15 @@
+# Week 8 Task 3: Cog builds the MediaPipe FaceLandmarker direction classifier image.
+build:
+  gpu: false
+  python_version: "3.11"
+  sdk_version: "0.23.1"
+  system_packages:
+    - "libegl1"
+    - "libgles2"
+    - "libgl1"
+    - "libglib2.0-0"
+    - "libgomp1"
+    - "libportaudio2"
+  python_requirements: requirements-cog.txt
+run: "run.py:Runner"
+image: "ee471-week8-face-direction:cog"

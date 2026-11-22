@@ -1,0 +1,32 @@
+[
+  {
+    "file": ".cache/samples/thumbs_up.jpg",
+    "source": "https://storage.googleapis.com/mediapipe-tasks/gesture_recognizer/thumbs_up.jpg",
+    "origin": "Google MediaPipe Tasks official example asset",
+    "usage": "Task 1 Gesture Recognizer demo"
+  },
+  {
+    "file": ".cache/samples/victory.jpg",
+    "source": "https://storage.googleapis.com/mediapipe-tasks/gesture_recognizer/victory.jpg",
+    "origin": "Google MediaPipe Tasks official example asset",
+    "usage": "Task 1 Gesture Recognizer demo"
+  },
+  {
+    "file": ".cache/samples/woman_hands.jpg",
+    "source": "https://storage.googleapis.com/mediapipe-tasks/hand_landmarker/woman_hands.jpg",
+    "origin": "Google MediaPipe Tasks official example asset",
+    "usage": "Task 1 Hand Landmarker demo"
+  },
+  {
+    "file": ".cache/samples/cat_and_dog.jpg",
+    "source": "https://storage.googleapis.com/mediapipe-tasks/object_detector/cat_and_dog.jpg",
+    "origin": "Google MediaPipe Tasks official example asset",
+    "usage": "Task 1 Object Detector, Image Segmenter, Interactive Segmenter, Image Embedder, and Universal Embedder demos"
+  },
+  {
+    "file": ".cache/samples/burger.jpg",
+    "source": "https://storage.googleapis.com/mediapipe-tasks/image_classifier/burger.jpg",
+    "origin": "Google MediaPipe Tasks official example asset",
+    "usage": "Task 1 Image Classifier and Image Embedder demos (plus local burger_crop.jpg crop)"
+  }
+]

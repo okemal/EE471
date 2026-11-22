@@ -1,0 +1,43 @@
+[project]
+name = "ee471-week8-arm-pose"
+version = "1.0.0"
+description = "EE471 Week 8 Task 2: MediaPipe PoseLandmarker arm-up classifier containerized with Docker and Cog."
+requires-python = ">=3.11,<3.13"
+dependencies = [
+  "mediapipe==1.2.3",
+  "pillow>=11.2,<13",
+  "httpx>=0.28,<1",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3,<10",
+  "pytest-cov>=6.0,<7",
+  "ruff>=0.11,<1",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+  "live: integration tests requiring pose_landmarker_full.task on disk",
+]
+
+[tool.coverage.run]
+source = ["arm_pose", "classify_arm", "run"]
+branch = true
+omit = ["tests/*", "scripts/*"]
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

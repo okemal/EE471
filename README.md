@@ -16,6 +16,9 @@ Course portfolio for **EE471**, organized chronologically by weekly in-class exe
 | Week 6 | Task 2 · Felis Cat Classifier | [`Week 6/cat_id/`](Week%206/cat_id/README.md) | FastAPI + Cog (`ResNet50` + `OpenCLIP` + `BioCLIP 2.5`), 41 Felidae profiles | `8000`, `5002` | [README](Week%206/cat_id/README.md) · [Assignment](Week%206/cat_id/docs/assignment.md) · [Testing](Week%206/cat_id/docs/testing.md) |
 | Week 7 | Task 1 · Atelier Garment Classifier | [`Week 7/garment_id/`](Week%207/garment_id/README.md) | FashionMNIST dual-model (`QuickstartMLP` vs HPO `GarmentConvNet`), FastAPI + Cog | `8000`, `5002` | [Week 7 README](Week%207/README.md) · [Report](Week%207/REPORT.md) · [PDF Report](Week%207/report/week7_performance_report.pdf) |
 | Week 7 | Task 2 · Vision10 CIFAR-10 Classifier | [`Week 7/cifar10_id/`](Week%207/cifar10_id/README.md) | CIFAR-10 dual-model (`TutorialCifarNet` vs HPO `CifarResNet9`), FastAPI + Cog | `8001`, `5003` | [README](Week%207/cifar10_id/README.md) · [Model Study](Week%207/cifar10_id/docs/model.md) · [Testing](Week%207/cifar10_id/docs/testing.md) |
+| Week 8 | Task 1 · 22 MediaPipe Solutions | [`Week 8/task1_mediapipe_demos/`](Week%208/task1_mediapipe_demos/README.md) | `mediapipe==1.2.3` across Audio, Decision, Retrieval, Text, and Vision (`uv`) | CLI | [Week 8 README](Week%208/README.md) · [Task 1 README](Week%208/task1_mediapipe_demos/README.md) |
+| Week 8 | Task 2 · Arm-Up Pose Classifier | [`Week 8/task2_arm_pose/`](Week%208/task2_arm_pose/README.md) | MediaPipe `PoseLandmarker` (`left`/`right`/`both`/`None`), CLI + Docker/Cog | `5004` | [Task 2 README](Week%208/task2_arm_pose/README.md) |
+| Week 8 | Task 3 · Face Direction Classifier | [`Week 8/task3_face_direction/`](Week%208/task3_face_direction/README.md) | MediaPipe `FaceLandmarker` (`left`/`right`/`straight`), CLI + Docker/Cog | `5005` | [Task 3 README](Week%208/task3_face_direction/README.md) |
 
 ---
 
@@ -87,6 +90,19 @@ Compares baseline PyTorch tutorial networks against hyperparameter-optimized CNN
 ```bash
 cd "Week 7/garment_id" && uv run --frozen ruff check . && uv run --frozen pytest -q
 cd "Week 7/cifar10_id" && uv run --frozen ruff check . && uv run --frozen pytest -q
+```
+
+### Week 8 — MediaPipe Solutions & Containerized Pose / Face Classifiers ([`Week 8/`](Week%208/README.md))
+
+Demonstrates all 22 MediaPipe `1.2.3` Python solutions and packages two MediaPipe vision classifiers with Docker and Cog:
+- **Task 1 — 22 MediaPipe Solutions** ([`Week 8/task1_mediapipe_demos/`](Week%208/task1_mediapipe_demos/README.md)): Standalone runnable scripts across Audio (`AudioClassifier`, `AudioTranscriber`, `TextToSpeech`), Decision (`DecisionMaker`), Retrieval (`SemanticRetriever`, `UniversalEmbedder`), Text (`LanguageDetector`, `TextClassifier`, `TextEmbedder`, `TextProofreader`, `TextSummarizer`), and Vision (11 tasks) using official public `litert-community` bundles.
+- **Task 2 — Arm-Up Pose Classifier** ([`Week 8/task2_arm_pose/`](Week%208/task2_arm_pose/README.md)): Classifies `"left"`, `"right"`, `"both"`, or `"None"` via MediaPipe `PoseLandmarker` (`pose-1..3.jpg` -> `left`, `right`, `both`), containerized with Cog (`5004`) and standalone Docker CLI.
+- **Task 3 — Face Direction Classifier** ([`Week 8/task3_face_direction/`](Week%208/task3_face_direction/README.md)): Classifies `"left"`, `"right"`, or `"straight"` via MediaPipe `FaceLandmarker` 3D head-pose matrix (`face-1..3.png` -> `left`, `right`, `straight`), containerized with Cog (`5005`) and standalone Docker CLI.
+
+```bash
+cd "Week 8/task1_mediapipe_demos" && uv run --frozen ruff check . && uv run --frozen pytest -q
+cd "Week 8/task2_arm_pose" && uv run --frozen ruff check . && uv run --frozen pytest -q
+cd "Week 8/task3_face_direction" && uv run --frozen ruff check . && uv run --frozen pytest -q
 ```
 
 ---
