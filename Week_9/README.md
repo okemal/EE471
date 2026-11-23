@@ -1,104 +1,131 @@
-# Week 9 — Pre-Assignment Hugging Face Model Demos
+# Week 9 — Hugging Face Transformers Suite, Gradio Demo & Chapter 2 Exercises
 
-Reusable Python 3.14 modules and CLI entry points for the four announced EE471 Week 9 Hugging Face models. Because the full assignment specification has not been announced yet, this package establishes a clean, tested, credential-safe foundation ready to build on.
+Complete Python 3.14 package for the **EE471 Week 9** in-class exercises:
 
-## Announced Models
+- **Task 1**: Ten Hugging Face inference demonstrations (`week-9 task1 <name>` or `week-9 task1 all`).
+- **Task 3**: Shared OOP [`Week9Tasks`](src/week_9/tasks.py) module and 10-tab Gradio 6 interactive web app (`week-9 app`).
+- **Task 4**: Five Chapter 2 model & tokenizer demonstrations (`week-9 task4 <name>` or `week-9 task4 all`).
+- **Legacy pre-assignment demos**: `smollm2`, `opus-mt-fr-en`, `vit`, and `whisper` remain preserved with their original CLI flags and Python APIs.
 
-| CLI Command | Module | Hugging Face Checkpoint | Task | Default Precision (CUDA / CPU) |
-| --- | --- | --- | --- | --- |
-| `smollm2` | [`src/week_9/smollm2.py`](src/week_9/smollm2.py) | `HuggingFaceTB/SmolLM2-360M` | Causal text generation | `bfloat16` (fallback `float16`) / `float32` |
-| `opus-mt-fr-en` | [`src/week_9/opus_mt_fr_en.py`](src/week_9/opus_mt_fr_en.py) | `Helsinki-NLP/opus-mt-fr-en` | French-to-English machine translation | `float32` / `float32` |
-| `vit` | [`src/week_9/vit.py`](src/week_9/vit.py) | `google/vit-base-patch16-224` | ImageNet-1K image classification | `float32` / `float32` |
-| `whisper` | [`src/week_9/whisper.py`](src/week_9/whisper.py) | `openai/whisper-large-v3` | Automatic speech recognition | `float16` / `float32` |
+## Models & Checkpoints
 
-Supporting modules:
+| Task | CLI Subcommand | `Week9Tasks` Method | Hugging Face Checkpoint |
+| --- | --- | --- | --- |
+| Sentiment analysis | `task1 sentiment` | `analyze_sentiment` | `distilbert/distilbert-base-uncased-finetuned-sst-2-english` |
+| Zero-shot classification | `task1 zero-shot` | `classify_zero_shot` | `typeform/distilbert-base-uncased-mnli` |
+| Text generation | `task1 generate` | `complete_text` | `HuggingFaceTB/SmolLM2-360M` |
+| Mask filling | `task1 fill-mask` | `fill_mask` | `google-bert/bert-base-cased` |
+| Named entity recognition | `task1 ner` | `recognize_entities` | `dslim/bert-base-NER` |
+| Question answering (NER check) | `task1 qa` | `answer_question` | `deepset/roberta-base-squad2` |
+| Summarization | `task1 summarize` | `summarize` | `google-t5/t5-small` |
+| French-to-English translation | `task1 translate` | `translate_text` | `Helsinki-NLP/opus-mt-fr-en` |
+| Image classification | `task1 image` | `classify_image` | `google/vit-base-patch16-224` |
+| Speech recognition | `task1 asr` | `transcribe_audio` | `openai/whisper-large-v3` |
+| Legacy FR→EN translation | `opus-mt-fr-en` | — | `Helsinki-NLP/opus-mt-fr-en` |
 
-- [`src/week_9/config.py`](src/week_9/config.py) — `.env` loading (`python-dotenv`), `HF_TOKEN` resolution, automatic PyTorch device/dtype selection (`cuda` -> `mps` -> `cpu`), and logging setup.
-- [`src/week_9/cli.py`](src/week_9/cli.py) — Unified `week-9` CLI dispatcher and model registry (`MODEL_REGISTRY`).
+`Week9Tasks` keeps **at most one active model bundle** in GPU memory at a time and serializes model switches with a lock.
 
-## Setup & Credentials
+## Setup & Online vs. Offline Execution
 
-1. Install dependencies with [`uv`](https://docs.astral.sh/uv/):
+1. **Install dependencies** with [`uv`](https://docs.astral.sh/uv/):
 
    ```bash
    cd Week_9
-   uv sync
+   uv sync --frozen
    ```
 
-2. Configure your Hugging Face access token in a local, git-ignored `Week_9/.env` file (never commit `.env` or hardcode tokens in source files):
+2. **Optional Hugging Face token** (recommended for faster initial downloads; never commit `.env`):
 
    ```bash
-   cp .env.example .env
+   touch .env
    chmod 600 .env
-   # Edit .env and set HF_TOKEN=<your-read-only-token>
+   # Set HF_TOKEN=<your-read-only-token> inside .env
    ```
 
-   Environment variables already exported in your shell take precedence over `Week_9/.env` (`override=False`). `HF_TOKEN` is loaded automatically via [`week_9.config.get_hf_token`](src/week_9/config.py) so authenticated requests avoid Hugging Face Hub rate limits.
+3. **Initial online run (populates `~/.cache/huggingface/hub`):**
+   On a fresh checkout, run once with network access so all required checkpoints are cached locally:
+
+   ```bash
+   uv run --frozen week-9 task1 all
+   uv run --frozen week-9 task4 all
+   ```
+
+4. **Subsequent offline runs (`HF_HUB_OFFLINE=1`):**
+   Once the cache is populated, every Task 1, Task 3, and Task 4 command runs completely offline without Hub access:
+
+   ```bash
+   HF_HUB_OFFLINE=1 uv run --frozen week-9 task1 all
+   HF_HUB_OFFLINE=1 uv run --frozen week-9 task4 all
+   HF_HUB_OFFLINE=1 uv run --frozen week-9 app
+   ```
+
+   If a checkpoint is missing from the local cache during an offline run, `Week9Tasks` raises a descriptive error naming the checkpoint to fetch online.
 
 ## Usage
 
-### Unified CLI (`week-9`)
+### Task 1 & Task 4 CLI
 
 ```bash
-# List all announced models
-uv run week-9 list
+# List all commands
+uv run --frozen week-9 list
 
-# 1. Text generation (SmolLM2-360M)
-uv run week-9 smollm2
-uv run week-9 smollm2 --prompt "Explain pointers in C:" --max-new-tokens 128
+# Run individual Task 1 demos (or 'all')
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task1 sentiment
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task1 zero-shot
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task1 generate
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task1 fill-mask
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task1 ner
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task1 qa
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task1 summarize
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task1 translate
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task1 image
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task1 asr
 
-# 2. French-to-English translation (OPUS-MT)
-uv run week-9 opus-mt-fr-en
-uv run week-9 opus-mt-fr-en --text "Bonjour tout le monde !"
-
-# 3. Image classification (ViT-Base)
-uv run week-9 vit
-uv run week-9 vit --image /path/to/photo.jpg --top-k 5
-
-# 4. Speech recognition (Whisper Large v3)
-uv run week-9 whisper
-uv run week-9 whisper --audio /path/to/speech.wav --language auto --show-timestamps
+# Run individual Task 4 demos (or 'all')
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task4 load-save
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task4 encode-decode
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task4 pad
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task4 truncate
+HF_HUB_OFFLINE=1 uv run --frozen week-9 task4 special-tokens
 ```
 
-Every model module can also be executed directly with `python -m`:
+### Task 3 Gradio Demo & Python API
 
 ```bash
-uv run python -m week_9.smollm2 --help
-uv run python -m week_9.opus_mt_fr_en --help
-uv run python -m week_9.vit --help
-uv run python -m week_9.whisper --help
+HF_HUB_OFFLINE=1 uv run --frozen week-9 app
+# Opens on http://127.0.0.1:7860
 ```
-
-### Library API
-
-Each module avoids import-time side effects and exposes typed, reusable functions returning frozen dataclasses:
 
 ```python
-from week_9.opus_mt_fr_en import translate_text
-from week_9.smollm2 import generate_text
-from week_9.vit import classify_image
-from week_9.whisper import transcribe_audio
+from week_9 import Week9Tasks
 
-translation = translate_text("Je voudrais un café, s'il vous plaît.")
-print(translation.translated_text)
+tasks = Week9Tasks()
+print(tasks.analyze_sentiment().items)
+print(tasks.translate_text().translated_text)
 ```
 
-## Key Fixes Applied to the Initial Scripts
+### Legacy Pre-Assignment Commands
 
-- **Credential hygiene**: Removed hardcoded `access_token` literals from all four scripts, stored `HF_TOKEN` in git-ignored `Week_9/.env` (`chmod 600`), and added `.env.example` plus local `.gitignore`.
-- **Valid PEP 8 module naming**: Renamed `src/week_9/opus-mt-fr-en.py` to `src/week_9/opus_mt_fr_en.py` so it is a valid importable Python module (while keeping `opus-mt-fr-en` as the CLI subcommand).
-- **Device & dtype portability**: Replaced hardcoded `"cuda"` calls in `smollm2.py` and `opus_mt_fr_en.py` and CPU-only execution in `vit.py` with `resolve_device()` (`cuda` -> `mps` -> `cpu`) and `resolve_dtype()` (using native `bfloat16` for SmolLM2 and `float16` for Whisper on CUDA, and `float32` on CPU).
-- **Inference safety & memory efficiency**: Added `model.eval()` and `with torch.inference_mode():` across all four models (fixing autograd graph allocation in `vit.py`).
-- **SmolLM2 tokenization**: Replaced `tokenizer.encode(...)` with `tokenizer(..., return_tensors="pt")` so `attention_mask` is passed to `model.generate(...)`, and explicitly supplied `pad_token_id=tokenizer.eos_token_id` when unset.
-- **ViT image loading & output**: Added request timeouts, `response.raise_for_status()`, context managers to close HTTP responses and image buffers, `.convert("RGB")` normalization, local file support, and softmax top-k probabilities.
-- **Whisper Transformers 5.x compatibility**: Cleared deprecated `model.generation_config.forced_decoder_ids`, disabled WordPiece space cleanup (`clean_up_tokenization_spaces=False`) for Whisper's BPE tokenizer, and passed explicit `generate_kwargs` (`task` and `language`).
-- **Modularity & documentation**: Separated model loading, inference, and CLI parsing behind `if __name__ == "__main__":`, added full Python 3.14 type hints and Google-style docstrings, and configured Ruff + Pytest.
+```bash
+uv run --frozen week-9 smollm2
+uv run --frozen week-9 opus-mt-fr-en
+uv run --frozen week-9 vit
+uv run --frozen week-9 whisper
+```
+
+## Bundled Media Assets & Attributions
+
+Both sample files live in [`src/week_9/assets/`](src/week_9/assets/) and are cataloged in [`src/week_9/assets/credits.json`](src/week_9/assets/credits.json):
+
+- **`dog.jpg`**: [`Golden_Retriever_Dukedestiny01_drvd.jpg`](https://commons.wikimedia.org/wiki/File:Golden_Retriever_Dukedestiny01_drvd.jpg) by Janneke Vreugdenhil (derivative work by Anka Friedrich), **Public domain** (copied unchanged from the Week 6 sample asset).
+- **`librispeech_sample.wav`**: 5.50-second mono 16 kHz 16-bit PCM WAV excerpt (`0.00s–5.50s`) extracted from `distil-whisper/librispeech_long` (`clean` / `validation[0]`), originally from the [LibriSpeech ASR corpus](https://www.openslr.org/12/) by Vassil Panayotov et al., licensed under **CC BY 4.0**.
 
 ## Development & Verification
 
 ```bash
 cd Week_9
-uv run ruff check .
-uv run ruff format --check .
-uv run pytest -q
+uv sync --frozen
+uv run --frozen ruff check .
+uv run --frozen ruff format --check .
+HF_HUB_OFFLINE=1 uv run --frozen pytest -q -m "not live"
 ```

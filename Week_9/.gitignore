@@ -1,7 +1,8 @@
-# Credentials and local configuration
+# Credentials, templates, plans, and recording guides
 .env
 .env.*
-!.env.example
+IMPLEMENTATION_PLAN.md
+RECORDING_GUIDE.md
 
 # Python environments and generated artifacts
 .venv/
@@ -15,3 +16,5 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+saved_models/
+.artifacts/

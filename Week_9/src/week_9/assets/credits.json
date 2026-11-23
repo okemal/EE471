@@ -1,0 +1,25 @@
+[
+  {
+    "id": "dog",
+    "file": "dog.jpg",
+    "title": "Golden_Retriever_Dukedestiny01_drvd.jpg",
+    "artist": "Janneke Vreugdenhil; derivative work by Anka Friedrich",
+    "license": "Public domain",
+    "license_url": "",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Golden_Retriever_Dukedestiny01_drvd.jpg",
+    "changes": "Copied unchanged from Week 6 sample asset (originally resized by Wikimedia)."
+  },
+  {
+    "id": "librispeech-sample",
+    "file": "librispeech_sample.wav",
+    "title": "LibriSpeech ASR corpus (validation clean sample 0 excerpt)",
+    "artist": "Vassil Panayotov, Guoguo Chen, Daniel Povey, Sanjeev Khudanpur (via distil-whisper/librispeech_long)",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "source_url": "https://www.openslr.org/12/",
+    "dataset_url": "https://huggingface.co/datasets/distil-whisper/librispeech_long",
+    "split": "clean / validation[0]",
+    "time_interval": "0.00s-5.50s",
+    "changes": "Extracted 5.50-second mono 16 kHz 16-bit PCM WAV excerpt from validation sample 0."
+  }
+]

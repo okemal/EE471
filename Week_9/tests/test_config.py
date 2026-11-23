@@ -16,9 +16,11 @@ def test_no_hardcoded_hf_tokens_in_source_or_templates() -> None:
     project_root = Path(__file__).resolve().parents[1]
     targets = [
         *sorted((project_root / "src").rglob("*.py")),
-        project_root / ".env.example",
         project_root / "README.md",
     ]
+    env_example = project_root / ".env.example"
+    if env_example.is_file():
+        targets.append(env_example)
     for path in targets:
         content = path.read_text(encoding="utf-8")
         assert TOKEN_PATTERN.search(content) is None, f"Hardcoded token found in {path}"

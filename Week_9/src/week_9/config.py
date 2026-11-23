@@ -64,8 +64,8 @@ def get_hf_token(*, env_path: Path | None = None, required: bool = False) -> str
         return token
     if required:
         raise RuntimeError(
-            f"{HF_TOKEN_ENV_VAR} is not set. Copy Week_9/.env.example to Week_9/.env "
-            f"and set {HF_TOKEN_ENV_VAR} to your Hugging Face access token."
+            f"{HF_TOKEN_ENV_VAR} is not set. Create Week_9/.env and set "
+            f"{HF_TOKEN_ENV_VAR} to your Hugging Face access token."
         )
     return None
 

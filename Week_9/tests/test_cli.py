@@ -5,7 +5,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from week_9 import cli, opus_mt_fr_en, smollm2, vit, whisper
+from week_9 import cli, opus_mt_fr_en, smollm2, task4, vit, whisper
+from week_9.tasks import SentimentAnalysisResult, SentimentItem
 
 
 def test_cli_list_prints_all_four_models(capsys: pytest.CaptureFixture[str]) -> None:
@@ -17,6 +18,55 @@ def test_cli_list_prints_all_four_models(capsys: pytest.CaptureFixture[str]) -> 
     assert "opus-mt-fr-en" in captured.out
     assert "vit" in captured.out
     assert "whisper" in captured.out
+    assert "task1" in captured.out
+    assert "task4" in captured.out
+    assert "app" in captured.out
+
+
+def test_cli_dispatches_task1_task4_and_app(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    monkeypatch.setattr(
+        cli.Week9Tasks,
+        "analyze_sentiment",
+        lambda self: SentimentAnalysisResult(
+            model_id="distilbert-sst2",
+            device="cpu",
+            items=(SentimentItem("Great", "POSITIVE", 0.99),),
+        ),
+    )
+    assert cli.main(["task1", "sentiment"]) == 0
+    assert "POSITIVE" in capsys.readouterr().out
+
+    monkeypatch.setattr(
+        cli,
+        "demonstrate_encode_and_decode",
+        lambda: task4.EncodeDecodeResult(
+            model_id="bert-base-cased",
+            original_text="Hi",
+            tokens=("Hi",),
+            input_ids=(101, 8790, 102),
+            decoded_with_special="[CLS] Hi [SEP]",
+            decoded_without_special="Hi",
+            explanation="Boundary tokens added.",
+        ),
+    )
+    assert cli.main(["task4", "encode-decode"]) == 0
+    assert "[CLS] Hi [SEP]" in capsys.readouterr().out
+
+    app_args: list[str] = []
+    monkeypatch.setattr(
+        importlib,
+        "import_module",
+        lambda name: (
+            SimpleNamespace(main=lambda a: app_args.extend(a) or 0)
+            if name == "week_9.app"
+            else None
+        ),
+    )
+    assert cli.main(["app", "--port", "7860"]) == 0
+    assert app_args == ["--port", "7860"]
 
 
 def test_cli_dispatches_to_model_module(monkeypatch: pytest.MonkeyPatch) -> None:

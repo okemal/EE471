@@ -1,7 +1,7 @@
 [project]
 name = "week-9"
 version = "0.1.0"
-description = "EE471 Week 9: Pre-assignment Hugging Face Transformers demos (SmolLM2, OPUS-MT, ViT, Whisper)."
+description = "EE471 Week 9: Hugging Face Transformers inference tasks, OOP Week9Tasks module, Gradio demo, and Chapter 2 tokenizer/model exercises."
 readme = "README.md"
 authors = [
     { name = "Onat Kemal Gede", email = "74457146+okemal@users.noreply.github.com" }
@@ -10,6 +10,7 @@ requires-python = ">=3.14,<3.15"
 dependencies = [
     "accelerate>=1.16.0",
     "datasets[audio]>=5.2.0",
+    "gradio>=6.32.0",
     "pillow>=13.0.0",
     "python-dotenv>=1.2.4",
     "requests>=2.34.2",
