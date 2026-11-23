@@ -1,0 +1,17 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+
+# Python environments and generated artifacts
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+dist/
+build/
+*.egg-info/
