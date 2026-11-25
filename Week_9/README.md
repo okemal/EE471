@@ -3,7 +3,8 @@
 Complete Python 3.14 package for the **EE471 Week 9** in-class exercises:
 
 - **Task 1**: Ten Hugging Face inference demonstrations (`week-9 task1 <name>` or `week-9 task1 all`).
-- **Task 3**: Shared OOP [`Week9Tasks`](src/week_9/tasks.py) module and 10-tab Gradio 6 interactive web app (`week-9 app`).
+- **Task 2**: Chapter 1 review and official Hugging Face LLM Course quick-quiz walkthrough.
+- **Task 3**: Shared object-oriented [`Week9Tasks`](src/week_9/tasks.py) backend and 10-tab Gradio 6 interactive web application (`week-9 app`).
 - **Task 4**: Five Chapter 2 model & tokenizer demonstrations (`week-9 task4 <name>` or `week-9 task4 all`).
 - **Legacy pre-assignment demos**: `smollm2`, `opus-mt-fr-en`, `vit`, and `whisper` remain preserved with their original CLI flags and Python APIs.
 
@@ -21,9 +22,16 @@ Complete Python 3.14 package for the **EE471 Week 9** in-class exercises:
 | French-to-English translation | `task1 translate` | `translate_text` | `Helsinki-NLP/opus-mt-fr-en` |
 | Image classification | `task1 image` | `classify_image` | `google/vit-base-patch16-224` |
 | Speech recognition | `task1 asr` | `transcribe_audio` | `openai/whisper-large-v3` |
+| Chapter 2 exercises (Task 4) | `task4 <name>` | `week_9.task4` functions | `google-bert/bert-base-cased` |
 | Legacy FR→EN translation | `opus-mt-fr-en` | — | `Helsinki-NLP/opus-mt-fr-en` |
 
-`Week9Tasks` keeps **at most one active model bundle** in GPU memory at a time and serializes model switches with a lock.
+## Architecture & Implementation Highlights
+
+- **Single-Model GPU Budget (`Week9Tasks`)**: [`src/week_9/tasks.py`](src/week_9/tasks.py) maintains **at most one active model bundle** in GPU memory at a time, moving evicted models back to CPU and clearing CUDA caches inside a re-entrant lock (`threading.RLock`) so sequential CLI runs and concurrent Gradio clicks operate safely on a 6 GB GPU.
+- **Constrained Deterministic Generation**: `Week9Tasks.complete_text()` pairs beam search with isolated RNG-seeded nucleus sampling (`torch.random.fork_rng`), filtering out incomplete trailing ellipses (`...`) and list headers so both returned sentences are complete, distinct, reproducible, and within the 35-word budget.
+- **Unicode-Accurate NER & QA Validation**: `recognize_entities()` reconstructs BIO-tagged WordPiece spans via character `offset_mapping` and `word_ids` (preserving ASCII `'I'` in `'Izmir Institute of Technology'` alongside dotted `'İ'` in `'İzmir'`), and `answer_question()` cross-checks `roberta-base-squad2` extractive spans against NER.
+- **Chapter 2 Tokenizer & Model Mechanics (`task4.py`)**: [`src/week_9/task4.py`](src/week_9/task4.py) demonstrates `save_pretrained` / offline `local_files_only=True` reload, WordPiece tokenization & decoding, batch padding with `attention_mask` alignment, `max_length` truncation, and **both** automatic `[CLS]`/`[SEP]` boundary tokens (`101`/`102`) and custom `<EE471>` registration with `resize_token_embeddings()`.
+- **Clean CLI Output**: Non-verbose runs silence third-party progress bars and checkpoint load-report tables; pass `-v` / `--verbose` to inspect model-loading logs.
 
 ## Setup & Online vs. Offline Execution
 
@@ -37,7 +45,7 @@ Complete Python 3.14 package for the **EE471 Week 9** in-class exercises:
 2. **Optional Hugging Face token** (recommended for faster initial downloads; never commit `.env`):
 
    ```bash
-   touch .env
+   cp .env.example .env
    chmod 600 .env
    # Set HF_TOKEN=<your-read-only-token> inside .env
    ```

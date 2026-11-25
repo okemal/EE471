@@ -88,7 +88,11 @@ TASK4_CHOICES: Final[tuple[str, ...]] = (
 
 
 def format_model_list() -> str:
-    """Render a concise summary table of the announced Week 9 models and commands."""
+    """Render a concise summary table of legacy model scripts and assignment subcommands.
+
+    Returns:
+        Formatted multi-line string listing every ``week-9`` CLI subcommand.
+    """
     lines = ["Available Week 9 legacy model commands:"]
     for entry in MODEL_REGISTRY.values():
         lines.append(f"  - {entry.command:<14} {entry.model_id:<32} ({entry.task})")
@@ -105,6 +109,12 @@ def format_model_list() -> str:
 
 
 def _run_single_task1(runner: Week9Tasks, name: str) -> None:
+    """Execute one Task 1 inference demo on ``runner`` and print formatted output.
+
+    Args:
+        runner: Shared :class:`Week9Tasks` instance managing model lifecycle.
+        name: Task 1 demo identifier from ``TASK1_CHOICES`` (excluding ``"all"``).
+    """
     if name == "sentiment":
         res = runner.analyze_sentiment()
         print(f"=== Task 1: Sentiment Analysis ({res.model_id} on {res.device}) ===")
@@ -132,6 +142,11 @@ def _run_single_task1(runner: Week9Tasks, name: str) -> None:
         res = runner.recognize_entities()
         print(f"=== Task 1: Named Entity Recognition ({res.model_id} on {res.device}) ===")
         print(f"  Text: {res.text}")
+        print(
+            f"  Extracted -> Subject: {', '.join(res.persons) or 'None'} | "
+            f"Organization: {', '.join(res.organizations) or 'None'} | "
+            f"Location: {', '.join(res.locations) or 'None'}"
+        )
         for ent in res.entities:
             print(
                 f"  - [{ent.entity_group}] {ent.text!r} "
@@ -179,7 +194,14 @@ def _run_single_task1(runner: Week9Tasks, name: str) -> None:
 
 
 def run_task1_cli(argv: Sequence[str]) -> int:
-    """Run one or all Task 1 demonstrations."""
+    """Parse arguments and run one or all Task 1 inference demonstrations.
+
+    Args:
+        argv: Subcommand argument sequence following ``week-9 task1``.
+
+    Returns:
+        Exit status code (``0`` on success).
+    """
     parser = argparse.ArgumentParser(prog="week-9 task1", description="Run Week 9 Task 1 demos.")
     parser.add_argument("name", choices=TASK1_CHOICES, help="Task 1 demo name or 'all'.")
     parser.add_argument("--device", default=None, help="PyTorch device override.")
@@ -199,6 +221,12 @@ def run_task1_cli(argv: Sequence[str]) -> int:
 
 
 def _run_single_task4(name: str, *, device: str | None) -> None:
+    """Execute one Task 4 Chapter 2 exercise and print formatted evidence.
+
+    Args:
+        name: Task 4 exercise identifier from ``TASK4_CHOICES`` (excluding ``"all"``).
+        device: Optional PyTorch device selector used by ``load-save``.
+    """
     if name == "load-save":
         res = demonstrate_load_and_save(device=device)
         print(f"=== Task 4.1: Load & Save ({res.model_id}) ===")
@@ -243,18 +271,29 @@ def _run_single_task4(name: str, *, device: str | None) -> None:
     elif name == "special-tokens":
         res = demonstrate_special_tokens()
         print(f"=== Task 4.5: Adding Special Tokens ({res.model_id}) ===")
-        print(f"  Sample text  : {res.sample_text}")
-        print(f"  Tokens before: {list(res.tokens_before)}")
-        print(f"  Tokens after : {list(res.tokens_after)}")
-        print(f"  Added token  : {res.special_token!r} -> ID {res.special_token_id}")
+        print(f"  Sample text            : {res.sample_text}")
+        if res.ids_without_boundary and res.ids_with_boundary:
+            print(f"  IDs (no special tokens): {list(res.ids_without_boundary)}")
+            print(f"  IDs (with [CLS]/[SEP]) : {list(res.ids_with_boundary)}")
+            print(f"  Decoded boundary tokens: {res.decoded_with_boundary}")
+        print(f"  Tokens before {res.special_token}: {list(res.tokens_before)}")
+        print(f"  Tokens after  {res.special_token}: {list(res.tokens_after)}")
+        print(f"  Added custom token     : {res.special_token!r} -> ID {res.special_token_id}")
         print(
-            f"  Vocab size   : {res.vocab_size_before} -> {res.vocab_size_after} | "
+            f"  Vocab size             : {res.vocab_size_before} -> {res.vocab_size_after} | "
             f"Embedding rows: {res.embedding_rows_before} -> {res.embedding_rows_after}"
         )
 
 
 def run_task4_cli(argv: Sequence[str]) -> int:
-    """Run one or all Task 4 Chapter 2 demonstrations."""
+    """Parse arguments and run one or all Task 4 Chapter 2 demonstrations.
+
+    Args:
+        argv: Subcommand argument sequence following ``week-9 task4``.
+
+    Returns:
+        Exit status code (``0`` on success).
+    """
     parser = argparse.ArgumentParser(prog="week-9 task4", description="Run Week 9 Task 4 demos.")
     parser.add_argument("name", choices=TASK4_CHOICES, help="Task 4 demo name or 'all'.")
     parser.add_argument("--device", default=None, help="PyTorch device override.")
@@ -292,7 +331,14 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    """Dispatch the top-level ``week-9`` CLI command."""
+    """Dispatch the top-level ``week-9`` CLI command.
+
+    Args:
+        argv: Optional command-line argument sequence. Defaults to ``sys.argv[1:]``.
+
+    Returns:
+        Process exit status code (``0`` on success).
+    """
     parsed = build_parser().parse_args(argv)
     forwarded = list(parsed.args)
     if forwarded and forwarded[0] == "--":

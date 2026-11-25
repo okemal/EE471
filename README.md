@@ -19,12 +19,13 @@ Course portfolio for **EE471**, organized chronologically by weekly in-class exe
 | Week 8 | Task 1 · 22 MediaPipe Solutions | [`Week 8/task1_mediapipe_demos/`](Week%208/task1_mediapipe_demos/README.md) | `mediapipe==1.2.3` across Audio, Decision, Retrieval, Text, and Vision (`uv`) | CLI | [Week 8 README](Week%208/README.md) · [Task 1 README](Week%208/task1_mediapipe_demos/README.md) |
 | Week 8 | Task 2 · Arm-Up Pose Classifier | [`Week 8/task2_arm_pose/`](Week%208/task2_arm_pose/README.md) | MediaPipe `PoseLandmarker` (`left`/`right`/`both`/`None`), CLI + Docker/Cog | `5004` | [Task 2 README](Week%208/task2_arm_pose/README.md) |
 | Week 8 | Task 3 · Face Direction Classifier | [`Week 8/task3_face_direction/`](Week%208/task3_face_direction/README.md) | MediaPipe `FaceLandmarker` (`left`/`right`/`straight`), CLI + Docker/Cog | `5005` | [Task 3 README](Week%208/task3_face_direction/README.md) |
+| Week 9 | Transformers, Gradio & Tokenizers | [`Week_9/`](Week_9/README.md) | Hugging Face Transformers (`Week9Tasks` OOP, 10 tasks), Gradio 6 UI, Ch. 2 tokenizers (`uv`) | `7860` | [Week 9 README](Week_9/README.md) |
 
 ---
 
 ## Shared Prerequisites & Credentials
 
-- **Python**: Python 3.11–3.12 (`uv` is used for dependency locking in Weeks 5, 6, and 7; standard `pip` / `venv` is supported in Week 4 and Week 5 Task 2).
+- **Python**: Python 3.11–3.14 (`uv` is used for dependency locking in Weeks 5–9; standard `pip` / `venv` is supported in Week 4 and Week 5 Task 2).
 - **Azure Speech Services (Weeks 5 & 6 Task 1)**: Live speech features require `AZURE_SPEECH_KEY` (or `AZURE_API_KEY_1`) and `AZURE_SPEECH_REGION` in a local, git-ignored `.env` file (see project `.env.example` templates). Automated test suites mock Azure and run offline without credentials.
 - **Docker, Cog, and Node.js**:
   - **Docker Desktop / Engine + Compose** and **Cog (`0.23.1`)** are used in Week 6 and Week 7. For `Week 6/cat_id`, allocate at least 10 GiB of memory to the Docker VM when running CPU BioCLIP inference.
@@ -103,6 +104,16 @@ Demonstrates all 22 MediaPipe `1.2.3` Python solutions and packages two MediaPip
 cd "Week 8/task1_mediapipe_demos" && uv run --frozen ruff check . && uv run --frozen pytest -q
 cd "Week 8/task2_arm_pose" && uv run --frozen ruff check . && uv run --frozen pytest -q
 cd "Week 8/task3_face_direction" && uv run --frozen ruff check . && uv run --frozen pytest -q
+```
+
+### Week 9 — Hugging Face Transformers, Gradio Demo & Tokenizers ([`Week_9/`](Week_9/README.md))
+
+Implements the Hugging Face LLM Course Chapter 1 and Chapter 2 exercises in a unified Python 3.14 package:
+- **Tasks 1 & 3 — Shared OOP Inference & Gradio 6 Web App**: [`Week9Tasks`](Week_9/src/week_9/tasks.py) runs sentiment analysis, zero-shot NLI, constrained SmolLM2 text generation, BERT mask filling, Unicode-accurate NER, RoBERTa QA validation, T5 summarization, French-to-English OPUS-MT translation, ViT image classification, and Whisper Large v3 ASR through both `week-9 task1 <name>` and a 10-tab Gradio interface (`week-9 app` on `127.0.0.1:7860`) while keeping a single model bundle on the GPU at a time.
+- **Task 4 — Chapter 2 Model & Tokenizer Exercises**: [`task4.py`](Week_9/src/week_9/task4.py) demonstrates `save_pretrained` / local offline reload, WordPiece encoding & decoding, batch padding with `attention_mask`, sequence truncation, and automatic `[CLS]`/`[SEP]` plus custom `<EE471>` special-token embedding resizing (`week-9 task4 <name>`).
+
+```bash
+cd Week_9 && uv run --frozen ruff check . && HF_HUB_OFFLINE=1 uv run --frozen pytest -q -m "not live"
 ```
 
 ---

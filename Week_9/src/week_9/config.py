@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import logging
 import os
+import warnings
 from pathlib import Path
 from typing import Final
 
 import torch
 from dotenv import load_dotenv
+from transformers.utils import logging as hf_logging
 
 PROJECT_ROOT: Final[Path] = Path(__file__).resolve().parents[2]
 DEFAULT_ENV_PATH: Final[Path] = PROJECT_ROOT / ".env"
@@ -127,14 +129,25 @@ def resolve_dtype(device: torch.device, *, prefer_bfloat16: bool = False) -> tor
 
 
 def configure_logging(*, verbose: bool = False) -> None:
-    """Configure concise CLI logging output for the ``week_9`` package.
+    """Configure concise CLI and library logging for the ``week_9`` package.
+
+    When ``verbose`` is ``False``, silences Hugging Face ``transformers`` progress
+    bars, checkpoint load-report tables, and benign Triton configuration warnings
+    so CLI outputs remain clean and readable.
 
     Args:
-        verbose: When ``True``, emit ``INFO`` logs for ``week_9`` while keeping
-            third-party library loggers at ``WARNING``.
+        verbose: When ``True``, emit ``INFO`` logs for ``week_9`` and restore
+            ``WARNING`` verbosity and progress bars for ``transformers``.
     """
     logging.basicConfig(
         level=logging.WARNING,
         format="%(levelname)s [%(name)s] %(message)s",
     )
     logging.getLogger("week_9").setLevel(logging.INFO if verbose else logging.WARNING)
+    if verbose:
+        hf_logging.set_verbosity_warning()
+        hf_logging.enable_progress_bar()
+    else:
+        hf_logging.set_verbosity_error()
+        hf_logging.disable_progress_bar()
+        warnings.filterwarnings("ignore", category=UserWarning, module=r"triton\..*")

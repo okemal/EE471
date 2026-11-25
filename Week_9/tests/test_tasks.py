@@ -161,6 +161,7 @@ def test_complete_text_enforces_two_distinct_sentences_and_word_budget(
         def decode(self, ids: torch.Tensor, **_: Any) -> str:
             idx = int(ids[0].item())
             choices = {
+                9: " I will be able to...",
                 10: " I will master Hugging Face Transformers quickly. Extra words here.",
                 11: " I will build reliable AI software in Python!",
                 12: " I will master Hugging Face Transformers quickly.",
@@ -171,6 +172,7 @@ def test_complete_text_enforces_two_distinct_sentences_and_word_budget(
         def generate(self, **_: Any) -> torch.Tensor:
             return torch.tensor(
                 [
+                    [1, 2, 3, 9, 99],
                     [1, 2, 3, 10, 99],
                     [1, 2, 3, 12, 99],
                     [1, 2, 3, 11, 99],
@@ -189,6 +191,7 @@ def test_complete_text_enforces_two_distinct_sentences_and_word_budget(
         assert comp.text.startswith(res.prompt)
         assert comp.word_count <= 35
         assert comp.text[-1] in ".!?"
+        assert not comp.text.endswith("...")
 
     with pytest.raises(ValueError, match="entire budget"):
         runner.complete_text("one two three four five", max_words=5)
@@ -293,6 +296,9 @@ def test_recognize_entities_preserves_unicode_spans(monkeypatch: pytest.MonkeyPa
         ("LOC", "İzmir"),
         ("LOC", "Türkiye"),
     ]
+    assert res.persons == ("Nate",)
+    assert res.organizations == ("Izmir Institute of Technology",)
+    assert res.locations == ("İzmir", "Türkiye")
 
 
 def test_answer_question_retains_disagreement_between_qa_and_ner(

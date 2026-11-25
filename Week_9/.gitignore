@@ -1,6 +1,7 @@
-# Credentials, templates, plans, and recording guides
+# Credentials, local plans, and recording guides
 .env
 .env.*
+!.env.example
 IMPLEMENTATION_PLAN.md
 RECORDING_GUIDE.md
 

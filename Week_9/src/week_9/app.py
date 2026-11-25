@@ -1,4 +1,9 @@
-"""Gradio 6 interactive demo for all ten EE471 Week 9 Hugging Face tasks."""
+"""Gradio 6 interactive web demo for all ten EE471 Week 9 Hugging Face tasks.
+
+Exposes :func:`create_app` to construct a 10-tab ``gradio.Blocks`` interface
+backed by a single shared :class:`~week_9.tasks.Week9Tasks` instance so switching
+tabs automatically evicts the previous checkpoint on GPU-constrained hosts.
+"""
 
 from __future__ import annotations
 
@@ -31,14 +36,29 @@ DEFAULT_PORT: Final[int] = 7860
 
 
 def _format_error(exc: Exception) -> str:
+    """Format a validation or runtime exception as a user-facing Gradio message."""
     return f"Error: {exc}"
 
 
 def create_app(tasks: Week9Tasks | None = None) -> gr.Blocks:
-    """Build the 10-tab Gradio Blocks application backed by ``Week9Tasks``."""
+    """Build the 10-tab Gradio Blocks application backed by ``Week9Tasks``.
+
+    Args:
+        tasks: Optional pre-configured :class:`Week9Tasks` runner (useful for
+            dependency injection in unit tests or custom device selection).
+            Creates a new lazy instance when ``None``.
+
+    Returns:
+        A configured ``gradio.Blocks`` application ready for ``.queue().launch()``.
+    """
     runner = tasks if tasks is not None else Week9Tasks()
 
+    # ------------------------------------------------------------------
+    # Gradio event callbacks (each delegates directly to ``Week9Tasks``)
+    # ------------------------------------------------------------------
+
     def run_sentiment(sentences_text: str) -> str:
+        """Run sentiment analysis on newline-separated input sentences."""
         try:
             result = runner.analyze_sentiment(sentences_text)
         except (ValueError, RuntimeError) as exc:
@@ -49,6 +69,7 @@ def create_app(tasks: Week9Tasks | None = None) -> gr.Blocks:
         return "\n".join(lines)
 
     def run_zero_shot(text: str, labels_csv: str) -> str:
+        """Rank comma-separated candidate labels via zero-shot NLI."""
         try:
             result = runner.classify_zero_shot(text, labels_csv)
         except (ValueError, RuntimeError) as exc:
@@ -59,6 +80,7 @@ def create_app(tasks: Week9Tasks | None = None) -> gr.Blocks:
         return "\n".join(lines)
 
     def run_generation(prompt: str, max_words: int) -> str:
+        """Generate two distinct complete sentences within ``max_words``."""
         try:
             result = runner.complete_text(prompt, max_words=int(max_words))
         except (ValueError, RuntimeError) as exc:
@@ -72,6 +94,7 @@ def create_app(tasks: Week9Tasks | None = None) -> gr.Blocks:
         return "\n".join(lines).strip()
 
     def run_fill_mask(text: str, top_k: int) -> str:
+        """Predict top-k token replacements for a single ``[…]`` or ``[MASK]`` gap."""
         try:
             result = runner.fill_mask(text, top_k=int(top_k))
         except (ValueError, RuntimeError) as exc:
@@ -82,6 +105,7 @@ def create_app(tasks: Week9Tasks | None = None) -> gr.Blocks:
         return "\n".join(lines)
 
     def run_ner(text: str) -> str:
+        """Extract grouped person, organization, and location spans from ``text``."""
         try:
             result = runner.recognize_entities(text)
         except (ValueError, RuntimeError) as exc:
@@ -90,6 +114,12 @@ def create_app(tasks: Week9Tasks | None = None) -> gr.Blocks:
         if not result.entities:
             lines.append("No named entities detected.")
             return "\n".join(lines)
+        lines.append(
+            f"Subject (PER): {', '.join(result.persons) or 'None'} | "
+            f"Organization (ORG): {', '.join(result.organizations) or 'None'} | "
+            f"Location (LOC): {', '.join(result.locations) or 'None'}"
+        )
+        lines.append("")
         for ent in result.entities:
             lines.append(
                 f"- [{ent.entity_group}] {ent.text!r} "
@@ -98,6 +128,7 @@ def create_app(tasks: Week9Tasks | None = None) -> gr.Blocks:
         return "\n".join(lines)
 
     def run_qa(context: str, questions_text: str) -> str:
+        """Answer newline-separated questions and cross-check answers against NER."""
         try:
             result = runner.answer_question(questions_text, context)
         except (ValueError, RuntimeError) as exc:
@@ -120,6 +151,7 @@ def create_app(tasks: Week9Tasks | None = None) -> gr.Blocks:
         return "\n".join(lines).strip()
 
     def run_summarize(text: str) -> str:
+        """Condense ``text`` into a short summary using T5."""
         try:
             result = runner.summarize(text)
         except (ValueError, RuntimeError) as exc:
@@ -127,6 +159,7 @@ def create_app(tasks: Week9Tasks | None = None) -> gr.Blocks:
         return f"Model: {result.model_id} ({result.device})\n\nSummary:\n{result.summary_text}"
 
     def run_translate(text: str) -> str:
+        """Translate French ``text`` into English using OPUS-MT."""
         try:
             result = runner.translate_text(text)
         except (ValueError, RuntimeError) as exc:
@@ -137,6 +170,7 @@ def create_app(tasks: Week9Tasks | None = None) -> gr.Blocks:
         )
 
     def run_image(image: Image.Image | str | None, top_k: int) -> str:
+        """Classify an uploaded or default image into ImageNet-1K categories."""
         if image is None:
             return "Error: Please provide or upload an image."
         try:
@@ -149,6 +183,7 @@ def create_app(tasks: Week9Tasks | None = None) -> gr.Blocks:
         return "\n".join(lines)
 
     def run_asr(audio_path: str | None) -> str:
+        """Transcribe an uploaded or default audio clip with Whisper Large v3."""
         if not audio_path:
             return "Error: Please provide or upload an audio file."
         try:
@@ -167,6 +202,10 @@ def create_app(tasks: Week9Tasks | None = None) -> gr.Blocks:
                 end = f"{chunk.end_s:5.2f}s" if chunk.end_s is not None else " ?.??s"
                 lines.append(f"[{start} -> {end}] {chunk.text}")
         return "\n".join(lines)
+
+    # ------------------------------------------------------------------
+    # Ten-tab Gradio UI layout prefilled with Week 9 assignment inputs
+    # ------------------------------------------------------------------
 
     with gr.Blocks(title="EE471 Week 9 — Hugging Face Transformers Demo") as demo:
         gr.Markdown(
@@ -243,7 +282,7 @@ def create_app(tasks: Week9Tasks | None = None) -> gr.Blocks:
                     value=DEFAULT_NER_QA_CONTEXT,
                     lines=4,
                 )
-                ner_out = gr.Textbox(label="Detected Entities", lines=7)
+                ner_out = gr.Textbox(label="Detected Entities", lines=8)
             gr.Button("Recognize Entities", variant="primary").click(
                 run_ner, inputs=ner_in, outputs=ner_out
             )
@@ -337,7 +376,14 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    """Launch the Week 9 Gradio demo."""
+    """Parse CLI options and launch the Week 9 Gradio web server.
+
+    Args:
+        argv: Optional sequence of command-line arguments. Defaults to ``sys.argv[1:]``.
+
+    Returns:
+        Exit status code (``0`` on clean shutdown).
+    """
     args = build_parser().parse_args(argv)
     configure_logging(verbose=args.verbose)
     tasks = Week9Tasks(device=args.device)
