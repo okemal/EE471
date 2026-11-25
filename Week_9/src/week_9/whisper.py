@@ -4,10 +4,13 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os
 from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Final, Literal
+
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 
 import torch
 from datasets import load_dataset
@@ -218,6 +221,8 @@ def transcribe_audio(
 
     resolved_token = token if token is not None else get_hf_token()
     if audio_path is not None:
+        if isinstance(audio_path, dict):
+            audio_path = audio_path.get("path") or audio_path.get("name")
         path = Path(audio_path)
         if not path.is_file():
             raise FileNotFoundError(f"Audio file not found: {path}")

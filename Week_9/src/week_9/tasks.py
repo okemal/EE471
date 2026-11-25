@@ -12,12 +12,15 @@ from __future__ import annotations
 import contextlib
 import gc
 import logging
+import os
 import re
 import threading
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Final
+
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 
 import torch
 from PIL import Image
@@ -599,15 +602,14 @@ class Week9Tasks:
             bundle = self._active_bundle
             self._active_bundle = None
             self._active_key = None
-            if bundle is None:
-                return
-            if isinstance(bundle, dict):
-                for value in bundle.values():
-                    model_obj = getattr(value, "model", value)
-                    if hasattr(model_obj, "to") and callable(model_obj.to):
-                        with contextlib.suppress(Exception):
-                            model_obj.to("cpu")
-            del bundle
+            if bundle is not None:
+                if isinstance(bundle, dict):
+                    for value in bundle.values():
+                        model_obj = getattr(value, "model", value)
+                        if hasattr(model_obj, "to") and callable(model_obj.to):
+                            with contextlib.suppress(Exception):
+                                model_obj.to("cpu")
+                del bundle
             gc.collect()
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
@@ -1566,6 +1568,8 @@ class Week9Tasks:
             FileNotFoundError: If ``audio_source`` does not point to an existing file.
             RuntimeError: If the checkpoint cannot be loaded.
         """
+        if isinstance(audio_source, dict):
+            audio_source = audio_source.get("path") or audio_source.get("name")
         resolved_path = Path(audio_source) if audio_source is not None else DEFAULT_AUDIO_PATH
         if not resolved_path.is_file():
             raise FileNotFoundError(f"Audio file not found: {resolved_path}")
@@ -1601,27 +1605,40 @@ class Week9Tasks:
             )
             return {"pipeline": asr_pipe, "dtype": dtype}
 
-        with self._lock:
-            bundle, device = self._get_bundle("whisper", model_id, _load)
-            asr_pipe = bundle["pipeline"]
-            dtype = bundle["dtype"]
-            generate_kwargs: dict[str, Any] = {"task": "transcribe"}
-            if language:
-                generate_kwargs["language"] = language
+        try:
+            with self._lock:
+                bundle, device = self._get_bundle("whisper", model_id, _load)
+                asr_pipe = bundle["pipeline"]
+                dtype = bundle["dtype"]
+                generate_kwargs: dict[str, Any] = {"task": "transcribe"}
+                if language:
+                    generate_kwargs["language"] = language
 
-            with torch.inference_mode():
-                raw_result = asr_pipe(
-                    str(resolved_path),
-                    return_timestamps=return_timestamps,
-                    generate_kwargs=generate_kwargs,
+                with torch.inference_mode():
+                    raw_result = asr_pipe(
+                        str(resolved_path),
+                        return_timestamps=return_timestamps,
+                        generate_kwargs=generate_kwargs,
+                    )
+
+                chunks: tuple[TranscriptChunk, ...] = _parse_chunks(raw_result.get("chunks"))
+                return TranscriptionResult(
+                    model_id=model_id,
+                    device=str(device),
+                    dtype=str(dtype),
+                    source=str(resolved_path),
+                    text=str(raw_result["text"]).strip(),
+                    chunks=chunks,
                 )
-
-            chunks: tuple[TranscriptChunk, ...] = _parse_chunks(raw_result.get("chunks"))
-            return TranscriptionResult(
+        except RuntimeError as exc:
+            if self._device_pref == "cpu" or "out of memory" not in str(exc).lower():
+                raise
+            LOGGER.warning("Whisper inference ran out of GPU memory; retrying on CPU: %s", exc)
+            self.unload_active_model()
+            cpu_runner = Week9Tasks(device="cpu", token=self._token)
+            return cpu_runner.transcribe_audio(
+                resolved_path,
+                return_timestamps=return_timestamps,
+                language=language,
                 model_id=model_id,
-                device=str(device),
-                dtype=str(dtype),
-                source=str(resolved_path),
-                text=str(raw_result["text"]).strip(),
-                chunks=chunks,
             )

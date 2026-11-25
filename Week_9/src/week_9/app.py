@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import argparse
 from collections.abc import Sequence
-from typing import Final
+from typing import Any, Final
 
 import gradio as gr
 from PIL import Image
@@ -182,8 +182,10 @@ def create_app(tasks: Week9Tasks | None = None) -> gr.Blocks:
             lines.append(f"{rank}. {pred.label}: {pred.probability:.2%}")
         return "\n".join(lines)
 
-    def run_asr(audio_path: str | None) -> str:
+    def run_asr(audio_path: Any) -> str:
         """Transcribe an uploaded or default audio clip with Whisper Large v3."""
+        if isinstance(audio_path, dict):
+            audio_path = audio_path.get("path") or audio_path.get("name")
         if not audio_path:
             return "Error: Please provide or upload an audio file."
         try:

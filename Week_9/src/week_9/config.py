@@ -8,6 +8,8 @@ import warnings
 from pathlib import Path
 from typing import Final
 
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+
 import torch
 from dotenv import load_dotenv
 from transformers.utils import logging as hf_logging
